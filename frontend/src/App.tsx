@@ -1,11 +1,23 @@
-import React from 'react';
-import './App.css';
-import { Button } from '@material-tailwind/react';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import HomePage from './pages/Home';
+
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+]);
 
 
 function App() {
   return (
-    <Button color="blue">Hello World</Button>
+    <>
+      <RouterProvider router={router} />
+    </>
   );
 }
 
