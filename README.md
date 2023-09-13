@@ -13,6 +13,7 @@ To run the project follow these steps
 
 ```bash
   git clone "link from top right of repo here"
+  cd frontend
   npm install
   npm start
 ```
