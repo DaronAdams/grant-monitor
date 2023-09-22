@@ -4,7 +4,7 @@
 Grant Monitor System for COMP4882
 
 
-## Installation
+## Installation (frontend)
 
 To run the project follow these steps
 - Clone the repo
@@ -17,4 +17,13 @@ To run the project follow these steps
   npm install
   npm start
 ```
+
+## Installation (backend)
+```bash
+createdb grant_monitor
+dotnet restore
+dotnet ef database update
+dotnet run
+```
+Go to http://localhost:5207/swagger to see the API schema.
     
