@@ -1478,6 +1478,7 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "Microsoft.AspNetCore.OpenApi >= 7.0.10",
+      "Microsoft.EntityFrameworkCore >= 7.0.11",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.11",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.11",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 7.0.11",
@@ -1485,19 +1486,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/daronadams/.nuget/packages/": {}
+    "/Users/kenschnarrs/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj",
+      "projectUniqueName": "/Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/GrantApi.csproj",
       "projectName": "GrantApi",
-      "projectPath": "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj",
-      "packagesPath": "/Users/daronadams/.nuget/packages/",
-      "outputPath": "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/obj/",
+      "projectPath": "/Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/GrantApi.csproj",
+      "packagesPath": "/Users/kenschnarrs/.nuget/packages/",
+      "outputPath": "/Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/daronadams/.nuget/NuGet/NuGet.Config"
+        "/Users/kenschnarrs/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -1524,6 +1525,10 @@
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
             "version": "[7.0.10, )"
+          },
+          "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[7.0.11, )"
           },
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -1565,7 +1570,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.400/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.202/RuntimeIdentifierGraph.json"
       }
     }
   }
