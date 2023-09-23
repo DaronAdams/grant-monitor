@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/GrantApi.csproj": {}
+    "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj": {}
   },
   "projects": {
-    "/Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/GrantApi.csproj": {
+    "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/GrantApi.csproj",
+        "projectUniqueName": "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj",
         "projectName": "GrantApi",
-        "projectPath": "/Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/GrantApi.csproj",
-        "packagesPath": "/Users/kenschnarrs/.nuget/packages/",
-        "outputPath": "/Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/obj/",
+        "projectPath": "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj",
+        "packagesPath": "/Users/daronadams/.nuget/packages/",
+        "outputPath": "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/kenschnarrs/.nuget/NuGet/NuGet.Config"
+          "/Users/daronadams/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -38,6 +38,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Cors": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[7.0.10, )"
@@ -86,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.202/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.400/RuntimeIdentifierGraph.json"
         }
       }
     }

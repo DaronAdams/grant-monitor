@@ -26,7 +26,15 @@ namespace YourNamespace
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            // Add other services as needed...
+            // Configure CORS
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
 
             services.AddControllers();
         }
@@ -47,6 +55,8 @@ namespace YourNamespace
             // Add other middleware and configuration as needed...
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
