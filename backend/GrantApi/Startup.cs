@@ -26,6 +26,10 @@ namespace YourNamespace
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(connectionString));
 
+            // Configure Identity (.NET's version of authentication)
+            
+
+
             // Configure CORS
             services.AddCors(options =>
             {

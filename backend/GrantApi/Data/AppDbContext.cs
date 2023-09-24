@@ -1,20 +1,24 @@
 using Microsoft.EntityFrameworkCore;
 using GrantApi.Models;
 
-public class AppDbContext : DbContext
+namespace GrantApi.Data
 {
-     protected readonly IConfiguration Configuration;
-
-    public AppDbContext(IConfiguration configuration)
+    public class AppDbContext : DbContext
     {
-        Configuration = configuration;
-    }
+        protected readonly IConfiguration Configuration;
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-    {
-        // connect to postgres with connection string from app settings
-        options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
-    }
+        public AppDbContext(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-    public DbSet<Grant> Grants { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            // connect to postgres with connection string from app settings
+            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+        }
+
+        public DbSet<Grant> Grants { get; set; }
+        public DbSet<User> Users { get; set; }
+    }
 }

@@ -84,3 +84,13 @@
 /Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/obj/Debug/net7.0/GrantApi.pdb
 /Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/obj/Debug/net7.0/GrantApi.genruntimeconfig.cache
 /Users/kenschnarrs/Projects/capstone/grant-montior/backend/GrantApi/obj/Debug/net7.0/ref/GrantApi.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/BCrypt.Net-Next.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/Microsoft.IdentityModel.Logging.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/Microsoft.IdentityModel.Tokens.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/System.IdentityModel.Tokens.Jwt.dll
+/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/bin/Debug/net7.0/System.Security.Permissions.dll
