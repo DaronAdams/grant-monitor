@@ -3,9 +3,10 @@ using GrantApi.Models;
 
 public class AppDbContext : DbContext
 {
-     protected readonly IConfiguration Configuration;
+    protected readonly IConfiguration Configuration;
 
-    public AppDbContext(IConfiguration configuration)
+    public AppDbContext(IConfiguration configuration, DbContextOptions<AppDbContext> options)
+        : base(options)
     {
         Configuration = configuration;
     }
