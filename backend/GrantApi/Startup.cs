@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 using GrantApi.Controllers;
+using GrantApi.Repositories;
 
 namespace GrantApi
 {
@@ -27,6 +28,7 @@ namespace GrantApi
             services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IGrantRepository, GrantRepository>();
             // Log registration
             Console.WriteLine("AppDbContext registered.");
 
