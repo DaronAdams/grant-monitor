@@ -1,6 +1,7 @@
 using GrantApi.Models;
-using GrantApi.Data;
+using GrantApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
+
 
 
 namespace GrantApi.Controllers
@@ -9,27 +10,23 @@ namespace GrantApi.Controllers
     [ApiController]
     public class GrantController : ControllerBase
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IGrantRepository _grantRepository;
 
-        public GrantController(AppDbContext dbContext)
+        public GrantController(IGrantRepository grantRepository)
         {
-            _dbContext = dbContext;
-            Console.WriteLine("AppDbContext injected into GrantController.");
+            _grantRepository = grantRepository;
         }
-
-
-
 
         [HttpGet]
         public ActionResult<IEnumerable<Grant>> GetGrants()
         {
-            return Ok(_dbContext.Grants.ToList());
+            return Ok(_grantRepository.GetAll());
         }
 
         [HttpGet("{id}")]
         public ActionResult<Grant> GetGrantById(int id)
         {
-            var grant = _dbContext.Grants.Find(id);
+            var grant = _grantRepository.GetById(id);
             if (grant == null)
             {
                 return NotFound();
@@ -40,8 +37,8 @@ namespace GrantApi.Controllers
         [HttpPost]
         public ActionResult<Grant> CreateGrant([FromBody] Grant grant)
         {
-            _dbContext.Grants.Add(grant);
-            _dbContext.SaveChanges();
+            _grantRepository.Insert(grant);
+            _grantRepository.SaveChanges();
             return CreatedAtAction(nameof(GetGrantById), new { id = grant.Id }, grant);
         }
 
@@ -52,14 +49,14 @@ namespace GrantApi.Controllers
             {
                 return BadRequest();
             }
-            _dbContext.Entry(grant).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _grantRepository.Update(id, grant);
             try
             {
-                _dbContext.SaveChanges();
+                _grantRepository.SaveChanges();
             }
             catch (Exception)
             {
-                if (_dbContext.Grants.Find(id) == null)
+                if (_grantRepository.GetById(id) == null)
                 {
                     return NotFound();
                 }
@@ -71,13 +68,13 @@ namespace GrantApi.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteGrant(int id)
         {
-            var grant = _dbContext.Grants.Find(id);
+            var grant = _grantRepository.GetById(id);
             if (grant == null)
             {
                 return NotFound();
             }
-            _dbContext.Grants.Remove(grant);
-            _dbContext.SaveChanges();
+            _grantRepository.Delete(id);
+            _grantRepository.SaveChanges();
             return NoContent();
         }
     }
