@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using GrantApi.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
+using GrantApi.Controllers;
 
-namespace YourNamespace
+namespace GrantApi
 {
     public class Startup
     {
@@ -20,11 +22,14 @@ namespace YourNamespace
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             // Configure PostgreSQL
             services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(connectionString));
+            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            // Log registration
+            Console.WriteLine("AppDbContext registered.");
+
 
             // Configure CORS
             services.AddCors(options =>

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj": {}
+    "/Users/daronadams/Desktop/capstone/grant-montior/backend/GrantApi/GrantApi.csproj": {}
   },
   "projects": {
-    "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj": {
+    "/Users/daronadams/Desktop/capstone/grant-montior/backend/GrantApi/GrantApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj",
+        "projectUniqueName": "/Users/daronadams/Desktop/capstone/grant-montior/backend/GrantApi/GrantApi.csproj",
         "projectName": "GrantApi",
-        "projectPath": "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/GrantApi.csproj",
+        "projectPath": "/Users/daronadams/Desktop/capstone/grant-montior/backend/GrantApi/GrantApi.csproj",
         "packagesPath": "/Users/daronadams/.nuget/packages/",
-        "outputPath": "/Users/daronadams/Desktop/grant-monitor/grant-montior/backend/GrantApi/obj/",
+        "outputPath": "/Users/daronadams/Desktop/capstone/grant-montior/backend/GrantApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/daronadams/.nuget/NuGet/NuGet.Config"

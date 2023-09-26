@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using GrantApi.Models;
+using GrantApi.Data;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace GrantApi.Controllers
 {
@@ -9,25 +9,27 @@ namespace GrantApi.Controllers
     [ApiController]
     public class GrantController : ControllerBase
     {
-        private static List<Grant> grants = new List<Grant>
+        private readonly AppDbContext _dbContext;
+
+        public GrantController(AppDbContext dbContext)
         {
-            new Grant { Id = 1, Title = "Grant 1", Amount = 100.00 },
-            new Grant { Id = 2, Title = "Grant 2", Amount = 200.00 },
-            new Grant { Id = 3, Title = "Grant 3", Amount = 300.00 },
-            new Grant { Id = 4, Title = "Grant 4", Amount = 400.00 },
-            new Grant { Id = 5, Title = "Grant 5", Amount = 500.00 },
-        };
+            _dbContext = dbContext;
+            Console.WriteLine("AppDbContext injected into GrantController.");
+        }
+
+
+
 
         [HttpGet]
-        public ActionResult<IEnumerable<Grant>> Get()
+        public ActionResult<IEnumerable<Grant>> GetGrants()
         {
-            return Ok(grants);
+            return Ok(_dbContext.Grants.ToList());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Grant> Get(int id)
+        public ActionResult<Grant> GetGrantById(int id)
         {
-            var grant = grants.Find(grant => grant.Id == id);
+            var grant = _dbContext.Grants.Find(id);
             if (grant == null)
             {
                 return NotFound();
@@ -36,36 +38,47 @@ namespace GrantApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Grant> Post([FromBody] Grant grant)
+        public ActionResult<Grant> CreateGrant([FromBody] Grant grant)
         {
-            grant.Id = grants.Count + 1;
-            grants.Add(grant);
-            return CreatedAtAction(nameof(Get), new { id = grant.Id }, grant);
+            _dbContext.Grants.Add(grant);
+            _dbContext.SaveChanges();
+            return CreatedAtAction(nameof(GetGrantById), new { id = grant.Id }, grant);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Grant> Put(int id, [FromBody] Grant grant)
+        public ActionResult<Grant> UpdateGrant(int id, [FromBody] Grant grant)
         {
-            var grantToUpdate = grants.Find(grant => grant.Id == id);
-            if (grantToUpdate == null)
+            if (id != grant.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
-            grantToUpdate.Title = grant.Title;
-            grantToUpdate.Amount = grant.Amount;
-            return Ok(grantToUpdate);
+            _dbContext.Entry(grant).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            try
+            {
+                _dbContext.SaveChanges();
+            }
+            catch (Exception)
+            {
+                if (_dbContext.Grants.Find(id) == null)
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+            return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult DeleteGrant(int id)
         {
-            var grantToDelete = grants.Find(grant => grant.Id == id);
-            if (grantToDelete == null)
+            var grant = _dbContext.Grants.Find(id);
+            if (grant == null)
             {
                 return NotFound();
             }
-            grants.Remove(grantToDelete);
-            return Ok();
+            _dbContext.Grants.Remove(grant);
+            _dbContext.SaveChanges();
+            return NoContent();
         }
     }
 }
