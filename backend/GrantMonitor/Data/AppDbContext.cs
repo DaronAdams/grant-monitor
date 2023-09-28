@@ -9,6 +9,8 @@ namespace GrantMonitor.Data
         : base(options) { }
 
         public DbSet<Grant> Grants { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserDto> UserDtos { get; set; }
     }
 
 }
