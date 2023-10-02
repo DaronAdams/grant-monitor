@@ -11,11 +11,10 @@ import {
   UserCircleIcon,
   Cog6ToothIcon,
   PowerIcon,
-} from '@heroicons/react/24/solid';
-import { useAuth } from '../hooks/context/authContext';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-
+  CalendarDaysIcon,
+} from "@heroicons/react/24/solid";
+import { Link } from "react-router-dom";
+ 
 export function HomePageSidebar() {
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -52,7 +51,18 @@ export function HomePageSidebar() {
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Dashboard
+          <Link to="/">
+            Dashboard
+          </Link>
+        </ListItem>
+        <ListItem>
+          <ListItemPrefix>
+            <CalendarDaysIcon className="h-5 w-5">
+            </CalendarDaysIcon>
+          </ListItemPrefix>
+          <Link to="/calendar">
+            Calendar View
+          </Link>
         </ListItem>
         <ListItem id="charts" onClick={handleSidebarClick}>
           <ListItemPrefix>
@@ -76,9 +86,7 @@ export function HomePageSidebar() {
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/">
-            Log Out
-          </Link>
+          Log Out
         </ListItem>
       </List>
     </Card>

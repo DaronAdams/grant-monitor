@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Test from './pages/Test';
 import TestChart from './pages/TestChart';
+import Calendar from './pages/Calendar';
 
 
 const router = createBrowserRouter([
