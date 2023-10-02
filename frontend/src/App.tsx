@@ -6,6 +6,7 @@ import HomePage from './pages/Home';
 import Login from './pages/Login';
 import Register from "./pages/Register";
 import Test from "./pages/Test";
+import Calendar from './pages/Calendar';
 
 
 const router = createBrowserRouter([
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
   {
     path: "/test",
     element: <Test />
-  }
+  },
+  {
+    path: "/calendar",
+    element: <Calendar />
+  },
 
 ]);
 

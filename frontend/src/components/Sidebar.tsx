@@ -11,7 +11,9 @@ import {
   UserCircleIcon,
   Cog6ToothIcon,
   PowerIcon,
+  CalendarDaysIcon,
 } from "@heroicons/react/24/solid";
+import { Link } from "react-router-dom";
  
 export function HomePageSidebar() {
   return (
@@ -26,7 +28,18 @@ export function HomePageSidebar() {
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Dashboard
+          <Link to="/">
+            Dashboard
+          </Link>
+        </ListItem>
+        <ListItem>
+          <ListItemPrefix>
+            <CalendarDaysIcon className="h-5 w-5">
+            </CalendarDaysIcon>
+          </ListItemPrefix>
+          <Link to="/calendar">
+            Calendar View
+          </Link>
         </ListItem>
         <ListItem>
           <ListItemPrefix>
@@ -50,7 +63,9 @@ export function HomePageSidebar() {
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Log Out
+          <Link to="/login">
+            Log Out
+          </Link>
         </ListItem>
       </List>
     </Card>
