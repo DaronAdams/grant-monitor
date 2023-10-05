@@ -22,5 +22,5 @@ To run the project follow these steps
 ```bash
 bundle install
 rails db:create
-rails server
+rails server -p 4000
 ```
