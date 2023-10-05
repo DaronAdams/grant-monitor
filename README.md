@@ -20,6 +20,7 @@ To run the project follow these steps
 
 ## Installation (backend)
 ```bash
+bundle install
 rails db:create
 rails server
 ```
