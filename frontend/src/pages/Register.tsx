@@ -6,7 +6,10 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 import { authRegisterEndpoint } from "../constants/endpoints";
+import { parseErrorsJson } from "../utils/parseJson";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -23,13 +26,18 @@ const Register = () => {
     });
   };
 
+  const handleErrors = (error: any) => {
+    const response = parseErrorsJson(error);
+    toast.error(response);
+  }
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     axios
       .post(authRegisterEndpoint, formData)
       .then((response) => {
         console.log("Registration successful", response);
-
+        toast.success('Registration successful!');
         // Clear the form data after successful registration
         setFormData({
           email: '',
@@ -38,7 +46,8 @@ const Register = () => {
         })
       })
       .catch((error) => {
-        console.error('Error:', error);
+        handleErrors(error);
+        console.error('Error:', error.request.response);
       });
   };
 
@@ -105,7 +114,9 @@ const Register = () => {
         </Typography>
       </form>
     </Card>
+      <ToastContainer position="top-center" autoClose={5000} />
         </div>
+        
     
      );
 }
