@@ -4,12 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD
-    "start": "nodemon src/index.ts",
-=======
     "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "dev" : "nodemon --exec npx ts-node ./index.ts",
->>>>>>> 0a004ef9765ea7f463271205f34a2b89f3df02e1
     "build": "tsc"
   },
   "keywords": [],
