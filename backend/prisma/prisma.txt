@@ -1,0 +1,59 @@
+model User {
+  id              Int     @id @default(autoincrement())
+  email           String  @unique
+  password        String
+  confirmPassword String
+  name            String?
+
+  grants Grant[]
+}
+
+enum StatusType {
+  Recieved
+  Aprroved
+  Completed
+}
+
+model Grant {
+  id                  Int        @id @default(autoincrement())
+  grantIndex          Int        @unique
+  name                String
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  user                User       @relation(fields: [userId], references: [id])
+  userId              Int
+  primaryInvestigator String
+  coPI                String?
+  amountRecieved      Float
+  Status              StatusType
+
+  expenseDate DateTime
+  startDate   DateTime
+  endDate     DateTime
+  PI          PI?      @relation(fields: [pIId], references: [id])
+  pIId        Int?
+
+  @@index([userId])
+}
+
+enum TransactionType {
+  Travel
+  Equipment
+  Payroll
+}
+
+// 0:Many Relationship With Grant
+model Transaction {
+  id           Int             @id @default(autoincrement())
+  transcations TransactionType
+  amountSpent  Float
+}
+
+// 1:Many Relationship With Grants
+model PI {
+  id        Int      @id @default(autoincrement())
+  name      String
+  grants    Grant[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
