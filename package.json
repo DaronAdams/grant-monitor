@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "@devexpress/dx-react-chart": "^4.0.5",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.14.11",
-    "@mui/x-charts": "^6.0.0-alpha.13"
-  }
-}
