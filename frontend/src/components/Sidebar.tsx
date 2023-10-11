@@ -4,16 +4,16 @@ import {
   List,
   ListItem,
   ListItemPrefix,
-} from "@material-tailwind/react";
+} from '@material-tailwind/react';
 import {
   PresentationChartBarIcon,
   ShoppingBagIcon,
   UserCircleIcon,
   Cog6ToothIcon,
   PowerIcon,
-} from "@heroicons/react/24/solid";
+} from '@heroicons/react/24/solid';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 export function HomePageSidebar() {
   return (
