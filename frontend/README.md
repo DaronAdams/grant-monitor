@@ -11,3 +11,10 @@ For styling we are using material-tailwind components but each of those can be e
 
 I've set an example in the HomePage components but you change the styling to any html element by adding className="write the classes here".
 
+### ESLint
+ESLint will make sure we all use the same format when developing. The main things you need to know when using it will be the following commands:
+```
+npx eslint src/
+npx eslist --fix src/
+```
+The fix command will attempt to format the files for you.
