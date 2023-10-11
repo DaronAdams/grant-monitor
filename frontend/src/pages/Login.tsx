@@ -10,8 +10,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { parseErrorsJson } from "../utils/parseJson";
 import { authLoginEndpoint } from "../constants/endpoints";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -45,7 +47,7 @@ const Login = () => {
           email: '',
           password: ''
         })
-
+        navigate('/dashboard')
       })
       .catch((error) => {
         handleErrors(error);

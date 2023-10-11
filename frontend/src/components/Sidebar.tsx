@@ -12,7 +12,9 @@ import {
   Cog6ToothIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
- 
+
+import { Link } from "react-router-dom";
+
 export function HomePageSidebar() {
   return (
     <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
@@ -26,13 +28,17 @@ export function HomePageSidebar() {
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
+          <Link to="/dashboard">
           Dashboard
+          </Link>
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <ShoppingBagIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Reports
+          <Link to="/testchart">
+            Charts
+          </Link>
         </ListItem>
         <ListItem>
           <ListItemPrefix>
@@ -50,7 +56,9 @@ export function HomePageSidebar() {
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Log Out
+          <Link to="/">
+            Log Out
+          </Link>
         </ListItem>
       </List>
     </Card>

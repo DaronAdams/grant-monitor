@@ -1,4 +1,3 @@
-import { Card, Typography } from "@material-tailwind/react";
 import { HomePageSidebar } from "../components/Sidebar";
 import BasicGrid from "../components/BasicGrid";
 

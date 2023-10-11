@@ -13,11 +13,11 @@ import TestChart from "./pages/TestChart";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <Login />,
   },
   {
-    path: "/login",
-    element: <Login />
+    path: "/dashboard",
+    element: <HomePage />
   },
   {
     path: "/register",
