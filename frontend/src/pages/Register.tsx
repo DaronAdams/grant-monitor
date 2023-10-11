@@ -1,19 +1,22 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState } from 'react';
+import axios from 'axios';
 import {
   Card,
   Input,
   Button,
   Typography,
-} from "@material-tailwind/react";
+} from '@material-tailwind/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { authRegisterEndpoint } from "../constants/endpoints";
-import { parseErrorsJson } from "../utils/parseJson";
-import { useNavigate } from "react-router-dom";
+import { authRegisterEndpoint } from '../constants/endpoints';
+import { parseErrorsJson } from '../utils/parseJson';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/context/authContext';
 
 const Register = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -41,7 +44,7 @@ const Register = () => {
     axios
       .post(authRegisterEndpoint, formData)
       .then((response) => {
-        console.log("Registration successful", response);
+        console.log('Registration successful', response);
         toast.success('Registration successful!');
         // Clear the form data after successful registration
         setFormData({
@@ -49,6 +52,7 @@ const Register = () => {
           password: '',
           confirmPassword: '',
         })
+        login(response.data.user);
         navigate('/dashboard')
       })
       .catch((error) => {
@@ -58,8 +62,8 @@ const Register = () => {
   };
 
 
-    return ( 
-        <div className="bg-gray-100 flex h-screen items-center justify-center">
+  return ( 
+    <div className="bg-gray-100 flex h-screen items-center justify-center">
       <Card color="transparent" shadow={false}>
         <Typography variant="h4" color="blue-gray">
           Register
@@ -75,7 +79,7 @@ const Register = () => {
             <Input 
               size="lg"
               label="Email"
-              crossOrigin={""}
+              crossOrigin={''}
               name="email"
               type="text"
               value={formData.email}
@@ -86,7 +90,7 @@ const Register = () => {
               type="password"
               size="lg"
               label="Password"
-              crossOrigin={""}
+              crossOrigin={''}
               typeof="password"
               name="password"
               value={formData.password}
@@ -97,7 +101,7 @@ const Register = () => {
               type="password"
               size="lg"
               label="Confirm Password"
-              crossOrigin={""}
+              crossOrigin={''}
               typeof="password"
               name="confirmPassword"
               value={formData.confirmPassword}
@@ -113,16 +117,16 @@ const Register = () => {
             Register
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <a href="/login" className="font-medium text-gray-900">
               Login
             </a>
           </Typography>
         </form>
-    </Card>
+      </Card>
       <ToastContainer position="top-center" autoClose={5000} />
-        </div>
-     );
+    </div>
+  );
 }
  
 export default Register;

@@ -3,129 +3,129 @@ import { BarChart } from '@mui/x-charts/BarChart';
 
 const BasicBar = () => {
 
-const labelProp = {
+  const labelProp = {
 
     xAxis: [
-        {
-            label: 'Amount of Grant Money Spent Per Month : Professor Cook'
-        },
+      {
+        label: 'Amount of Grant Money Spent Per Month : Professor Cook',
+      },
     ],
 
     width: 500,
     height: 400,
-};
+  };
 
-const dataProp = [
+  const dataProp = [
 
     {
       
       grant1: 10000,
       grant2: 5000,
   
-      month: 'January'
+      month: 'January',
     },
     {
       
       grant1: 25000,
       grant2: 15000,
       
-      month: 'February'
+      month: 'February',
     },
     {
       
       grant1: 47000,
       grant2: 53000,
       
-      month: 'March'
+      month: 'March',
     },
     {
       
       grant1: 2500,
       grant2: 16000,
       
-      month: 'April'
+      month: 'April',
     },
     {
       
       grant1: 17500,
       grant2: 27000,
       
-      month: 'May'
+      month: 'May',
     },
     {
       
       grant1: 65000,
       grant2: 60000,
       
-      month: 'June'
+      month: 'June',
     },
     {
       
       grant1: 30000,
       grant2: 30000,
      
-      month: 'July'
+      month: 'July',
     },
     {
       
       grant1: 65000,
       grant2: 60000,
    
-      month: 'August'
+      month: 'August',
     },
     {
       
       grant1: 75000,
       grant2: 32000,
      
-      month: 'September'
+      month: 'September',
     },
     {
       
       grant1: 5000,
       grant2: 15000,
       
-      month: 'October'
+      month: 'October',
     },
     {
       
       grant1: 45000,
       grant2: 32000,
       
-      month: 'November'
+      month: 'November',
     },
     {
        
       grant1: 17000,
       grant2: 65000,
       
-      month: 'December'
+      month: 'December',
     },
   ];
   
   const valueFormatter = (value: number) => `$${value}`;
   
   
-    return (
-      <BarChart
+  return (
+    <BarChart
 
-        dataset= {dataProp}
-        yAxis={[{ scaleType: 'band', dataKey: 'month' }]}
-        series={[{ dataKey: 'grant1', label: 'Grant 1 Money Spent', valueFormatter },
+      dataset= {dataProp}
+      yAxis={[{ scaleType: 'band', dataKey: 'month' }]}
+      series={[{ dataKey: 'grant1', label: 'Grant 1 Money Spent', valueFormatter },
         { dataKey: 'grant2', label: 'Grant 2 Money Spent', valueFormatter }]}
-        layout = "horizontal"
-        {...labelProp}
+      layout = "horizontal"
+      {...labelProp}
   
-  legend={{
-    direction: "row"
-    }}
-  sx={{
-    "--ChartsLegend-rootOffsetX": "0px",
-    "--ChartsLegend-rootOffsetY": "-20px",
-    '--ChartsLegend-rootSpacing': "100px",
-  }}
-      />
-    );
+      legend={{
+        direction: 'row',
+      }}
+      sx={{
+        '--ChartsLegend-rootOffsetX': '0px',
+        '--ChartsLegend-rootOffsetY': '-20px',
+        '--ChartsLegend-rootSpacing': '100px',
+      }}
+    />
+  );
   
 } 
 
