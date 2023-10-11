@@ -12,10 +12,20 @@ import {
   Cog6ToothIcon,
   PowerIcon,
 } from '@heroicons/react/24/solid';
-
+import { useAuth } from '../hooks/context/authContext';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 export function HomePageSidebar() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout(): void {
+    logout();
+    navigate('/');
+    console.log('Logout successful!');
+  }
+
   return (
     <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="mb-2 p-4">
@@ -52,7 +62,7 @@ export function HomePageSidebar() {
           </ListItemPrefix>
           Settings
         </ListItem>
-        <ListItem>
+        <ListItem onClick={handleLogout}>
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>

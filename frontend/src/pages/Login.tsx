@@ -11,9 +11,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { parseErrorsJson } from '../utils/parseJson';
 import { authLoginEndpoint } from '../constants/endpoints';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/context/authContext';
+import { log } from 'console';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -40,13 +44,15 @@ const Login = () => {
     axios
       .post(authLoginEndpoint, formData)
       .then((response) => {
-        console.log('', response);
+        console.log('Response', response);
         toast.success('Login successful!');
         // Clear the form data after successful registration
         setFormData({
           email: '',
           password: '',
         })
+        // Set the auth context to the user data
+        login(response.data.user);
         navigate('/dashboard')
       })
       .catch((error) => {
