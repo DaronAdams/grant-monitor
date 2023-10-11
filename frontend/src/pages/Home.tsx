@@ -8,7 +8,6 @@ const HomePage = () => {
         <HomePageSidebar />
         <div className="flex flex-col w-full">
           <div className="flex flex-row justify-between items-center p-4">
-                        
             <BasicGrid />
           </div>
         </div>
