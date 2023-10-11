@@ -11,9 +11,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { authRegisterEndpoint } from '../constants/endpoints';
 import { parseErrorsJson } from '../utils/parseJson';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/context/authContext';
 
 const Register = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -49,6 +52,7 @@ const Register = () => {
           password: '',
           confirmPassword: '',
         })
+        login(response.data.user);
         navigate('/dashboard')
       })
       .catch((error) => {
