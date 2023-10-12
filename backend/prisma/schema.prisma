@@ -18,7 +18,6 @@ model User {
   confirmPassword String
   name            String?
 
-  grants Grant[]
 }
 
 enum StatusType {
@@ -28,21 +27,51 @@ enum StatusType {
 }
 
 model Grant {
-  id                  Int        @id @default(autoincrement())
-  grantIndex          Int        @unique
-  name                String
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt
-  user                User       @relation(fields: [userId], references: [id])
-  userId              Int
-  primaryInvestigator String
-  coPI                String?
-  amountRecieved      Float
-  Status              StatusType
+  id         Int      @id @default(autoincrement())
+  grantIndex Int      @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  expenseDate DateTime
-  startDate   DateTime
-  endDate     DateTime
+  
+  userId Int
+  Status StatusType
 
-  @@index([userId])
+  expenseDate     DateTime
+  startDate       DateTime
+  endDate         DateTime
+  
+}
+
+model Transaction {
+  id     Int      @id @default(autoincrement())
+  amount Float
+  date   DateTime
+}
+
+model Employee {
+  id        Int    @id @default(autoincrement())
+  uID       String
+  balance   Float
+  firstName String
+  lastName  String
+}
+
+model GrantBudgetItem {
+  id      Int    @id @default(autoincrement())
+  name    String
+  balance Float
+  grantId Int
+  commitment String
+  
+  
+}
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  type          String
+  earnings_code Int
+  Hours         Float
+  Rate          Float
+  Frequency     String
+  Date          DateTime
 }
