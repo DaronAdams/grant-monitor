@@ -26,6 +26,20 @@ export function HomePageSidebar() {
     console.log('Logout successful!');
   }
 
+  function handleSidebarClick(event: { currentTarget: { id: any; }; }): void {
+    switch (event?.currentTarget?.id) {
+      case 'dashboard':
+        navigate('/dashboard');
+        break;
+      case 'charts':
+        navigate('/testchart');
+        break;
+      default:
+        console.log('Invalid sidebar click!');
+        break;    
+    }
+  }
+
   return (
     <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="mb-2 p-4">
@@ -34,29 +48,25 @@ export function HomePageSidebar() {
         </Typography>
       </div>
       <List>
-        <ListItem>
+        <ListItem id="dashboard" onClick={handleSidebarClick}>
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/dashboard">
           Dashboard
-          </Link>
         </ListItem>
-        <ListItem>
+        <ListItem id="charts" onClick={handleSidebarClick}>
           <ListItemPrefix>
             <ShoppingBagIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/testchart">
             Charts
-          </Link>
         </ListItem>
-        <ListItem>
+        <ListItem onClick={handleSidebarClick}>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
           Profile
         </ListItem>
-        <ListItem>
+        <ListItem onClick={handleSidebarClick}>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />
           </ListItemPrefix>
