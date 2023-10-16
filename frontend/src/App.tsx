@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Test from './pages/Test';
 import TestChart from './pages/TestChart';
+import CalendarPage from './pages/CalendarPage';
 
 
 const router = createBrowserRouter([
@@ -20,12 +21,16 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
+    path: '/calendar',
+    element: <CalendarPage />,
+  },
+  {
     path: '/register',
     element: <Register />,
   },
   {
-    path: '/test',
-    element: <Test />,
+    path: '/testchart',
+    element: <TestChart />,
   },
 
 ]);

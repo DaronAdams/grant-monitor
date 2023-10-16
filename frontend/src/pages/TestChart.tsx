@@ -9,9 +9,6 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 
-
-
-
 const TestBar = () => {
 
   const pdfRef = useRef(null);
@@ -46,6 +43,7 @@ const TestBar = () => {
       });
     }
   };
+
   return ( 
     <>
       <div className="flex flex-row">
@@ -71,5 +69,3 @@ const TestBar = () => {
 }
  
 export default TestBar;
-
-

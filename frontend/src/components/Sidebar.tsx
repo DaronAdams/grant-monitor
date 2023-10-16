@@ -35,6 +35,9 @@ export function HomePageSidebar() {
       case 'charts':
         navigate('/testchart');
         break;
+      case 'calendar':
+        navigate('/calendar');
+        break;
       default:
         console.log('Invalid sidebar click!');
         break;    
@@ -53,18 +56,14 @@ export function HomePageSidebar() {
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/">
             Dashboard
-          </Link>
         </ListItem>
-        <ListItem>
+        <ListItem id="calendar" onClick={handleSidebarClick}>
           <ListItemPrefix>
             <CalendarDaysIcon className="h-5 w-5">
             </CalendarDaysIcon>
           </ListItemPrefix>
-          <Link to="/calendar">
             Calendar
-          </Link>
         </ListItem>
         <ListItem id="charts" onClick={handleSidebarClick}>
           <ListItemPrefix>
