@@ -13,7 +13,8 @@ import {
   PowerIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from '../hooks/context/authContext';
  
 export function HomePageSidebar() {
   const { logout } = useAuth();
@@ -33,6 +34,9 @@ export function HomePageSidebar() {
       case 'charts':
         navigate('/testchart');
         break;
+      case 'calendar':
+        navigate('/calendar');
+        break;
       default:
         console.log('Invalid sidebar click!');
         break;    
@@ -51,11 +55,9 @@ export function HomePageSidebar() {
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/">
             Dashboard
-          </Link>
         </ListItem>
-        <ListItem>
+        <ListItem id="calendar" onClick={handleSidebarClick}>
           <ListItemPrefix>
             <CalendarDaysIcon className="h-5 w-5">
             </CalendarDaysIcon>
