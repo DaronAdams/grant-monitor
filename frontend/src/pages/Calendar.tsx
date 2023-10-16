@@ -1,13 +1,23 @@
-import { HomePageSidebar } from "../components/Sidebar";
+import React, { Component } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
-const Calendar = () => {
+
+class CalApp extends Component {
+  state = {
+    date: new Date(),
+  }
+
+  onChange = (date: any) => this.setState({ date })
+
+  render() {
     return (
-        <>
-            <div className="flex flex-row">
-                <HomePageSidebar />
-            </div>
-        </>
+      <div>
+        <Calendar
+          onChange={this.onChange}
+          value={this.state.date}
+        />
+      </div>
     );
+  }
 }
-
-export default Calendar;
