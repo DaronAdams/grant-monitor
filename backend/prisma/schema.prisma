@@ -17,8 +17,6 @@ model User {
   password        String
   confirmPassword String
   name            String?
-
-  grants Grant[]
 }
 
 enum StatusType {
@@ -28,21 +26,81 @@ enum StatusType {
 }
 
 model Grant {
-  id                  Int        @id @default(autoincrement())
-  grantIndex          Int        @unique
-  name                String
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt
-  user                User       @relation(fields: [userId], references: [id])
-  userId              Int
-  primaryInvestigator String
-  coPI                String?
-  amountRecieved      Float
-  Status              StatusType
+  id                 Int                   @id @default(autoincrement())
+  grantIndex         Int                   @unique
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  fund               String
+  organization       String
+  account            String
+  userId             Int
+  Status             StatusType
+  startDate          DateTime
+  endDate            DateTime
+  transactions       Transaction[]
+  payments           Payment[]
+  grantBudgetItems   GrantBudgetItem[]
+  grantEmployeeEfort GrantEmployeeEffort[]
+}
 
-  expenseDate DateTime
-  startDate   DateTime
-  endDate     DateTime
+model Transaction {
+  id      Int      @id @default(autoincrement())
+  amount  Float
+  date    DateTime
+  Grant   Grant    @relation(fields: [grantId], references: [id])
+  grantId Int
 
-  @@index([userId])
+  @@index([grantId])
+}
+
+model Employee {
+  id                  Int                   @id @default(autoincrement())
+  uID                 String
+  balance             Float
+  firstName           String
+  lastName            String
+  payments            Payment[]
+  grantEmployeeEffort GrantEmployeeEffort[]
+}
+
+model GrantBudgetItem {
+  id         Int    @id @default(autoincrement())
+  name       String
+  balance    Float
+  grantId    Int
+  commitment String
+  spent      Float
+  account    String
+  Grant      Grant  @relation(fields: [grantId], references: [id])
+
+  @@index([grantId])
+}
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  type          String
+  earnings_code Int
+  Hours         Float
+  Rate          Float
+  Frequency     String
+  Date          DateTime
+  Grant         Grant    @relation(fields: [grantId], references: [id])
+  grantId       Int
+  Employee      Employee @relation(fields: [employeeId], references: [id])
+  employeeId    Int
+
+  @@index([employeeId])
+  @@index([grantId])
+}
+
+model GrantEmployeeEffort {
+  id         Int      @id @default(autoincrement())
+  effort     Float
+  Grant      Grant    @relation(fields: [grantId], references: [id])
+  grantId    Int
+  Employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId Int
+
+  @@index([grantId])
+  @@index([employeeId])
 }
