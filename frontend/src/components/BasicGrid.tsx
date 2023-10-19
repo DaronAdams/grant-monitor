@@ -31,14 +31,14 @@ const BasicGrid = () => {
   ];
     
   const columns: GridColDef[] = [
-    { field: 'col1', headerName: 'Items', width: 150 },
-    { field: 'col2', headerName: 'PI', width: 60 },
-    { field: 'col3', headerName: 'Timeline', width: 150 },
-    { field: 'col4', headerName: 'Funds Spent', width: 50 },
+    { field: 'col1', headerName: 'Items', width: 120 },
+    { field: 'col2', headerName: 'PI', width: 100 },
+    { field: 'col3', headerName: 'Timeline', width: 120 },
+    { field: 'col4', headerName: 'Funds Spent', width: 100 },
     { field: 'col5', headerName: 'Amount Recieved', width: 150 },
-    { field: 'col6', headerName: 'Spent', width: 150 },
-    { field: 'col7', headerName: 'Status', width: 150 },
-    { field: 'col8', headerName: 'Owner', width: 75 },
+    { field: 'col6', headerName: 'Spent', width: 120 },
+    { field: 'col7', headerName: 'Status', width: 120 },
+    { field: 'col8', headerName: 'Owner', width: 100 },
   ];
 
 
