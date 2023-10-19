@@ -26,10 +26,10 @@ enum StatusType {
 }
 
 model Grant {
-  id                 Int                   @id @default(autoincrement())
-  grantIndex         Int                   @unique
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @updatedAt
+  id                 Int                  @id @default(autoincrement())
+  grantIndex         Int                  @unique
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
   fund               String
   organization       String
   account            String
@@ -37,10 +37,10 @@ model Grant {
   Status             StatusType
   startDate          DateTime
   endDate            DateTime
-  transactions       Transaction[]
-  payments           Payment[]
-  grantBudgetItems   GrantBudgetItem[]
-  grantEmployeeEfort GrantEmployeeEffort[]
+  transactions       Transaction?
+  payments           Payment?
+  grantBudgetItems   GrantBudgetItem?
+  grantEmployeeEfort GrantEmployeeEffort?
 }
 
 model Transaction {
@@ -48,7 +48,7 @@ model Transaction {
   amount  Float
   date    DateTime
   Grant   Grant    @relation(fields: [grantId], references: [id])
-  grantId Int
+  grantId Int      @unique
 
   @@index([grantId])
 }
@@ -67,7 +67,7 @@ model GrantBudgetItem {
   id         Int    @id @default(autoincrement())
   name       String
   balance    Float
-  grantId    Int
+  grantId    Int    @unique
   commitment String
   spent      Float
   account    String
@@ -85,7 +85,7 @@ model Payment {
   Frequency     String
   Date          DateTime
   Grant         Grant    @relation(fields: [grantId], references: [id])
-  grantId       Int
+  grantId       Int      @unique
   Employee      Employee @relation(fields: [employeeId], references: [id])
   employeeId    Int
 
@@ -97,7 +97,7 @@ model GrantEmployeeEffort {
   id         Int      @id @default(autoincrement())
   effort     Float
   Grant      Grant    @relation(fields: [grantId], references: [id])
-  grantId    Int
+  grantId    Int      @unique
   Employee   Employee @relation(fields: [employeeId], references: [id])
   employeeId Int
 
