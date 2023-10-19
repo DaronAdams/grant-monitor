@@ -12,7 +12,6 @@ import { parseErrorsJson } from '../utils/parseJson';
 import { authLoginEndpoint } from '../constants/endpoints';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/context/authContext';
-import { log } from 'console';
 
 const Login = () => {
   const navigate = useNavigate();
