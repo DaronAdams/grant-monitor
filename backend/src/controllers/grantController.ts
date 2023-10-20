@@ -5,22 +5,7 @@ const prisma = new PrismaClient();
 
 export async function createGrant(req: Request, res: Response) {
     try {
-    const { fund, organization, account, userId, Status, startDate, endDate,
-    grantIndex } = req.body;
-
-    // Create a new grant in the database using Prisma
-    const newGrant = await prisma.grant.create({
-      data: {
-        fund,
-        organization,
-        account,
-        userId,
-        startDate,
-        endDate,
-        Status,
-        grantIndex,
-      },
-    });
+    // TODO: Get the grant data from the request body
 
     // Close the Prisma connection when done
     await prisma.$disconnect();

@@ -26,21 +26,30 @@ enum StatusType {
 }
 
 model Grant {
-  id                 Int                  @id @default(autoincrement())
-  grantIndex         Int                  @unique
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
-  fund               String
-  organization       String
-  account            String
-  userId             Int
-  Status             StatusType
-  startDate          DateTime
-  endDate            DateTime
+  id             Int        @id @default(autoincrement())
+  grantIndex     Int        @unique
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  fund           String
+  organization   String
+  account        String
+  userId         Int
+  Status         StatusType
+  startDate      DateTime
+  endDate        DateTime
+  notes          String?
+  yearlyAmount   Float
+  NCEAppDate     DateTime
+  costShareIndex Float
+  cayuse         String
+  sponsor        String
+  totalAmount    Float
+
   transactions       Transaction?
   payments           Payment?
   grantBudgetItems   GrantBudgetItem?
   grantEmployeeEfort GrantEmployeeEffort?
+  PI                 PI?
 }
 
 model Transaction {
@@ -58,9 +67,29 @@ model Employee {
   uID                 String
   balance             Float
   firstName           String
+  rate                Float
+  effort              Float
+  startDate           DateTime
+  endDate             DateTime
   lastName            String
   payments            Payment[]
   grantEmployeeEffort GrantEmployeeEffort[]
+}
+
+model PI {
+  id                 Int    @id @default(autoincrement())
+  uNumber            String
+  firstName          String
+  lastName           String
+  summerEffort       Float
+  months             Float
+  costShareEffort    Float
+  academicYearEffort Float
+  credit             Float
+  Grant              Grant  @relation(fields: [grantId], references: [id])
+  grantId            Int    @unique
+
+  @@index([grantId])
 }
 
 model GrantBudgetItem {
