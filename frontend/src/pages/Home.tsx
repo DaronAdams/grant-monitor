@@ -4,6 +4,7 @@ import { useState } from 'react';
 import BasicGrid from '../components/BasicGrid';
 import { Button, Typography } from '@material-tailwind/react';
 import GrantForm from '../components/forms/GrantForm';
+import MultiStepForm from '../components/forms/MultiStepForm';
 
 
 const HomePage = () => {
@@ -18,7 +19,11 @@ const HomePage = () => {
     setIsModalOpen(false);
   };
 
-  const handleFormSubmit = () => {
+  const onGrantSubmit = () => {
+    console.log('Form submitted!');
+  }
+
+  const onEmployeeSubmit = () => {
     console.log('Form submitted!');
   }
 
@@ -35,7 +40,7 @@ const HomePage = () => {
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
               <Typography variant="h4" color="blue-gray">Grant Information</Typography>
-              <GrantForm onSubmit={handleFormSubmit}/>
+              <MultiStepForm onGrantSubmit={onGrantSubmit} onEmployeeSubmit={onEmployeeSubmit}/>
             </Modal>
           </div>
         </div>

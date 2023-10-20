@@ -91,92 +91,33 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onGrantSubmit, onEmployee
           <h2>Step 1: Grant Information</h2>
           <div className="mb-4">
             <label htmlFor="fund" className="block text-sm font-medium text-gray-700">
-          Fund:
-            </label>
-            <input
-            type="text"
-            id="fund"
-            name="fund"
-            value={grantData.fund}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-            />
-        </div>
-        <div className="mb-4">
-            <label htmlFor="organization" className="block text-sm font-medium text-gray-700">
-            Organization:
-            </label>
-            <input
-            type="text"
-            id="organization"
-            name="organization"
-            value={grantData.organization}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-            />
-        </div>
-        <div className="mb-4">
-            <label htmlFor="account" className="block text-sm font-medium text-gray-700">
-            Account:
+        Fund:
             </label>
             <input
               type="text"
-              id="account"
-              name="account"
-              value={grantData.account}
-              onChange={handleChange}
+              id="fund"
+              name="fund"
+              value={grantData.fund}
+              onChange={(e) => handleChange(e, 'grant')}
               className="w-full px-3 py-2 border rounded-md"
               required
             />
           </div>
           <div className="mb-4">
-        <div className="mb-4">
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-            Status:
+            <label htmlFor="organization" className="block text-sm font-medium text-gray-700">
+        Organization:
             </label>
-            <select
-            id="status"
-            name="status"
-              value={grantData.status}
-              onChange={handleChange}
+            <input
+              type="text"
+              id="organization"
+              name="organization"
+              value={grantData.organization}
+              onChange={(e) => handleChange(e, 'grant')}
               className="w-full px-3 py-2 border rounded-md"
               required
-            >
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
-            Start Date:
-            </label>
-            <input
-            type="text"
-            id="startDate"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md"
-            required
-            />
-        </div>
-        <div className="mb-4">
-            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">
-            End Date:
-            </label>
-            <input
-                type="text"
-            id="endDate"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md"
-            required
             />
           </div>
+          {/* Add more grant input fields as needed */}
           <button
             onClick={handleSubmit}
             className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
