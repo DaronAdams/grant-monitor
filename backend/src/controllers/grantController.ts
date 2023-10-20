@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function createGrant(req: Request, res: Response) {
     try {
     const { fund, organization, account, userId,
-         Status, startDate, endDate, grantIndex, yearlyAmount,
+         startDate, endDate, grantIndex, yearlyAmount,
         costShareIndex, cayuse, sponsor, totalAmount } = req.body;
 
 
