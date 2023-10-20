@@ -1,8 +1,17 @@
+import { Button } from '@material-tailwind/react';
 import React, { useState } from 'react';
 
 interface MultiStepFormProps {
   onGrantSubmit: (grantData: GrantData) => void;
   onEmployeeSubmit: (employeeData: EmployeeData) => void;
+  onPISubmit: (piData: PIData) => void;
+  onFormClose: () => void;
+}
+
+interface PIData {
+    summerEffort: number;
+    credit: number;
+    academicYearEffort: number;
 }
 
 interface GrantData {
@@ -25,7 +34,8 @@ interface EmployeeData {
   lastName: string;
 }
 
-const MultiStepForm: React.FC<MultiStepFormProps> = ({ onGrantSubmit, onEmployeeSubmit }) => {
+const MultiStepForm: React.FC<MultiStepFormProps> = ({ onGrantSubmit, onEmployeeSubmit,
+  onPISubmit, onFormClose }) => {
   const [step, setStep] = useState(1);
   const [grantData, setGrantData] = useState<GrantData>({
     fund: '',
@@ -45,6 +55,11 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onGrantSubmit, onEmployee
     endDate: '',
     lastName: '',
   });
+  const [piData, setPIData] = useState<PIData>({
+    summerEffort: 0,
+    credit: 0,
+    academicYearEffort: 0,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, formName: string) => {
     const { name, value } = e.target;
@@ -56,6 +71,11 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onGrantSubmit, onEmployee
     } else if (formName === 'employee') {
       setEmployeeData({
         ...employeeData,
+        [name]: value,
+      });
+    } else if (formName === 'pi') {
+      setPIData({
+        ...piData,
         [name]: value,
       });
     }
@@ -74,13 +94,14 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onGrantSubmit, onEmployee
       // Proceed to the next step
       handleNext();
     } else if (step === 2) {
-      // Submit the grant form
-      onGrantSubmit(grantData);
       // Proceed to the next step
       handleNext();
     } else if (step === 3) {
-      // Submit the employee form
+      handleNext();
+    } else if (step === 4) {
+      onGrantSubmit(grantData);
       onEmployeeSubmit(employeeData);
+      onPISubmit(piData);
     }
   };
 
@@ -118,12 +139,22 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onGrantSubmit, onEmployee
             />
           </div>
           {/* Add more grant input fields as needed */}
-          <button
-            onClick={handleSubmit}
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          >
+          <div className='flex justify-between'>
+            <Button
+              onClick={onFormClose}
+              variant="outlined"
+              className="py-2 px-4 rounded"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              className="py-2 px-4 rounded"
+            >
             Next
-          </button>
+            </Button>
+          </div>
+          
         </div>
       )}
 
@@ -131,21 +162,69 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({ onGrantSubmit, onEmployee
         <div>
           <h2>Step 2: Employee Information</h2>
           <div className="mb-4">
-            {/* Input fields for employee form */}
+            <p>Test</p>
           </div>
           <div className="flex justify-between">
-            <button
+            <Button
               onClick={handlePrevious}
-              className="bg-gray-300 text-gray-600 py-2 px-4 rounded hover:bg-gray-400"
+              variant='outlined'
+              className="py-2 px-4 rounded"
             >
               Previous
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleSubmit}
-              className="bg-blue-500 text-white py-2 px-4 rounded hover-bg-blue-600"
+              className="py-2 px-4 rounded"
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {step === 3 && (
+        <div>
+          <h2>Step 3: Add a PI</h2>
+          <div className="mb-4">
+            <p>Test</p>
+          </div>
+          <div className="flex justify-between">
+            <Button
+              onClick={handlePrevious}
+              variant='outlined'
+              className="py-2 px-4 rounded"
+            >
+              Previous
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              className="py-2 px-4 rounded"
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
+      {step === 4 && (
+        <div>
+          <h2>Step 4: Review</h2>
+          <div className="mb-4">
+            <p>Test</p>
+          </div>
+          <div className="flex justify-between">
+            <Button
+              onClick={handlePrevious}
+              variant='outlined'
+              className="py-2 px-4 rounded"
+            >
+              Previous
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              className="py-2 px-4 rounded"
             >
               Submit
-            </button>
+            </Button>
           </div>
         </div>
       )}

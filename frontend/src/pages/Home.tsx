@@ -1,9 +1,7 @@
 import { HomePageSidebar } from '../components/Sidebar';
 import Modal  from '../components/Modal';
 import { useState } from 'react';
-import BasicGrid from '../components/BasicGrid';
 import { Button, Typography } from '@material-tailwind/react';
-import GrantForm from '../components/forms/GrantForm';
 import MultiStepForm from '../components/forms/MultiStepForm';
 
 
@@ -27,6 +25,10 @@ const HomePage = () => {
     console.log('Form submitted!');
   }
 
+  const onPISubmit = () => {
+    console.log('Form submitted!');
+  }
+
   return ( 
     <>
       <div className="flex flex-row">
@@ -40,7 +42,12 @@ const HomePage = () => {
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
               <Typography variant="h4" color="blue-gray">Grant Information</Typography>
-              <MultiStepForm onGrantSubmit={onGrantSubmit} onEmployeeSubmit={onEmployeeSubmit}/>
+              <MultiStepForm 
+                onGrantSubmit={onGrantSubmit}
+                onEmployeeSubmit={onEmployeeSubmit}
+                onPISubmit={onPISubmit}
+                onFormClose={closeModal}
+              />
             </Modal>
           </div>
         </div>
