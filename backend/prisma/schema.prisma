@@ -39,7 +39,7 @@ model Grant {
   endDate        DateTime
   notes          String?
   yearlyAmount   Float
-  NCEAppDate     DateTime
+  NCEAppDate     DateTime?
   costShareIndex Float
   cayuse         String
   sponsor        String
@@ -63,31 +63,31 @@ model Transaction {
 }
 
 model Employee {
-  id                  Int                   @id @default(autoincrement())
-  uID                 String
-  balance             Float
-  firstName           String
-  rate                Float
-  effort              Float
-  startDate           DateTime
-  endDate             DateTime
-  lastName            String
-  payments            Payment[]
-  grantEmployeeEffort GrantEmployeeEffort[]
+  id                  Int                  @id @default(autoincrement())
+  uID                 String?
+  balance             Float?
+  firstName           String?
+  rate                Float?
+  effort              Float?
+  startDate           DateTime?
+  endDate             DateTime?
+  lastName            String?
+  payments            Payment?
+  grantEmployeeEffort GrantEmployeeEffort?
 }
 
 model PI {
-  id                 Int    @id @default(autoincrement())
-  uNumber            String
-  firstName          String
-  lastName           String
-  summerEffort       Float
-  months             Float
-  costShareEffort    Float
-  academicYearEffort Float
-  credit             Float
-  Grant              Grant  @relation(fields: [grantId], references: [id])
-  grantId            Int    @unique
+  id                 Int     @id @default(autoincrement())
+  uNumber            String?
+  firstName          String?
+  lastName           String?
+  summerEffort       Float?
+  months             Float?
+  costShareEffort    Float?
+  academicYearEffort Float?
+  credit             Float?
+  Grant              Grant?  @relation(fields: [grantId], references: [id])
+  grantId            Int     @unique
 
   @@index([grantId])
 }
@@ -116,7 +116,7 @@ model Payment {
   Grant         Grant    @relation(fields: [grantId], references: [id])
   grantId       Int      @unique
   Employee      Employee @relation(fields: [employeeId], references: [id])
-  employeeId    Int
+  employeeId    Int      @unique
 
   @@index([employeeId])
   @@index([grantId])
@@ -128,7 +128,7 @@ model GrantEmployeeEffort {
   Grant      Grant    @relation(fields: [grantId], references: [id])
   grantId    Int      @unique
   Employee   Employee @relation(fields: [employeeId], references: [id])
-  employeeId Int
+  employeeId Int      @unique
 
   @@index([grantId])
   @@index([employeeId])
