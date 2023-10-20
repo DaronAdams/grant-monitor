@@ -92,6 +92,7 @@ model GrantBudgetItem {
   commitment   String
   spent        Float
   account      String
+  category     String
   grantId      Int
   grant        Grant         @relation(fields: [grantId], references: [id])
   transactions Transaction[]
