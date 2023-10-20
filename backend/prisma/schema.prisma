@@ -81,34 +81,19 @@ model Employee {
   user                User                  @relation(fields: [userId], references: [id])
 }
 
-model GrantBudgetItem {
-  id           Int           @id @default(autoincrement())
-  name         String
-  balance      Float
-  grantId      Int           @unique
-  commitment   String
-  spent        Float
-  account      String
-  grant        Grant         @relation(fields: [grantId], references: [id])
-  transactions Transaction[]
-  payments     Payment[]
-
-  @@index([grantId])
-}
 
 model Payment {
-  id                Int             @id @default(autoincrement())
-  type              String
-  earnings_code     Int
-  hours             Float
-  rate              Float
-  frequency         String
-  date              DateTime
-  grantBudgetItem   GrantBudgetItem @relation(fields: [grantBudgetItemId], references: [id])
-  grantBudgetItemId Int             @unique
-  employee          Employee        @relation(fields: [employeeId], references: [id])
-  employeeId        Int             @unique
-
+  id            Int      @id @default(autoincrement())
+  type          String
+  earnings_code Int
+  Hours         Float
+  Rate          Float
+  Frequency     String
+  Date          DateTime
+  Grant         Grant    @relation(fields: [grantId], references: [id])
+  grantId       Int      @unique
+  Employee      Employee @relation(fields: [employeeId], references: [id])
+  employeeId    Int      @unique
   @@index([employeeId])
   @@index([grantBudgetItemId])
 }
