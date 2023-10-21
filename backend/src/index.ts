@@ -17,9 +17,9 @@ app.use(bodyParser.json());
 
 // Each controller will have its own route file
 app.use('/auth', authRoutes);
-app.use('/grant', grantRoutes);
-app.use('/employee', employeeRoutes);
-app.use('/pi', piRoutes);
+// app.use('/grant', grantRoutes);
+// app.use('/employee', employeeRoutes);
+// app.use('/pi', piRoutes);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

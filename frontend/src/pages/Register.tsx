@@ -20,7 +20,6 @@ const Register = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    confirmPassword: '',
   });
 
   const handleChange = (e: any) => {
@@ -50,7 +49,6 @@ const Register = () => {
         setFormData({
           email: '',
           password: '',
-          confirmPassword: '',
         })
         login(response.data.user);
         navigate('/dashboard')
@@ -104,7 +102,6 @@ const Register = () => {
               crossOrigin={''}
               typeof="password"
               name="confirmPassword"
-              value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
