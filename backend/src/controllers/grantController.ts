@@ -1,37 +1,55 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from "@prisma/client";
+import { Grant } from '../libs/types/grant';
 
 const prisma = new PrismaClient();
 
 export async function createGrant(req: Request, res: Response) {
-    try {
-    const { fund, organization, account, userId,
-         startDate, endDate, grantIndex, yearlyAmount,
-        costShareIndex, cayuse, sponsor, totalAmount } = req.body;
+  try {
+    // Extract the relevant fields from req.body using the YourModel type
+    const {
+      fund,
+      organization,
+      account,
+      program,
+      costShareIndex,
+      cayuse,
+      sponsor,
+      status,
+      totalAmount,
+      startDate,
+      endDate,
+      index,
+      yearlyAmount,
+      User
+    } = req.body as Grant;
 
+    // const newGrant = await prisma.grant.create({
+    //   data: {
+    //     fund,
+    //     organization,
+    //     account,
+    //     program,
+    //     costShareIndex,
+    //     cayuse,
+    //     sponsor,
+    //     status,
+    //     totalAmount,
+    //     startDate,
+    //     endDate,
+    //     index,
+    //     yearlyAmount,
+    //     User: {
+    //       connect: {
+    //         id: User.id
+    //       }
+    //     }
+    //   },
+    // });
 
-    // Create a new grant in the database using Prisma
-    const newGrant = await prisma.grant.create({
-      data: {
-        fund,
-        organization,
-        account,
-        userId,
-        Status: 'Recieved',
-        startDate,
-        endDate,
-        grantIndex,
-        yearlyAmount,
-        costShareIndex,
-        cayuse,
-        sponsor,
-        totalAmount,
-      },
-    });
-
-    if (!newGrant) {
-        return res.status(500).json({ error: 'An error occurred while creating the grant' });
-    }
+    // if (!newGrant) {
+    //   return res.status(500).json({ error: 'An error occurred while creating the grant' });
+    // }
 
     // Close the Prisma connection when done
     await prisma.$disconnect();
@@ -42,6 +60,7 @@ export async function createGrant(req: Request, res: Response) {
     return res.status(500).json({ error: 'An error occurred while creating the grant' });
   }
 }
+
 
 export async function getGrantById(req: Request, res: Response) {
     // TODO: Implement this function

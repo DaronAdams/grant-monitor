@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from "@prisma/client";
 import { checkValidEmail } from '../libs/utils/emailVerifyer';
+import jwt, { Secret } from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
+const accessTokenSecret = process.env.TOKEN_SECRET;
 
 export async function registerUser(req: Request, res: Response) {
   const { email, password } = req.body;
@@ -29,7 +31,8 @@ export async function registerUser(req: Request, res: Response) {
       return res.status(400).json({ message: 'Email is not valid' });
     }
 
-    return res.status(201).json({ message: 'User registered successfully', user: newUser });
+    const accessToken = jwt.sign({ email: email }, accessTokenSecret as Secret);
+    return res.status(201).json({ message: 'User registered successfully', user: newUser, accessToken: accessToken });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -55,7 +58,8 @@ export async function loginUser(req: Request, res: Response) {
       return res.status(400).json({ message: 'Password is incorrect' });
     }
 
-    return res.status(200).json({ message: 'User logged in successfully', user: existingUser });
+    const accessToken = jwt.sign({ email: email }, accessTokenSecret as Secret);
+    return res.status(200).json({ message: 'User logged in successfully', user: existingUser, accessToken: accessToken });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
