@@ -9,9 +9,6 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 
-
-
-
 const TestBar = () => {
 
   const pdfRef = useRef(null);
@@ -50,6 +47,7 @@ const TestBar = () => {
     <>
       <div className="flex flex-row">
         <HomePageSidebar />
+
         <div className="flex flex-col w-full" ref = {pdfRef}>
           <div className="flex flex-row justify-between items-center p-4">
             <BasicBar />

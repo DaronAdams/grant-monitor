@@ -9,8 +9,10 @@ const HomePage = () => {
     <>
       <div className="flex flex-row">
         <HomePageSidebar />
+
         <div className="flex flex-col w-full">
           { user ? (<p>Welcome {user.email} </p>) : (<p>Welcome Guest</p>)}
+
           <div className="flex flex-row justify-between items-center p-4">
             <BasicGrid />
           </div>
