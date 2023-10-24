@@ -54,7 +54,7 @@ export async function createGrant(req: Request, res: Response) {
     // Close the Prisma connection when done
     await prisma.$disconnect();
 
-    return res.status(201).json({ message: 'Grant created successfully', grant: newGrant });
+    // return res.status(201).json({ message: 'Grant created successfully', grant: newGrant });
   } catch (error) {
     console.error('Error creating grant:', error);
     return res.status(500).json({ error: 'An error occurred while creating the grant' });
