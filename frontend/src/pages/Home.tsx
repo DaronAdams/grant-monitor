@@ -1,5 +1,9 @@
 import { HomePageSidebar } from "../components/Sidebar";
 import BasicGrid from "../components/BasicGrid";
+import UpdatedGrid from "../components/UpdatedGrid";
+
+
+
 
 const HomePage = () => {
     return ( 
@@ -9,8 +13,11 @@ const HomePage = () => {
                 <div className="flex flex-col w-full">
                     <div className="flex flex-row justify-between items-center p-4">
                         
-                        <BasicGrid />
+                        
+                        <UpdatedGrid />
+                        
                     </div>
+
                 </div>
             </div>
         </>
