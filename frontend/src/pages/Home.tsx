@@ -1,6 +1,7 @@
 import { HomePageSidebar } from '../components/Sidebar';
 import BasicGrid from '../components/BasicGrid';
 import { useAuth } from '../hooks/context/authContext';
+import StartDateCal from '../components/StartDateCal';
 
 const HomePage = () => {
   const { user } = useAuth();
@@ -15,6 +16,7 @@ const HomePage = () => {
 
           <div className="flex flex-row justify-between items-center p-4">
             <BasicGrid />
+
           </div>
         </div>
       </div>

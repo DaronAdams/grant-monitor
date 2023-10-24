@@ -9,8 +9,9 @@ import { HomePageSidebar } from './Sidebar';
 
 export function StartDateCal() {
 // pull startDate based on grant attribute
+// calendar is 0 indexed, need to subtract 1 to get the correct month
 
-  const startDate=new Date(2023, 1, 23); // will need to update and replace once we get DB querying set up
+  const startDate=new Date(2023, 0, 5); // will need to update and replace once we get DB querying set up
     
   return(
     <>
