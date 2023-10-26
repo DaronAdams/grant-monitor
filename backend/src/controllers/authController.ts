@@ -31,7 +31,7 @@ export async function registerUser(req: Request, res: Response) {
       return res.status(400).json({ message: 'Email is not valid' });
     }
 
-    const accessToken = jwt.sign({ id: id }, accessTokenSecret as Secret);
+    const accessToken = jwt.sign({ id: newUser.id }, accessTokenSecret as Secret);
     return res.status(201).json({ message: 'User registered successfully', user: newUser, accessToken: accessToken });
   } catch (error) {
     console.error(error);
@@ -40,7 +40,7 @@ export async function registerUser(req: Request, res: Response) {
 }
 
 export async function loginUser(req: Request, res: Response) {
-  const { email, password, id } = req.body;
+  const { email, password } = req.body;
 
   try {
     // Check if the email is already registered
