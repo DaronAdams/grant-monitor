@@ -5,16 +5,16 @@ interface ButtonProps {
 
 
 const Button = ({
-    text,
-    children
+  text,
+  children,
 }: ButtonProps) => {
-    return ( 
-        <button
-            className="btn"
-        >
-            {text}
-        </button>
-    );
+  return ( 
+    <button
+      className="btn"
+    >
+      {text}
+    </button>
+  );
 }
  
 export default Button;

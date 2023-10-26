@@ -1,37 +1,37 @@
 import {
   createBrowserRouter,
   RouterProvider,
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import HomePage from './pages/Home';
 import Login from './pages/Login';
-import Register from "./pages/Register";
-import Test from "./pages/Test";
-import TestChart from "./pages/TestChart";
+import Register from './pages/Register';
+import Test from './pages/Test';
+import TestChart from './pages/TestChart';
 
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Login />,
   },
   {
-    path: "/dashboard",
-    element: <HomePage />
+    path: '/dashboard',
+    element: <HomePage />,
   },
   {
-    path: "/register",
-    element: <Register />
+    path: '/register',
+    element: <Register />,
   },
   {
-    path: "/test",
-    element: <Test />
+    path: '/test',
+    element: <Test />,
   },
 
   {
-    path:"/testchart",
-    element: <TestChart />
-  }
+    path:'/testchart',
+    element: <TestChart />,
+  },
 
 ]);
 

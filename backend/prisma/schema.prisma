@@ -12,37 +12,148 @@ datasource db {
 }
 
 model User {
-  id              Int     @id @default(autoincrement())
-  email           String  @unique
-  password        String
-  confirmPassword String
-  name            String?
-
-  grants Grant[]
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String?
+  grants    Grant[]
+  employees Employee[]
 }
 
 enum StatusType {
-  Recieved
-  Aprroved
+  Received
+  Approved
   Completed
 }
 
 model Grant {
-  id                  Int        @id @default(autoincrement())
-  grantIndex          Int        @unique
-  name                String
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt
-  user                User       @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  index          Int        @unique
+  fund           String
+  organization   String
+  account        String
+  program        String
+  costShareIndex Float
+  cayuse         String
+  sponsor        String
+  status         StatusType
+
+  yearlyAmount Float
+  totalAmount  Float
+
+  startDate  DateTime
+  endDate    DateTime
+  nceAppDate DateTime?
+
+  notes String?
+
+  grantBudgetItems    GrantBudgetItem[]
+  grantEmployeeBridge GrantEmployeeBridge[]
+  grantPIBridge       GrantPIBridge[]
   userId              Int
-  primaryInvestigator String
-  coPI                String?
-  amountRecieved      Float
-  Status              StatusType
+  User                User                  @relation(fields: [userId], references: [id])
 
-  expenseDate DateTime
-  startDate   DateTime
-  endDate     DateTime
+  @@index(userId)
+}
 
-  @@index([userId])
+model Transaction {
+  id                Int             @id @default(autoincrement())
+  amount            Float
+  date              DateTime
+  grantBudgetItem   GrantBudgetItem @relation(fields: [grantBudgetItemId], references: [id])
+  grantBudgetItemId Int
+
+  @@index(grantBudgetItemId)
+}
+
+model Employee {
+  id                  Int                   @id @default(autoincrement())
+  uID                 String?               @unique
+  firstName           String?
+  middleInitial       String?
+  lastName            String?
+  notes               String?
+  payments            Payment[]
+  grantEmployeeBridge GrantEmployeeBridge[]
+  grantPIBridge       GrantPIBridge[]
+  userId              Int
+  user                User                  @relation(fields: [userId], references: [id])
+
+  @@index(userId)
+}
+
+model GrantBudgetItem {
+  id           Int           @id @default(autoincrement())
+  name         String
+  balance      Float
+  commitment   String
+  spent        Float
+  account      String
+  category     String
+  grantId      Int
+  grant        Grant         @relation(fields: [grantId], references: [id])
+  transactions Transaction[]
+  payments     Payment[]
+
+  @@index(grantId)
+}
+
+model Payment {
+  id                Int             @id @default(autoincrement())
+  type              String
+  earnings_code     Int
+  hours             Float
+  rate              Float
+  frequency         String
+  date              DateTime
+  grantBudgetItem   GrantBudgetItem @relation(fields: [grantBudgetItemId], references: [id])
+  grantBudgetItemId Int
+  employee          Employee        @relation(fields: [employeeId], references: [id])
+  employeeId        Int
+
+  @@index(employeeId)
+  @@index(grantBudgetItemId)
+}
+
+model GrantEmployeeBridge {
+  id     Int   @id @default(autoincrement())
+  rate   Float
+  effort Float
+
+  startDate DateTime
+  endDate   DateTime?
+
+  grant      Grant    @relation(fields: [grantId], references: [id])
+  grantId    Int
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId Int
+
+  @@unique([grantId, employeeId])
+  @@index(grantId)
+  @@index(employeeId)
+}
+
+model GrantPIBridge {
+  id                 Int   @id @default(autoincrement())
+  academicYearEffort Float
+  costShareEffort    Float
+  summerEffort       Float
+  credit             Float
+
+  startDate DateTime
+  endDate   DateTime?
+
+  isCoPI Boolean
+
+  grant      Grant    @relation(fields: [grantId], references: [id])
+  grantId    Int
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId Int
+
+  @@unique([grantId, employeeId])
+  @@index(grantId)
+  @@index(employeeId)
 }

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import axios from "axios";
+import axios from 'axios';
 import { grantListEndpoint } from '../constants/endpoints';
 
 const Test = () => {
-    const [data, setData] = useState(null);
+  const [data, setData] = useState(null);
 
-    useEffect(() => {
+  useEffect(() => {
     // Make a GET request using the Axios instance
     axios
       .get(grantListEndpoint)
@@ -20,7 +20,7 @@ const Test = () => {
   }, []); // The empty dependency array ensures the effect runs once on component mount
 
     
-    return (
+  return (
     <div>
       {data ? (
         <div>

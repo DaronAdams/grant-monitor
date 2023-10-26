@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { PrismaClient } from "@prisma/client";
 import { checkValidEmail } from '../libs/utils/emailVerifyer';
 
-export const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
 export async function registerUser(req: Request, res: Response) {
   const { email, password, confirmPassword } = req.body;
