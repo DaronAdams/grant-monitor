@@ -1,10 +1,16 @@
 import * as React from 'react';
-import { DataGrid, GridToolbarContainer, GridToolbarExport, GridColDef, GridRowsProp,} from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer, GridColDef, GridRowsProp, GridFilterItem, GridFilterModel} from '@mui/x-data-grid';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 
+interface CustomGridFilterItem extends GridFilterItem {
+  columnField: string; // Add the missing property
+}
+
 const UpdatedGrid = () => {
+
+  
 
 
 const rows: GridRowsProp = [
@@ -122,6 +128,50 @@ const columns: GridColDef[] = [
     
 ];
 
+
+const [filterModel, setFilterModel] = React.useState<CustomGridFilterItem[]>([]);
+const [filteredRows, setFilteredRows] = React.useState<GridRowsProp>(rows);
+
+// Add a useEffect to update filteredRows whenever filterModel changes
+React.useEffect(() => {
+  let filteredData = rows;
+
+  // If there are filters applied, update filteredData
+  if (filterModel.length > 0) {
+    filteredData = rows.filter((row) => {
+      return filterModel.every((filter) => {
+        const cellValue = row[filter.columnField as string];
+        return cellValue.toString().toLowerCase().includes(filter.value.toString().toLowerCase());
+      });
+    });
+  }
+
+  setFilteredRows(filteredData);
+}, [filterModel, rows]);
+
+function filterRows(filterModel: GridFilterModel, rows: GridRowsProp) {
+  if (!filterModel || !filterModel.items) {
+    return rows; // No filters applied, return all rows
+  }
+
+  // Implement your filtering logic here
+  const filteredRows = rows.filter((row) => {
+    // Check each row against the filter criteria
+    for (const filter of filterModel.items as CustomGridFilterItem[]) {
+      const cellValue = row [filter.columnField]; // No type assertion needed now
+      if (!filter.value.toLowerCase().includes(cellValue.toLowerCase())) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  return filteredRows;
+}
+
+
+
+
 function CustomToolBar() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -132,6 +182,7 @@ function CustomToolBar() {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
 
 const exportDataAsCSV = (data: Array<{ [key: string]: any }>) => {
         const formattedData = data.map((row) => ({
@@ -165,6 +216,7 @@ const exportDataAsCSV = (data: Array<{ [key: string]: any }>) => {
 
   const handleExportCSV = () => {
     exportDataAsCSV(rows as Array<{ [key: string]: any }>);
+
     handleMenuClose();
   };
   
@@ -209,40 +261,17 @@ const exportDataAsCSV = (data: Array<{ [key: string]: any }>) => {
 }
 
 
-
-/*
-function CustomToolBar(){
-    return (
-        <GridToolbarContainer>
-            
-            <GridToolbarExport
-            excelOptions = {{
-
-                customColumnHeaders: columns.map((column) => ({
-                    id: column.field,
-                    displayName: column.headerName,
-                    numFmt: column.field === 'progress' ? '0.00%' : undefined,
-                  })),
-                startDate: { numFmt : 'dd/mm/yyyy'},
-                endDate: { numFmt : 'dd/mm/yyyy'},
-                
-
-            }}/>
-
-        </GridToolbarContainer>
-    );
-}
-*/
-
-
-
-
 return(
 
         <div style = {{height: 300, width:'100%'}}>
             <DataGrid
-            rows = {rows}
+            rows = {filteredRows}
             columns = {columns}
+            onFilterModelChange={(model) => {
+              const filteredRows = filterRows(model, rows);
+              setFilteredRows(filteredRows);
+            }}
+
             slots = {{toolbar: CustomToolBar}}/>
         </div>
     
