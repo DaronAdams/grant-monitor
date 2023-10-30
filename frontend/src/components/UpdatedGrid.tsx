@@ -1,81 +1,43 @@
-import * as React from 'react';
+import {useState, useEffect } from 'react';
 import { DataGrid, GridToolbarContainer, GridFilterModel, GridColDef, GridRowsProp, GridToolbarColumnsButton, GridToolbarFilterButton} from '@mui/x-data-grid';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
+import axios from 'axios';
+import { grantListEndpoint } from '../constants/endpoints';
 
 const UpdatedGrid = () => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    axios
+      .get(grantListEndpoint)
+      .then((response) => {
+        console.log('Response', response.data.grants);
+        setData(response.data.grants);
+        setIsLoading(false);
+      })
+  }, []);
 
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
 
-  const rows: GridRowsProp = [
-    {
-      grant: 'Grant 1',
-      owner: 'Amy Cook',
-      startDate: new Date(2021,8,4),
-      endDate: new Date(2022,8,4),
-      moneyAllocated: 150000,
-      moneySpent: 150000,
-      grantStatus: 'Grant Finished',
-      id:0,
-    },
-
-    {
-      grant: 'Grant 2',
-      owner: 'Amy Cook',
-      startDate: new Date(2023,8,4),
-      endDate: new Date(2025,5,4),
-      moneyAllocated: 250000,
-      moneySpent: 80000,
-      grantStatus: 'In Progress',
-      id:1,
-    },
-
-    {
-      grant: 'Grant 3',
-      owner: 'Amy Cook',
-      startDate: new Date(2023,11,1),
-      endDate: new Date(2024,8,4),
-      moneyAllocated: 300000,
-      moneySpent: 0,
-      grantStatus: 'Grant Not Started',
-      id:2,
-    },
-
-    {
-      grant: 'Grant 4',
-      owner: 'Vinhthuy Phan',
-      startDate: new Date(2022,11,1),
-      endDate: new Date(2023,3,4),
-      moneyAllocated: 300000,
-      moneySpent: 300000,
-      grantStatus: 'Grant Finished',
-      id:3,
-    },
-
-    {
-      grant: 'Grant 5',
-      owner: 'Vinhthuy Phan',
-      startDate: new Date(2023,5,4),
-      endDate: new Date(2026,3,4),
-      moneyAllocated: 500000,
-      moneySpent: 100000,
-      grantStatus: 'In Progress',
-      id:4,
-    },
-
-    {
-      grant: 'Grant 6',
-      owner: 'Fatih Sen',
-      startDate: new Date(2023,12,2),
-      endDate: new Date(2025,2,4),
-      moneyAllocated: 400000,
-      moneySpent: 0,
-      grantStatus: 'Grant Not Started',
-      id:5,
-    },
-        
-  ];
+  const rows: GridRowsProp = data.map((row: any) => {
+    return {
+      grant: row.account, // Use the 'account' property for the 'grant' value
+      owner: row.sponsor,
+      startDate: new Date(row.startDate),
+      endDate: new Date(row.endDate),
+      moneyAllocated: row.totalAmount,
+      moneySpent: 0, // You can set this to the initial value you want
+      grantStatus: row.status,
+      id: row.id,
+    };
+  })
 
   rows.forEach((row) => {
     const currentDate = new Date(); // Get the current date
@@ -93,143 +55,143 @@ const UpdatedGrid = () => {
 
 
 
-function applyFilters(data: GridRowsProp,filterModel: GridFilterModel,): GridRowsProp {
-  let filteredData: GridRowsProp = [...data];
-  filterModel.items.forEach((filterItem) => {
-    const { field, value} = filterItem;
-    if (value === 'equals') {
-      filteredData = filteredData.filter((row) => row[field] === filterItem.value);
-    } 
+  function applyFilters(data: GridRowsProp,filterModel: GridFilterModel): GridRowsProp {
+    let filteredData: GridRowsProp = [...data];
+    filterModel.items.forEach((filterItem) => {
+      const { field, value} = filterItem;
+      if (value === 'equals') {
+        filteredData = filteredData.filter((row) => row[field] === filterItem.value);
+      } 
 
-    if (value === 'contains') {
-      const searchValue = filterItem.value.toString().toLowerCase();
-      filteredData = filteredData.filter((row) =>
-        row[field].toString().toLowerCase().includes(searchValue)
-      );
-    }
-  });
-  return filteredData;
-}
-
-const [filterModel, setFilterModel] = React.useState<GridFilterModel>({items: [],});
-const [filteredRows, setFilteredRows] = React.useState(rows);
-const [filterApplied, setFilterApplied] = React.useState(false);
-
-const handleFilterModelChange = (newFilterModel: GridFilterModel) => {
-
-  setFilterModel(newFilterModel);
-  const filteredData = applyFilters(rows, newFilterModel);
-  setFilteredRows(filteredData);
-
-  if (newFilterModel.items.some((item) => item.value !== '')) {
-    setFilterApplied(true);
-  } else {
-    setFilterApplied(false);
+      if (value === 'contains') {
+        const searchValue = filterItem.value.toString().toLowerCase();
+        filteredData = filteredData.filter((row) =>
+          row[field].toString().toLowerCase().includes(searchValue),
+        );
+      }
+    });
+    return filteredData;
   }
-};
 
-function CustomToolBar() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({items: []});
+  const [filteredRows, setFilteredRows] = useState(rows);
+  const [filterApplied, setFilterApplied] = useState(false);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleFilterModelChange = (newFilterModel: GridFilterModel) => {
+
+    setFilterModel(newFilterModel);
+    const filteredData = applyFilters(rows, newFilterModel);
+    setFilteredRows(filteredData);
+
+    if (newFilterModel.items.some((item) => item.value !== '')) {
+      setFilterApplied(true);
+    } else {
+      setFilterApplied(false);
+    }
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  function CustomToolBar() {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const exportDataAsCSV = (data: Array<{[key:string]:any}>) => {
-    const formattedData = data.map((row) => ({
-      Grant: row.grant,
-      PI: row.owner,
-      StartDate: row.startDate.toLocaleDateString('en-GB'),
-      EndDate: row.endDate.toLocaleDateString('en-GB'),
-      Progress: `${row.progress.toFixed(2)}%`,
-      MoneyAllocated: `$${row.moneyAllocated}`,
-      MoneySpent: `$${row.moneySpent}`,
-      MoneyLeft: `$${row.moneyLeft}`,
-      GrantStatus: row.grantStatus,
-    }));
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
 
-    const csvContent =
+    const handleMenuClose = () => {
+      setAnchorEl(null);
+    };
+
+    const exportDataAsCSV = (data: Array<{[key:string]:any}>) => {
+      const formattedData = data.map((row) => ({
+        Grant: row.grant,
+        PI: row.owner,
+        StartDate: row.startDate.toLocaleDateString('en-GB'),
+        EndDate: row.endDate.toLocaleDateString('en-GB'),
+        Progress: `${row.progress.toFixed(2)}%`,
+        MoneyAllocated: `$${row.moneyAllocated}`,
+        MoneySpent: `$${row.moneySpent}`,
+        MoneyLeft: `$${row.moneyLeft}`,
+        GrantStatus: row.grantStatus,
+      }));
+
+      const csvContent =
       'data:text/csv;charset=utf-8,' +
       [Object.keys(formattedData[0]), ...formattedData.map(Object.values)]
         .map((row) => row.join(','))
         .join('\n');
 
-    const encodedUri = encodeURI(csvContent);
+      const encodedUri = encodeURI(csvContent);
 
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'data.csv');
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'data.csv');
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
 
-  const handleExportCSV = () => {
+    const handleExportCSV = () => {
 
-    let dataToExport;
+      let dataToExport;
 
-    if (filterApplied == true) {
-      dataToExport = filteredRows;
-    } 
-    else {
-      dataToExport = rows;
-    }
+      if (filterApplied == true) {
+        dataToExport = filteredRows;
+      } 
+      else {
+        dataToExport = rows;
+      }
 
-    exportDataAsCSV(dataToExport as Array<{[key:string]: any}>);
+      exportDataAsCSV(dataToExport as Array<{[key:string]: any}>);
 
-    handleMenuClose();
-  };
+      handleMenuClose();
+    };
 
-  const handleExcelExport = () => {
+    const handleExcelExport = () => {
 
-    let dataToExport;
+      let dataToExport;
 
-    if (filterApplied == true) {
-      dataToExport = filteredRows;
-    } 
-    else {
-      dataToExport = rows;
-    }
+      if (filterApplied == true) {
+        dataToExport = filteredRows;
+      } 
+      else {
+        dataToExport = rows;
+      }
   
 
-    const rowsForExcelExport = dataToExport.map((row) => ({
-      Grant: row.grant,
-      PI: row.owner,
-      StartDate: row.startDate.toLocaleDateString('en-GB'),
-      EndDate: row.endDate.toLocaleDateString('en-GB'),
-      Progress: `${row.progress.toFixed(2)}%`,
-      MoneyAllocated: `$${row.moneyAllocated}`,
-      MoneySpent: `$${row.moneySpent}`,
-      MoneyLeft: `$${row.moneyLeft}`,
-      GrantStatus: row.grantStatus,
-    }));
+      const rowsForExcelExport = dataToExport.map((row) => ({
+        Grant: row.grant,
+        PI: row.owner,
+        StartDate: row.startDate.toLocaleDateString('en-GB'),
+        EndDate: row.endDate.toLocaleDateString('en-GB'),
+        Progress: `${row.progress.toFixed(2)}%`,
+        MoneyAllocated: `$${row.moneyAllocated}`,
+        MoneySpent: `$${row.moneySpent}`,
+        MoneyLeft: `$${row.moneyLeft}`,
+        GrantStatus: row.grantStatus,
+      }));
 
-    const worksheet = XLSX.utils.json_to_sheet(rowsForExcelExport);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'DataGrid');
+      const worksheet = XLSX.utils.json_to_sheet(rowsForExcelExport);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'DataGrid');
 
-    XLSX.writeFile(workbook, 'data.xlsx');
-  };
+      XLSX.writeFile(workbook, 'data.xlsx');
+    };
 
-  return (
-    <GridToolbarContainer>
-      <GridToolbarColumnsButton />
-      <GridToolbarFilterButton />
-      <IconButton onClick={handleMenuOpen}>
-        <SaveAltIcon />
-      </IconButton>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-        <MenuItem onClick={handleExportCSV}>Download as CSV</MenuItem>
-        <MenuItem onClick={handleExcelExport}>Download as Excel</MenuItem>
-      </Menu>
-    </GridToolbarContainer>
-  );
-}
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <IconButton onClick={handleMenuOpen}>
+          <SaveAltIcon />
+        </IconButton>
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+          <MenuItem onClick={handleExportCSV}>Download as CSV</MenuItem>
+          <MenuItem onClick={handleExcelExport}>Download as Excel</MenuItem>
+        </Menu>
+      </GridToolbarContainer>
+    );
+  }
 
 
 
@@ -268,17 +230,17 @@ function CustomToolBar() {
 
 
 
-return (
-  <div style={{ height: '100%', width: '100%' }}>
-    <DataGrid
-      rows={filteredRows}
-      columns={columns}
-      filterModel={filterModel}
-      onFilterModelChange={handleFilterModelChange}
-      slots={{ toolbar: CustomToolBar }}
-    />
-  </div>
-);
+  return (
+    <div style={{ height: '100%', width: '100%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        filterModel={filterModel}
+        onFilterModelChange={handleFilterModelChange}
+        slots={{ toolbar: CustomToolBar }}
+      />
+    </div>
+  );
 
 }
 
