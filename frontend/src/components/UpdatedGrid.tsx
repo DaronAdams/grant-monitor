@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { DataGrid, GridToolbarContainer, GridFilterModel, GridColDef, GridRowsProp,} from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer, GridFilterModel, GridColDef, GridRowsProp, GridToolbarColumnsButton, GridToolbarFilterButton} from '@mui/x-data-grid';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 
 const UpdatedGrid = () => {
+
 
 
   const rows: GridRowsProp = [
@@ -97,10 +98,13 @@ function applyFilters(data: GridRowsProp,filterModel: GridFilterModel,): GridRow
   filterModel.items.forEach((filterItem) => {
     const { field, value} = filterItem;
     if (value === 'equals') {
-      filteredData = filteredData.filter((row) => row[field] === value);
-    } else if (value === 'contains') {
+      filteredData = filteredData.filter((row) => row[field] === filterItem.value);
+    } 
+
+    if (value === 'contains') {
+      const searchValue = filterItem.value.toString().toLowerCase();
       filteredData = filteredData.filter((row) =>
-        row[field].toString().includes(value)
+        row[field].toString().toLowerCase().includes(searchValue)
       );
     }
   });
@@ -112,10 +116,16 @@ const [filteredRows, setFilteredRows] = React.useState(rows);
 const [filterApplied, setFilterApplied] = React.useState(false);
 
 const handleFilterModelChange = (newFilterModel: GridFilterModel) => {
+
   setFilterModel(newFilterModel);
   const filteredData = applyFilters(rows, newFilterModel);
   setFilteredRows(filteredData);
-  setFilterApplied(newFilterModel.items.length > 0);
+
+  if (newFilterModel.items.some((item) => item.value !== '')) {
+    setFilterApplied(true);
+  } else {
+    setFilterApplied(false);
+  }
 };
 
 function CustomToolBar() {
@@ -160,7 +170,15 @@ function CustomToolBar() {
   };
 
   const handleExportCSV = () => {
-    const dataToExport = filterApplied ? filteredRows : rows;
+
+    let dataToExport;
+
+    if (filterApplied == true) {
+      dataToExport = filteredRows;
+    } 
+    else {
+      dataToExport = rows;
+    }
 
     exportDataAsCSV(dataToExport as Array<{[key:string]: any}>);
 
@@ -168,7 +186,16 @@ function CustomToolBar() {
   };
 
   const handleExcelExport = () => {
-    const dataToExport = filterApplied ? filteredRows : rows;
+
+    let dataToExport;
+
+    if (filterApplied == true) {
+      dataToExport = filteredRows;
+    } 
+    else {
+      dataToExport = rows;
+    }
+  
 
     const rowsForExcelExport = dataToExport.map((row) => ({
       Grant: row.grant,
@@ -191,6 +218,8 @@ function CustomToolBar() {
 
   return (
     <GridToolbarContainer>
+      <GridToolbarColumnsButton />
+      <GridToolbarFilterButton />
       <IconButton onClick={handleMenuOpen}>
         <SaveAltIcon />
       </IconButton>
@@ -235,6 +264,8 @@ function CustomToolBar() {
     
     
   ];
+
+
 
 
 return (
