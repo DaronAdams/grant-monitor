@@ -5,7 +5,7 @@ import { checkValidEmail } from '../libs/utils/emailVerifyer';
 const prisma = new PrismaClient();
 
 export async function registerUser(req: Request, res: Response) {
-  const { email, password, confirmPassword } = req.body;
+  const { email, password } = req.body;
   
 
   try {
@@ -22,15 +22,11 @@ export async function registerUser(req: Request, res: Response) {
 
     // Create a new user
     const newUser = await prisma.user.create({
-      data: { email, password, confirmPassword },
+      data: { email, password },
     });
 
     if (checkValidEmail(email) === false) {
       return res.status(400).json({ message: 'Email is not valid' });
-    }
-
-    if (confirmPassword !== password) {
-      return res.status(400).json({ message: 'Passwords do not match' });
     }
 
     return res.status(201).json({ message: 'User registered successfully', user: newUser });
