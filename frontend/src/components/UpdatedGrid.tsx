@@ -196,9 +196,6 @@ const UpdatedGrid = () => {
 
 
   const columns: GridColDef[] = [
-
-
-
     {field: 'grant', headerName: 'Grant', width: 100},
     {field: 'owner', headerName: 'PI', width: 150},
     {field: 'startDate', headerName: 'Start Date', width: 150},
@@ -222,9 +219,7 @@ const UpdatedGrid = () => {
     {field: 'moneyAllocated', headerName: 'Money Allocated', valueFormatter: (params) => `$${params.value}`, width: 150},
     {field: 'moneySpent', headerName: 'Money Spent', valueFormatter: (params) => `$${params.value}`, width: 150},
     {field: 'moneyLeft', headerName: 'Money Left', valueFormatter: (params) => `$${params.value}`, width: 150},
-    {field: 'grantStatus', headerName: 'Status',type:'singleSelect', valueOptions: ['Grant Finished', 'In Progress', 'Grant Not Started'], width: 150},
-    
-    
+    {field: 'grantStatus', headerName: 'Status',type:'singleSelect', valueOptions: ['Grant Finished', 'In Progress', 'Grant Not Started'], width: 150}, 
   ];
 
 
