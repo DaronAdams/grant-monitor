@@ -8,6 +8,6 @@ router.post('/create', createGrant);
 router.put('/edit/:id', editGrant);
 router.delete('/delete/:id', deleteGrant);
 router.get('/:id', getGrantById);
-router.get('/list', getGrantList);
+router.get('/list/grants', getGrantList);
 
 export default router;
