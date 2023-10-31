@@ -50,7 +50,7 @@ function SecondTabContent() {
   ) 
 }
 
-function BudgetReportTabContent() {
+function BudgetTabContent() {
   return(
     <div>
         Budget report tab content
@@ -73,8 +73,8 @@ export function TabsDefault() {
       desc: 'This is the second tab',
     },
     {
-      label: 'Budget Report',
-      value: 'Budget Report',
+      label: 'Budget',
+      value: 'Budget',
       desc: 'Budget report for a specific grant',
     },
   ];
@@ -116,7 +116,7 @@ export function TabsDefault() {
               <>
                 {value === 'Main' && <MainTabContent />}
                 {value === 'Second' && <SecondTabContent />}
-                {value === 'Budget Report' && <BudgetReportTabContent />}
+                {value === 'Budget' && <BudgetTabContent />}
               </>
             </TabPanel>
           ))}

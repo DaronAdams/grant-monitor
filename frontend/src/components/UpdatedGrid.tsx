@@ -58,12 +58,12 @@ const UpdatedGrid = () => {
   function applyFilters(data: GridRowsProp,filterModel: GridFilterModel): GridRowsProp {
     let filteredData: GridRowsProp = [...data];
     filterModel.items.forEach((filterItem) => {
-      const { field, value} = filterItem;
-      if (value === 'equals') {
+      const { field, value, operator} = filterItem;
+      if (filterItem.operator === 'equals') {
         filteredData = filteredData.filter((row) => row[field] === filterItem.value);
       } 
 
-      if (value === 'contains') {
+      if (filterItem.operator === 'contains') {
         const searchValue = filterItem.value.toString().toLowerCase();
         filteredData = filteredData.filter((row) =>
           row[field].toString().toLowerCase().includes(searchValue),
