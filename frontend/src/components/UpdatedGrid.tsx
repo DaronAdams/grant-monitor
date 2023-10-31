@@ -93,29 +93,31 @@ const UpdatedGrid = () => {
 
 
 
-function applyFilters(data: GridRowsProp,filterModel: GridFilterModel,): GridRowsProp {
-  let filteredData: GridRowsProp = [...data];
-  filterModel.items.forEach((filterItem) => {
-    const { field, value} = filterItem;
-    if (value === 'equals') {
-      filteredData = filteredData.filter((row) => row[field] === filterItem.value);
-    } 
-
-    if (value === 'contains') {
-      const searchValue = filterItem.value.toString().toLowerCase();
-      filteredData = filteredData.filter((row) =>
-        row[field].toString().toLowerCase().includes(searchValue)
+  function applyFilters(data: GridRowsProp, filterModel: GridFilterModel): GridRowsProp {
+    let filteredData = [...data];
+  
+    filterModel.items.forEach((filterItem) => {
+      const { field, value, operator} = filterItem;
+  
+      if (filterItem.operator === 'equals') {
+        filteredData = filteredData.filter((row) => row[field] === filterItem.value);
+      } else if (filterItem.operator === 'contains') {
+        const searchValue = filterItem.value ? filterItem.value.toString().toLowerCase() : '';
+        filteredData = filteredData.filter((row) =>
+        row[field] && row[field].toString().toLowerCase().includes(searchValue)
       );
-    }
-  });
-  return filteredData;
-}
+      }
+    });
+  
+    return filteredData;
+  }
 
 const [filterModel, setFilterModel] = React.useState<GridFilterModel>({items: [],});
 const [filteredRows, setFilteredRows] = React.useState(rows);
 const [filterApplied, setFilterApplied] = React.useState(false);
 
 const handleFilterModelChange = (newFilterModel: GridFilterModel) => {
+  //console.log('New Filter Model:', newFilterModel);
 
   setFilterModel(newFilterModel);
   const filteredData = applyFilters(rows, newFilterModel);
@@ -173,12 +175,14 @@ function CustomToolBar() {
 
     let dataToExport;
 
-    if (filterApplied == true) {
+    if (filterApplied === true) {
       dataToExport = filteredRows;
     } 
     else {
       dataToExport = rows;
     }
+
+    //console.log('Exporting CSV - Data Length:', dataToExport.length);
 
     exportDataAsCSV(dataToExport as Array<{[key:string]: any}>);
 
@@ -189,12 +193,14 @@ function CustomToolBar() {
 
     let dataToExport;
 
-    if (filterApplied == true) {
+    if (filterApplied === true) {
       dataToExport = filteredRows;
     } 
     else {
       dataToExport = rows;
     }
+
+    //console.log('Exporting Excel - Data Length:', dataToExport.length);
   
 
     const rowsForExcelExport = dataToExport.map((row) => ({
