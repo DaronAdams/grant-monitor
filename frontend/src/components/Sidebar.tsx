@@ -7,7 +7,6 @@ import {
 } from '@material-tailwind/react';
 import {
   PresentationChartBarIcon,
-  ShoppingBagIcon,
   UserCircleIcon,
   Cog6ToothIcon,
   PowerIcon,
@@ -31,9 +30,6 @@ export function HomePageSidebar() {
       case 'dashboard':
         navigate('/dashboard');
         break;
-      case 'charts':
-        navigate('/testchart');
-        break;
       default:
         console.log('Invalid sidebar click!');
         break;    
@@ -53,12 +49,6 @@ export function HomePageSidebar() {
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
           Dashboard
-        </ListItem>
-        <ListItem id="charts" onClick={handleSidebarClick}>
-          <ListItemPrefix>
-            <ShoppingBagIcon className="h-5 w-5" />
-          </ListItemPrefix>
-            Charts
         </ListItem>
         <ListItem onClick={handleSidebarClick}>
           <ListItemPrefix>
