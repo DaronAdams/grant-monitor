@@ -1,18 +1,18 @@
-import { HomePageSidebar } from '../components/Sidebar';
 import { useAuth } from '../hooks/context/authContext';
 import { TabsDefault } from '../components/Tabs';
 
-const GrantShowPage = () => {
+interface GrantShowPageProps {
+  params: any;
+}
+
+const GrantShowPage:React.FC<GrantShowPageProps> = ({params}) => {
   const { user } = useAuth();
 
   return ( 
     <>
-      <div className="flex flex-row">
-        <HomePageSidebar />
-        <div className="flex flex-col">
-          <TabsDefault />
+      <div className="flex flex-col">
+        <TabsDefault />
 
-        </div>
       </div>
     </>
         
