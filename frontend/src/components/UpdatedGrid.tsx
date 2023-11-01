@@ -6,7 +6,12 @@ import * as XLSX from 'xlsx';
 import axios from 'axios';
 import { grantListEndpoint } from '../constants/endpoints';
 
-const UpdatedGrid = () => {
+
+interface UpdatedGridProps {
+  openSubpage: (id: number) => void;
+}
+
+const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,6 +29,10 @@ const UpdatedGrid = () => {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+  };
+
+  const handleRowClick = (params: any) => {
+    openSubpage(params); // Call the openSubpage function with the row's id
   };
 
   const rows: GridRowsProp = data.map((row: any) => {
@@ -238,6 +247,7 @@ const UpdatedGrid = () => {
         filterModel={filterModel}
         onFilterModelChange={handleFilterModelChange}
         slots={{ toolbar: CustomToolBar }}
+        onRowClick={handleRowClick}
       />
     </div>
   );
