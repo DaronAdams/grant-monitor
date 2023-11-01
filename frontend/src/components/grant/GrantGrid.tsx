@@ -4,6 +4,7 @@ import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import GrantData from '../../interfaces/GrantData'
 import { useState } from 'react';
+import { Typography } from '@material-tailwind/react'
 
 
 interface UpdatedGridProps {
@@ -38,23 +39,42 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
     }
   };
 
-  const rows: GridRowsProp = allGrantsData.map((row: any) => {
+  const formatDateMMDDYYYY = (dateStr: any) => {
+
+    const date: Date = new Date(dateStr);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month (0-based) + 1
+    const day = date.getDate().toString().padStart(2, '0'); // Day
+    const year = date.getFullYear(); // Year
+
+    return `${month}/${day}/${year}`;
+  }
+
+  const rows: GridRowsProp = allGrantsData.map((grantDataObject: GrantData) => {
     return {
-      grant: row.account, // Use the 'account' property for the 'grant' value
-      owner: row.sponsor,
-      startDate: new Date(row.startDate),
-      endDate: new Date(row.endDate),
-      moneyAllocated: row.totalAmount,
-      moneySpent: 0, // You can set this to the initial value you want
-      grantStatus: row.status,
-      id: row.id,
+      grant: grantDataObject.account, // Use the 'account' property for the 'grant' value
+      owner: grantDataObject.sponsor,
+      startDate: formatDateMMDDYYYY(grantDataObject.startDate),
+      endDate: formatDateMMDDYYYY(grantDataObject.endDate),
+      moneyAllocated: grantDataObject.totalAmount,
+      moneySpent: 50000, // You can set this to the initial value you want
+      grantStatus: grantDataObject.status,
+      id: grantDataObject.id,
     };
   })
 
+  const parseDate = (dateStr: string) => {
+    const [mm, dd, yyyy] = dateStr.split('/').map(Number);
+    return new Date(yyyy, mm - 1, dd); // Month is 0-based, so subtract 1 from mm
+  }
+
   rows.forEach((row) => {
     const currentDate = new Date(); // Get the current date
-    const totalDuration = (row.endDate as any - row.startDate as any) / (1000 * 60 * 60 * 24); // Total duration in days
-    const elapsedDuration = (currentDate as any - row.startDate as any) / (1000 * 60 * 60 * 24); // Elapsed duration in days
+
+    const startDate: Date = parseDate(row.startDate);
+    const endDate: Date = parseDate(row.endDate);
+
+    const totalDuration = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24); // Total duration in days
+    const elapsedDuration = (currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24); // Elapsed duration in days
     if (elapsedDuration < 0) {
       row.progress = 0; // Start date is in the future, set progress to 0%
     } else if (elapsedDuration > totalDuration) {
@@ -63,6 +83,9 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
       row.progress = (elapsedDuration / totalDuration) * 100; // Progress percentage
     }
     row.moneyLeft = row.moneyAllocated - row.moneySpent;
+
+    row.moneyProgress = [(row.moneySpent / row.moneyAllocated) * 100, row.moneySpent / 1000, row.moneyLeft / 1000];
+    console.log(row.moneyProgress);
   });
 
 
@@ -174,7 +197,6 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
         dataToExport = rows;
       }
   
-
       const rowsForExcelExport = dataToExport.map((row) => ({
         Grant: row.grant,
         PI: row.owner,
@@ -209,54 +231,58 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
     );
   }
 
-
-
   const columns: GridColDef[] = [
-
-
-
-    {field: 'grant', headerName: 'Grant', width: 100},
-    {field: 'owner', headerName: 'PI', width: 150},
-    {field: 'startDate', headerName: 'Start Date', width: 150},
-    {field: 'endDate', headerName: 'End Date', width: 150},
-    {field: 'progress',headerName: 'Progress',width: 200,
+    {field: 'grant', headerName: 'Grant', flex: 1},
+    {field: 'owner', headerName: 'PI', flex: .75},
+    {field: 'startDate', headerName: 'Start Date', flex: 1},
+    {field: 'endDate', headerName: 'End Date', flex: 1},
+    {field: 'progress',headerName: 'Lifetime', flex: 1.75,
       renderCell: (params) => (
-        <div style={{ width: '100%', backgroundColor: 'lightgray', padding: '2px', borderRadius: '5px' }}>
+        <div style={{ width: '100%', backgroundColor: 'darkgray', padding: '2px', borderRadius: '5px' }}>
           <div
             style={{
               width: `${params.value}%`,
-              backgroundColor: 'green',
+              backgroundColor: `${params.value == 0 && 'darkgray' || 'blue'}`,
               height: '100%',
               borderRadius: '5px',
+              padding: '5px',
             }}
           >
-            {params.value.toFixed(2)}%
+            <Typography variant="small" color="white">{params.value.toFixed(0)}%</Typography>
+            
           </div>
         </div>
       ),
     },
-    {field: 'moneyAllocated', headerName: 'Money Allocated', valueFormatter: (params) => `$${params.value}`, width: 150},
-    {field: 'moneySpent', headerName: 'Money Spent', valueFormatter: (params) => `$${params.value}`, width: 150},
-    {field: 'moneyLeft', headerName: 'Money Left', valueFormatter: (params) => `$${params.value}`, width: 150},
-    {field: 'grantStatus', headerName: 'Status',type:'singleSelect', valueOptions: ['Grant Finished', 'In Progress', 'Grant Not Started'], width: 150},
-    
-    
+    {field: 'moneyProgress', headerName: 'Spending', flex: 1.75,
+      renderCell: (params) => (
+        <div style={{ width: '100%', backgroundColor: 'darkgray', padding: '2px', borderRadius: '5px' }}>
+          <div
+            style={{
+              width: `${params.value[0]}%`,
+              backgroundColor: `${params.value[0] == 0 && 'darkgray' || 'green'}`,
+              height: '100%',
+              borderRadius: '5px',
+              padding: '5px',
+            }}
+          >
+            <Typography variant="small" color="white" >${params.value[1].toFixed(2)}K spent, ${params.value[2].toFixed(2)}K left</Typography>            
+          </div>
+        </div>
+      ),
+    },
+    {field: 'grantStatus', headerName: 'Status',type:'singleSelect', valueOptions: ['Grant Finished', 'In Progress', 'Grant Not Started'], flex: 1},
   ];
 
-
-
-
   return (
-    <div style={{ height: '100%', width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        filterModel={filterModel}
-        onFilterModelChange={handleFilterModelChange}
-        slots={{ toolbar: CustomToolBar }}
-        onRowClick={handleRowClick}
-      />
-    </div>
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      filterModel={filterModel}
+      onFilterModelChange={handleFilterModelChange}
+      slots={{ toolbar: CustomToolBar }}
+      onRowClick={handleRowClick}
+    />
   );
 
 }
