@@ -1,4 +1,3 @@
-import {useState, useEffect } from 'react';
 
 interface SubpageProps {
     children: React.ReactNode; // Define children as a prop

@@ -1,41 +1,44 @@
-import {useState, useEffect } from 'react';
-import { DataGrid, GridToolbarContainer, GridFilterModel, GridColDef, GridRowsProp, GridToolbarColumnsButton, GridToolbarFilterButton} from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer, GridFilterModel, GridColDef, GridRowsProp, GridToolbarColumnsButton, GridToolbarFilterButton, GridRowParams} from '@mui/x-data-grid';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
-import axios from 'axios';
-import { grantListEndpoint } from '../constants/endpoints';
+import GrantData from '../../interfaces/GrantData'
+import { useState } from 'react';
 
 
 interface UpdatedGridProps {
-  openSubpage: (id: number) => void;
+  openSubpage: (grantData: GrantData) => void;
+  allGrantsData: GrantData[];
 }
 
-const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage }) => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) => {
 
-  useEffect(() => {
-    axios
-      .get(grantListEndpoint)
-      .then((response) => {
-        console.log('Response', response.data.grants);
-        setData(response.data.grants);
-        setIsLoading(false);
-      })
-  }, []);
 
+  /*
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   };
+  */
 
-  const handleRowClick = (params: any) => {
-    openSubpage(params); // Call the openSubpage function with the row's id
+  const findItemById = (id: number) => {
+    return allGrantsData.find(dataItem => dataItem.id === id);
   };
 
-  const rows: GridRowsProp = data.map((row: any) => {
+  const handleRowClick = (params: GridRowParams) => {
+    const id = parseInt(params.id.toString())
+    const grantData: GrantData | undefined = findItemById(id);
+    console.log(grantData);
+
+    if (grantData) {
+      openSubpage(grantData);
+    } else {
+      console.error('what the heck i couldnt get the grant data for ' + id);
+    }
+  };
+
+  const rows: GridRowsProp = allGrantsData.map((row: any) => {
     return {
       grant: row.account, // Use the 'account' property for the 'grant' value
       owner: row.sponsor,
@@ -67,12 +70,16 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage }) => {
   function applyFilters(data: GridRowsProp,filterModel: GridFilterModel): GridRowsProp {
     let filteredData: GridRowsProp = [...data];
     filterModel.items.forEach((filterItem) => {
-      const { field, value} = filterItem;
-      if (value === 'equals') {
+      const { field, value, operator} = filterItem;
+      if (value === undefined || value === null || value === ' '){
+        return;
+      }
+
+      if (filterItem.operator === 'equals') {
         filteredData = filteredData.filter((row) => row[field] === filterItem.value);
       } 
 
-      if (value === 'contains') {
+      if (filterItem.operator === 'contains') {
         const searchValue = filterItem.value.toString().toLowerCase();
         filteredData = filteredData.filter((row) =>
           row[field].toString().toLowerCase().includes(searchValue),

@@ -7,7 +7,6 @@ import HomePage from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Test from './pages/Test';
-import TestChart from './pages/TestChart';
 
 
 const router = createBrowserRouter([
@@ -27,12 +26,6 @@ const router = createBrowserRouter([
     path: '/test',
     element: <Test />,
   },
-
-  {
-    path:'/testchart',
-    element: <TestChart />,
-  },
-
 ]);
 
 
