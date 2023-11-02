@@ -28,7 +28,7 @@ export function HomePageSidebar() {
   function handleSidebarClick(event: { currentTarget: { id: any; }; }): void {
     switch (event?.currentTarget?.id) {
       case 'dashboard':
-        navigate('/dashboard');
+        navigate('/grants');
         break;
       default:
         console.log('Invalid sidebar click!');
