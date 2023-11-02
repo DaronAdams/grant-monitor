@@ -53,7 +53,7 @@ const Register = () => {
           confirmPassword: '',
         })
         login(response.data.user);
-        navigate('/dashboard')
+        navigate('/grants')
       })
       .catch((error) => {
         handleErrors(error);

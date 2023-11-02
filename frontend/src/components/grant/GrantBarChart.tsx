@@ -1,7 +1,6 @@
-import * as React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 
-const BasicBar = () => {
+const GrantBarChart = () => {
 
   const labelProp = {
 
@@ -129,4 +128,4 @@ const BasicBar = () => {
   
 } 
 
-export default BasicBar;
+export default GrantBarChart;

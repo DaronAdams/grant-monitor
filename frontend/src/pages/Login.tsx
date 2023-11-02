@@ -52,7 +52,7 @@ const Login = () => {
         })
         // Set the auth context to the user data
         login(response.data.user);
-        navigate('/dashboard')
+        navigate('/grants')
       })
       .catch((error) => {
         handleErrors(error);

@@ -3,12 +3,12 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 
-import HomePage from './pages/Home';
+import Grants from './pages/Grants';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Test from './pages/Test';
-import TestChart from './pages/TestChart';
-import GrantShowPage from './pages/GrantShow';
+import Employees from './pages/Employees';
+import Settings from './pages/Settings';
 
 
 const router = createBrowserRouter([
@@ -17,8 +17,16 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/dashboard',
-    element: <HomePage />,
+    path: '/grants',
+    element: <Grants />,
+  },
+  {
+    path: '/employees',
+    element: <Employees />,
+  },
+  {
+    path: '/settings',
+    element: <Settings />,
   },
   {
     path: '/register',
@@ -28,16 +36,6 @@ const router = createBrowserRouter([
     path: '/test',
     element: <Test />,
   },
-
-  {
-    path:'/testchart',
-    element: <TestChart />,
-  },
-  {
-    path:'/grant-show',
-    element: <GrantShowPage />,
-  },
-
 ]);
 
 
