@@ -5,9 +5,60 @@ import {
   Button,
   Typography,
 } from '@material-tailwind/react';
+import { ToastContainer, toast } from 'react-toastify';
+import { parseErrorsJson } from '../utils/parseJson';
+import { authLoginEndpoint } from '../constants/endpoints';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
   
 export function ChangePassword() {
+  const navigate = useNavigate();
+ 
+  const [formData, setFormData] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleErrors = (error: any) => {
+    const response = parseErrorsJson(error);
+    toast.error(response);
+  }
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    axios
+      .post(authLoginEndpoint, formData)
+      .then((response) => {
+        console.log('Response', response);
+        toast.success('Login successful!');
+        // Clear the form data after successful registration
+        setFormData({
+          oldPassword: '',
+          newPassword: '',
+          confirmPassword: '',
+        })
+        // Set the auth context to the user data
+        navigate('/grants')
+      })
+      .catch((error) => {
+        handleErrors(error);
+        console.error('Error:', error.request.response);
+      });
+  };
+
+
   return (
     <div className="mt-2 text-center">
       <Card color="transparent" shadow={false}>
@@ -17,7 +68,10 @@ export function ChangePassword() {
         <Typography color="gray" className="mt-1 font-normal">
         Change your password below.
         </Typography>
-        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+        <form 
+          className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+          onSubmit={handleSubmit}
+        >
           <div className="mb-4 flex flex-col gap-6">
             <Input
               size="lg"
@@ -25,6 +79,8 @@ export function ChangePassword() {
               crossOrigin={''}
               name="oldPassword"
               type="password"
+              value={formData.oldPassword}
+              onChange={handleChange}
               required
             />
             <Input
@@ -33,6 +89,8 @@ export function ChangePassword() {
               crossOrigin={''}
               name="newPassword"
               type="password"
+              value={formData.newPassword}
+              onChange={handleChange}
               required
             />
             <Input
@@ -41,6 +99,8 @@ export function ChangePassword() {
               crossOrigin={''}
               name="confirmPassword"
               type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
               required
             />
           </div>
@@ -53,6 +113,7 @@ export function ChangePassword() {
           </Button>
         </form>
       </Card>
+      <ToastContainer position="top-center" autoClose={5000} />
     </div>
   )
 }
