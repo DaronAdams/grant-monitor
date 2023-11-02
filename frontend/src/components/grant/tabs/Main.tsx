@@ -2,9 +2,10 @@ import React, {useRef, useState} from 'react';
 import GrantData from '../../../interfaces/GrantData';
 import GrantBarChart from '../GrantBarChart'
 import GrantLineChart from '../GrantLineChart'
-import Button from '@mui/material/Button';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import GrantDeleteButton from '../GrantDeleteButton';
+import { Button } from '@material-tailwind/react';
 
 
 interface GrantMainTabProps {
@@ -16,7 +17,9 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
 
   const pdfRef = useRef(null);
 
+  const [openPopUp, setOpenPopUp] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
+  const [grantDeleted, setGrantDeleted] = useState(false);
 
   const downloadPDF = () =>{
     const input = pdfRef.current;
@@ -45,6 +48,10 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
 
       });
     }
+  };
+
+  const openModal = () => {
+    setOpenPopUp(true);
   };
 
   return(
@@ -78,11 +85,23 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
         <p>{`Program: ${grantData.program}`}</p>
       </div>
 
+      <div className='py-4'>
+        <GrantDeleteButton openPopUp={openPopUp}
+          setOpenPopUp={setOpenPopUp}
+          onClick={openModal}
+          grantData={grantData}
+          grantDeleted={grantDeleted}
+        />
+      </div>
       
 
       <div className="flex flex-col w-full" ref = {pdfRef}>
         <div className="flex flex-row justify-between items-center p-4">
-          <Button variant="contained" onClick={downloadPDF} style={{ display: buttonVisible ? 'block' : 'none' }}>Download Charts</Button>
+          <Button
+            onClick={downloadPDF}
+          >
+            Download Charts
+          </Button>
         </div>
         <div className="flex flex-row justify-between items-center p-4">
           <GrantBarChart />
