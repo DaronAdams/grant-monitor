@@ -1,6 +1,7 @@
 import { HomePageSidebar } from '../components/Sidebar';
 import GrantGrid from '../components/grant/GrantGrid';
 import Subpage from '../components/Subpage';
+import NavSpeedDial from '../components/NavSpeedDial'
 //import { useAuth } from '../hooks/context/authContext';
 import { useState, useEffect } from 'react';
 import GrantContainer from '../components/grant/GrantContainer';
@@ -10,7 +11,7 @@ import { grantListEndpoint } from '../constants/endpoints';
 import { Spinner, Typography } from '@material-tailwind/react';
 
 
-const HomePage = () => {
+const Grants = () => {
   //const { user } = useAuth();
   const [grantData, setGrantData] = useState<GrantData | null>(null);
   const [allGrantsData, setAllGrantsData] = useState<GrantData[]>([]);
@@ -39,7 +40,7 @@ const HomePage = () => {
   return ( 
     <>
       <div className="flex flex-row">
-        <HomePageSidebar />
+        <NavSpeedDial />
         {!isLoading && (
           grantData !== null && (
             <Subpage>
@@ -67,4 +68,4 @@ const HomePage = () => {
   );
 }
  
-export default HomePage;
+export default Grants;

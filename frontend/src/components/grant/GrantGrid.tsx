@@ -230,7 +230,7 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
 
   const columns: GridColDef[] = [
     {field: 'grant', headerName: 'Grant', flex: 1},
-    {field: 'owner', headerName: 'PI', flex: .75},
+    {field: 'owner', headerName: 'Sponsor', flex: .75},
     {field: 'timeProgress', headerName: 'Lifetime', flex: 1.75,
       renderCell: (params) => (
         <div className="w-full">

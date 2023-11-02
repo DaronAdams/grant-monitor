@@ -59,23 +59,23 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
       <h1 className="font-semibold">Grant Name</h1>
   
       <div>
-        <p>{`PI: ${grantData.account}`}</p>
-        <p>{`PI U#: ${grantData.index}`}</p>
-        <p>{`Sponsor: ${grantData.sponsor}`}</p>
-        <p>{`Index: ${grantData.index}`}</p>
-        <p>{`Cost Share Index: ${grantData.costShareIndex}`}</p>
+        <p>{`Account: ${grantData.account}`}</p>
         <p>{`Cayuse: ${grantData.cayuse}`}</p>
-        <p>{`Dates: ${grantData.startDate} - ${grantData.endDate}`}</p>
-        <p>{`Total Amount: $${grantData.totalAmount.toFixed(2)}`}</p>
-        <p>{`Yearly Amount: $${grantData.yearlyAmount.toFixed(2)}`}</p>
-        <p>{`NCE Application Date: ${grantData.nceAppDate ? grantData.nceAppDate : 'N/A'}`}</p>
-        <p>{`Notes: ${grantData.notes || 'N/A'}`}</p>
-        <p>{`Status: ${grantData.status}`}</p>
-        <p>{`Created At: ${grantData.createdAt}`}</p>
-        <p>{`Updated At: ${grantData.updatedAt}`}</p>
         <p>{`Fund: ${grantData.fund}`}</p>
         <p>{`Organization: ${grantData.organization}`}</p>
         <p>{`Program: ${grantData.program}`}</p>
+        <p>{`Sponsor: ${grantData.sponsor}`}</p>
+        <p>{`Index: ${grantData.index}`}</p>
+        <p>{`Cost-Share Index: ${grantData.costShareIndex}`}</p>
+        <p>{`NCE App Date: ${grantData.nceAppDate}`}</p>
+        <p>{`Start Date: ${grantData.startDate}`}</p>
+        <p>{`End Date: ${grantData.endDate}`}</p>
+        <p>{`Status: ${grantData.status}`}</p>
+        <p>{`Total Amount: $${grantData.totalAmount}`}</p>
+        <p>{`Yearly Amount: ${grantData.yearlyAmount}`}</p>
+        <p>{`Notes: ${grantData.notes || 'N/A'}`}</p>
+        <p>{`Created At: ${grantData.createdAt}`}</p>
+        <p>{`Updated At: ${grantData.updatedAt}`}</p>
       </div>
 
       
