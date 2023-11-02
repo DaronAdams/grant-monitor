@@ -4,7 +4,7 @@ import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import GrantData from '../../interfaces/GrantData'
 import { useState } from 'react';
-import { Typography } from '@material-tailwind/react'
+import { Typography, Progress } from '@material-tailwind/react'
 
 
 interface UpdatedGridProps {
@@ -75,15 +75,10 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
 
     const totalDuration = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24); // Total duration in days
     const elapsedDuration = (currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24); // Elapsed duration in days
-    if (elapsedDuration < 0) {
-      row.progress = 0; // Start date is in the future, set progress to 0%
-    } else if (elapsedDuration > totalDuration) {
-      row.progress = 100; // End date has passed, set progress to 100%
-    } else {
-      row.progress = (elapsedDuration / totalDuration) * 100; // Progress percentage
-    }
-    row.moneyLeft = row.moneyAllocated - row.moneySpent;
+    const progress = (elapsedDuration < 0) && 0 || (elapsedDuration > totalDuration) && 100 || (elapsedDuration / totalDuration) * 100;
+    row.timeProgress = [progress, row.startDate, row.endDate]
 
+    row.moneyLeft = row.moneyAllocated - row.moneySpent;
     row.moneyProgress = [(row.moneySpent / row.moneyAllocated) * 100, row.moneySpent / 1000, row.moneyLeft / 1000];
     console.log(row.moneyProgress);
   });
@@ -99,7 +94,7 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
       }
 
       if (filterItem.operator === 'equals') {
-        filteredData = filteredData.filter((row) => row[field] === filterItem.value);
+        filteredData = filteredData.filter((row) => row[field] == filterItem.value || row[field][0] == filterItem.value);
       } 
 
       if (filterItem.operator === 'contains') {
@@ -144,12 +139,13 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
       const formattedData = data.map((row) => ({
         Grant: row.grant,
         PI: row.owner,
-        StartDate: row.startDate.toLocaleDateString('en-GB'),
-        EndDate: row.endDate.toLocaleDateString('en-GB'),
-        Progress: `${row.progress.toFixed(2)}%`,
+        StartDate: row.startDate,
+        EndDate: row.endDate,
+        Progress: `${row.timeProgress[0].toFixed(2)}%`,
         MoneyAllocated: `$${row.moneyAllocated}`,
         MoneySpent: `$${row.moneySpent}`,
         MoneyLeft: `$${row.moneyLeft}`,
+        PercentSpent: `${row.moneyProgress[0].toFixed(2)}%`,
         GrantStatus: row.grantStatus,
       }));
 
@@ -200,12 +196,13 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
       const rowsForExcelExport = dataToExport.map((row) => ({
         Grant: row.grant,
         PI: row.owner,
-        StartDate: row.startDate.toLocaleDateString('en-GB'),
-        EndDate: row.endDate.toLocaleDateString('en-GB'),
-        Progress: `${row.progress.toFixed(2)}%`,
+        StartDate: row.startDate,
+        EndDate: row.endDate,
+        Progress: `${row.timeProgress[0].toFixed(2)}%`,
         MoneyAllocated: `$${row.moneyAllocated}`,
         MoneySpent: `$${row.moneySpent}`,
         MoneyLeft: `$${row.moneyLeft}`,
+        PercentSpent: `${row.moneyProgress[0].toFixed(2)}%`,
         GrantStatus: row.grantStatus,
       }));
 
@@ -234,42 +231,41 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
   const columns: GridColDef[] = [
     {field: 'grant', headerName: 'Grant', flex: 1},
     {field: 'owner', headerName: 'PI', flex: .75},
-    {field: 'startDate', headerName: 'Start Date', flex: 1},
-    {field: 'endDate', headerName: 'End Date', flex: 1},
-    {field: 'progress',headerName: 'Lifetime', flex: 1.75,
+    {field: 'timeProgress', headerName: 'Lifetime', flex: 1.75,
       renderCell: (params) => (
-        <div style={{ width: '100%', backgroundColor: 'darkgray', padding: '2px', borderRadius: '5px' }}>
-          <div
-            style={{
-              width: `${params.value}%`,
-              backgroundColor: `${params.value == 0 && 'darkgray' || 'blue'}`,
-              height: '100%',
-              borderRadius: '5px',
-              padding: '5px',
-            }}
-          >
-            <Typography variant="small" color="white">{params.value.toFixed(0)}%</Typography>
-            
+        <div className="w-full">
+          <div className="mb-2 flex items-center justify-between gap-4">
+            <Typography variant="small">
+              {params.value[1]}
+            </Typography>
+            <Typography variant="small">
+              {params.value[2]}
+            </Typography>
           </div>
+          <Progress size="sm" color="pink" value={params.value[0]} />
         </div>
       ),
+      sortComparator: (v1, v2) => {
+        return v1[0] - v2[0];
+      },
     },
     {field: 'moneyProgress', headerName: 'Spending', flex: 1.75,
       renderCell: (params) => (
-        <div style={{ width: '100%', backgroundColor: 'darkgray', padding: '2px', borderRadius: '5px' }}>
-          <div
-            style={{
-              width: `${params.value[0]}%`,
-              backgroundColor: `${params.value[0] == 0 && 'darkgray' || 'green'}`,
-              height: '100%',
-              borderRadius: '5px',
-              padding: '5px',
-            }}
-          >
-            <Typography variant="small" color="white" >${params.value[1].toFixed(2)}K spent, ${params.value[2].toFixed(2)}K left</Typography>            
+        <div className="w-full">
+          <div className="mb-2 flex items-center justify-between gap-4">
+            <Typography variant="small">
+              ${params.value[1].toFixed(0)}K spent
+            </Typography>
+            <Typography variant="small">
+              ${params.value[2].toFixed(0)}K left
+            </Typography>
           </div>
+          <Progress size="sm" color="green" value={params.value[0]} />
         </div>
       ),
+      sortComparator: (v1, v2) => {
+        return v1[0] - v2[0];
+      },
     },
     {field: 'grantStatus', headerName: 'Status',type:'singleSelect', valueOptions: ['Grant Finished', 'In Progress', 'Grant Not Started'], flex: 1},
   ];
@@ -286,5 +282,7 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
   );
 
 }
+
+
 
 export default UpdatedGrid;
