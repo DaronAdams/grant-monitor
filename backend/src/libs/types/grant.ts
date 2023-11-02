@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 
 type StatusType = 'Approved' | 'Received' | 'Completed';
 
-export interface Grant {
+export default interface Grant {
   id: number;
   createdAt: Date;
   updatedAt: Date;

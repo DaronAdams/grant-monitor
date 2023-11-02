@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from "@prisma/client";
-import { Grant } from '../libs/types/grant';
+import Grant from '../libs/types/grant';
 
 const prisma = new PrismaClient();
 
