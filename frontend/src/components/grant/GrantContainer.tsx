@@ -111,7 +111,7 @@ const Grant:React.FC<GrantShowPageProps> = ({grantData, closeSubpage}) => {
                 <TabPanel key={value} value={value}>
                   <>
                     {value === 'Main' && <Main grantData={grantData} />}
-                    {value === 'Visuals' && <Visuals />}
+                    {value === 'Visuals' && <Visuals grantData={grantData} />}
                     {value === 'Budget Report' && <BudgetReport />}
                     {value === 'Effort Report' && <EffortReport />}
                     {value === 'Employee Report' && <EmployeeReport />}
