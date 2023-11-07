@@ -2,44 +2,21 @@
 import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { HomePageSidebar } from './Sidebar';
-import axios from 'axios';
-import { grantListEndpoint } from '../constants/endpoints';
 
-
-const [data, setData] = useState({startDate:null, endDate:null});
-const [isLoading, setIsLoading] = useState(true);
-
-// get grant data from db
-useEffect(() => {
-  axios.get(grantListEndpoint)
-    .then(response => {
-      console.log('Response', response.data.grants);
-      setData(response.data.grants);
-      setIsLoading(false);
-    })
-}, []);
-
-export function calendarStart() {
-  const startDate= data.startDate;
-  return(
-    <>
-      <div>
-        <Calendar
-          value={startDate} />
-      </div>
-    </>
-  );
+interface CalendarDateProps {
+  displayDate: Date;
 }
 
-export function calendarEnd() {
-  const endDate= data.endDate;
+const CalendarView:React.FC<CalendarDateProps> = ({displayDate}) => {
+  
   return(
     <>
       <div>
         <Calendar
-          value={endDate} />
+          value={displayDate}
+          showFixedNumberOfWeeks={true} />
       </div>
     </>
   )
-}
+} 
+export default CalendarView;
