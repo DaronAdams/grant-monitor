@@ -1,5 +1,4 @@
 // calendar component to display start date/month of a grant
-import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
@@ -20,3 +19,7 @@ const CalendarView:React.FC<CalendarDateProps> = ({displayDate}) => {
   )
 } 
 export default CalendarView;
+
+//notes
+// value passes through to calendar what should be the starting display date
+// showFixedNumberOfWeeks defaults to 6 weeks, and is set to True so our formatting/layout is consistent
