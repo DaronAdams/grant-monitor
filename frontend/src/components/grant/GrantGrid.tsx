@@ -8,7 +8,7 @@ import { Typography, Progress } from '@material-tailwind/react'
 
 
 interface UpdatedGridProps {
-  openSubpage: (grantData: GrantData) => void;
+  openSubpage: (grantData: any) => void;
   allGrantsData: GrantData[];
 }
 

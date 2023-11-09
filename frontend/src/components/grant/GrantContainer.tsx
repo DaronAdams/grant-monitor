@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-//import { useAuth } from '../../hooks/context/authContext';
 import {
   IconButton,
   Tabs,
@@ -25,7 +24,6 @@ interface GrantShowPageProps {
 }
 
 const Grant:React.FC<GrantShowPageProps> = ({grantData, closeSubpage}) => {
-  //const { user } = useAuth();
   
   const [activeTab, setActiveTab] = useState('Main');
 
