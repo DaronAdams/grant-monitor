@@ -9,25 +9,33 @@ import GrantData from '../interfaces/GrantData';
 import axios from 'axios';
 import { grantListEndpoint } from '../constants/endpoints';
 import { Spinner, Typography } from '@material-tailwind/react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { fetchGrantDataList, grantDataState } from '../hooks/grants/atom';
 
 
 const Grants = () => {
   //const { user } = useAuth();
   const [grantData, setGrantData] = useState<GrantData | null>(null);
   const [allGrantsData, setAllGrantsData] = useState<GrantData[]>([]);
+  const [grantListData, setGrantListData] = useRecoilState(grantDataState);
+
 
   const [isLoading, setIsLoading] = useState(true);
 
 
   useEffect(() => {
-    axios
-      .get(grantListEndpoint)
-      .then((response) => {
-        console.log('Response', response.data.grants);
-        setAllGrantsData(response.data.grants);
-        setIsLoading(false);
-      })
-  }, []);
+    axios.get(grantListEndpoint).then((response) => {
+      console.log('Response', response.data.grants);
+      setAllGrantsData(response.data.grants);
+      setGrantListData(response.data.grants);
+      setIsLoading(false);
+    });
+  }, [setGrantListData]); // Include setGrantListData as a dependency
+
+  // Log grantListData inside a useEffect to capture its updated value
+  useEffect(() => {
+    console.log('Grant List Data', grantListData);
+  }, [grantListData]);
 
   const openSubpage = (grantData: GrantData) => {
     setGrantData(grantData);

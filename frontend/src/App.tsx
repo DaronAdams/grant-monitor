@@ -2,6 +2,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 
 import Grants from './pages/Grants';
 import Login from './pages/Login';
@@ -38,11 +39,12 @@ const router = createBrowserRouter([
   },
 ]);
 
-
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <RecoilRoot>
+        <RouterProvider router={router} />
+      </RecoilRoot>
     </>
   );
 }
