@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import axios from 'axios';
-import { grantDataListState } from '../../state/grants/atom'; // import the atom
+import { grantDataListState } from '../../state/grants/atom';
 import { grantListEndpoint } from '../../constants/endpoints';
 
-const useGrantListData = () => {
+/* 
+ Custom hook to call grant list api and set that value to the global state using recoil state
+*/
+const useGrantListData = () => {  
   const [grantListData, setGrantListData] = useRecoilState(grantDataListState);
   const [isLoading, setIsLoading] = useState(true);
   

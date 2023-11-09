@@ -7,9 +7,7 @@ import {
   Tab,
   TabPanel,
 } from '@material-tailwind/react';
-
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
 import Main from './tabs/Main';
 import Visuals from './tabs/Visuals';
 import BudgetReport from './tabs/BudgetReport';
@@ -61,18 +59,6 @@ const Grant:React.FC<GrantShowPageProps> = ({grantData, closeSubpage}) => {
     },
   ];
 
-  //   const renderTabContent = () => {
-  //     switch (activeTab) {
-  //       case 'Main':
-  //         return <MainTabContent />;
-  //       case 'Second':
-  //         return <SecondTabContent />;
-  //       case 'Budget Report':
-  //         return <BudgetReportTabContent />;
-  //       default:
-  //         return null;
-  //     }
-  //   };
 
   return ( 
     <>

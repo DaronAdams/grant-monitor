@@ -1,9 +1,7 @@
-import { HomePageSidebar } from '../components/Sidebar';
 import GrantGrid from '../components/grant/GrantGrid';
 import Subpage from '../components/Subpage';
-import NavSpeedDial from '../components/NavSpeedDial'
-//import { useAuth } from '../hooks/context/authContext';
-import { useState, useEffect } from 'react';
+import NavSpeedDial from '../components/NavSpeedDial';
+import { useEffect } from 'react';
 import GrantContainer from '../components/grant/GrantContainer';
 import GrantData from '../interfaces/GrantData';
 import { Spinner, Typography } from '@material-tailwind/react';
@@ -17,13 +15,13 @@ const Grants = () => {
   const grantListData: GrantData[] = useRecoilValue(grantDataListState);
   const [grantData, setGrantData] = useRecoilState(currentGrantDataState);
   
-
   useEffect(() => {
     console.log('Grant List Data', grantListData);
   }, [grantListData]);
 
   const openSubpage = (grantData: ((currVal: null) => null) | null) => {
     setGrantData(grantData);
+    console.log('Current Grant Data', grantData);
   }
 
   const closeSubpage = () => {
@@ -44,7 +42,7 @@ const Grants = () => {
               <Typography variant="h3" color="blue" style={{ padding: '10px' }}>University of Memphis Grants</Typography>
               <Typography variant="paragraph" style={{ padding: '10px' }}>Welcome, Corinne!</Typography>
               <div className="flex flex-row justify-between items-center p-4">
-                <GrantGrid openSubpage={openSubpage} allGrantsData={grantListData}/>
+                <GrantGrid openSubpage={openSubpage} allGrantsData={grantListData} />
               </div>
             </Subpage>
           )
