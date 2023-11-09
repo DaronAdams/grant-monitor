@@ -1,4 +1,12 @@
-import { DataGrid, GridToolbarContainer, GridFilterModel, GridColDef, GridRowsProp, GridToolbarColumnsButton, GridToolbarFilterButton, GridRowParams} from '@mui/x-data-grid';
+import { 
+  DataGrid,
+  GridToolbarContainer,
+  GridFilterModel,
+  GridColDef,
+  GridRowsProp,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridRowParams } from '@mui/x-data-grid';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
@@ -8,20 +16,11 @@ import { Typography, Progress } from '@material-tailwind/react'
 
 
 interface UpdatedGridProps {
-  openSubpage: (grantData: GrantData) => void;
+  openSubpage: (grantData: any) => void;
   allGrantsData: GrantData[];
 }
 
 const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) => {
-
-
-  /*
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  };
-  */
 
   const findItemById = (id: number) => {
     return allGrantsData.find(dataItem => dataItem.id === id);
@@ -30,12 +29,10 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
   const handleRowClick = (params: GridRowParams) => {
     const id = parseInt(params.id.toString())
     const grantData: GrantData | undefined = findItemById(id);
-    console.log(grantData);
+    console.log(grantData)
 
     if (grantData) {
       openSubpage(grantData);
-    } else {
-      console.error('what the heck i couldnt get the grant data for ' + id);
     }
   };
 
@@ -80,7 +77,6 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
 
     row.moneyLeft = row.moneyAllocated - row.moneySpent;
     row.moneyProgress = [(row.moneySpent / row.moneyAllocated) * 100, row.moneySpent / 1000, row.moneyLeft / 1000];
-    console.log(row.moneyProgress);
   });
 
 
@@ -112,7 +108,6 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
   const [filterApplied, setFilterApplied] = useState(false);
 
   const handleFilterModelChange = (newFilterModel: GridFilterModel) => {
-
     setFilterModel(newFilterModel);
     const filteredData = applyFilters(rows, newFilterModel);
     setFilteredRows(filteredData);

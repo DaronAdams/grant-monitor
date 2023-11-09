@@ -2,11 +2,11 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 
 import Grants from './pages/Grants';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Test from './pages/Test';
 import Employees from './pages/Employees';
 import Settings from './pages/Settings';
 
@@ -32,17 +32,14 @@ const router = createBrowserRouter([
     path: '/register',
     element: <Register />,
   },
-  {
-    path: '/test',
-    element: <Test />,
-  },
 ]);
-
 
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <RecoilRoot>
+        <RouterProvider router={router} />
+      </RecoilRoot>
     </>
   );
 }
