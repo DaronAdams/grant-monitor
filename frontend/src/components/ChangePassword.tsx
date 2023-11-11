@@ -7,11 +7,10 @@ import {
 } from '@material-tailwind/react';
 import { ToastContainer, toast } from 'react-toastify';
 import { parseErrorsJson } from '../utils/parseJson';
-import { authLoginEndpoint } from '../constants/endpoints';
+import { userPasswordEndpoint } from '../constants/endpoints';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
 
   
 export function ChangePassword() {
@@ -22,6 +21,20 @@ export function ChangePassword() {
     newPassword: '',
     confirmPassword: '',
   });
+
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('/api/user'); //need to replace with our endpoint
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Error fetching user data: ', error);
+      }
+    };
+    fetchUserData();
+  }, []); 
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -38,11 +51,17 @@ export function ChangePassword() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+
+    if (userData && formData.oldPassword !== userData.password){
+      toast.error('Incorrect current password');
+      return;
+    }
+
     axios
-      .post(authLoginEndpoint, formData)
+      .post(userPasswordEndpoint, formData.newPassword)
       .then((response) => {
         console.log('Response', response);
-        toast.success('Login successful!');
+        toast.success('Password changed successfully!');
         // Clear the form data after successful registration
         setFormData({
           oldPassword: '',
