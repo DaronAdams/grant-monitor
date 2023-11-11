@@ -7,34 +7,24 @@ import {
 } from '@material-tailwind/react';
 import { ToastContainer, toast } from 'react-toastify';
 import { parseErrorsJson } from '../utils/parseJson';
-import { userPasswordEndpoint } from '../constants/endpoints';
+import { changePasswordEndpoint } from '../constants/endpoints';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAuth } from '../hooks/context/authContext';
 
   
 export function ChangePassword() {
   const navigate = useNavigate();
+  const auth = useAuth();
  
   const [formData, setFormData] = useState({
+    email: auth.user?.email,
     oldPassword: '',
     newPassword: '',
-    confirmPassword: '',
   });
 
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('/api/user'); //need to replace with our endpoint
-        setUserData(response.data);
-      } catch (error) {
-        console.error('Error fetching user data: ', error);
-      }
-    };
-    fetchUserData();
-  }, []); 
+  // const [userData, setUserData] = useState(null);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -52,23 +42,19 @@ export function ChangePassword() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    if (userData && formData.oldPassword !== userData.password){
-      toast.error('Incorrect current password');
-      return;
-    }
-
     axios
-      .post(userPasswordEndpoint, formData.newPassword)
+      .put(changePasswordEndpoint, formData)
       .then((response) => {
         console.log('Response', response);
         toast.success('Password changed successfully!');
         // Clear the form data after successful registration
         setFormData({
+          // Use the user contex to grab the current user's email
+          email: auth.user?.email,
           oldPassword: '',
           newPassword: '',
-          confirmPassword: '',
         })
-        // Set the auth context to the user data
+        // Redirect to the user page
         navigate('/grants')
       })
       .catch((error) => {
@@ -109,16 +95,6 @@ export function ChangePassword() {
               name="newPassword"
               type="password"
               value={formData.newPassword}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              size="lg"
-              label="Confirm Password"
-              crossOrigin={''}
-              name="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
