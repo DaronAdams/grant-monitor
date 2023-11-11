@@ -254,6 +254,9 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
             <Typography variant="small">
               ${params.value[2].toFixed(0)}K left
             </Typography>
+            <Typography variant="small">
+              ${(params.value[1] + params.value[2]).toFixed(0)}K Total
+            </Typography>
           </div>
           <Progress size="sm" color="green" value={params.value[0]} />
         </div>
