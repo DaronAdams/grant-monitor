@@ -7,7 +7,6 @@ const prisma = new PrismaClient();
 export async function registerUser(req: Request, res: Response) {
   const { email, password } = req.body;
   
-
   try {
     // Check if the email is already registered
     const existingUser = await prisma.user.findUnique({
@@ -59,5 +58,40 @@ export async function loginUser(req: Request, res: Response) {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export async function changePassword(req: Request, res: Response){
+  const { email, oldPassword, newPassword } = req.body;
+
+  try {
+    // verify that old password is correct
+    const existingUser = await prisma.user.findUnique({
+      where:{
+        email: email,
+      },
+    });
+
+    if (!existingUser) {
+      return res.status(400).json({ message: 'Email is not registered'});
+    }
+
+    if (oldPassword !== existingUser.password){
+      return res.status(400).json({ message: 'Old password is incorrect'});
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: existingUser.id,
+      },
+      data: {
+        password: newPassword,
+      },
+    });
+
+    return res.status(200).json({ message: 'Password changed successfully'})
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error '});
   }
 }
