@@ -80,6 +80,10 @@ export async function changePassword(req: Request, res: Response){
       return res.status(400).json({ message: 'Old password is incorrect'});
     }
 
+    if (oldPassword == newPassword) {
+      return res.status(400).json({ message: 'New password cannot be the same as the old password'});
+    }
+
     const updatedUser = await prisma.user.update({
       where: {
         id: existingUser.id,
@@ -89,7 +93,7 @@ export async function changePassword(req: Request, res: Response){
       },
     });
 
-    return res.status(200).json({ message: 'Password changed successfully'})
+    return res.status(200).json({ message: 'Password changed successfully'});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error '});
