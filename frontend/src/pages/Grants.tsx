@@ -1,36 +1,27 @@
-import { HomePageSidebar } from '../components/Sidebar';
 import GrantGrid from '../components/grant/GrantGrid';
 import Subpage from '../components/Subpage';
-import NavSpeedDial from '../components/NavSpeedDial'
-//import { useAuth } from '../hooks/context/authContext';
-import { useState, useEffect } from 'react';
+import NavSpeedDial from '../components/NavSpeedDial';
+import { useEffect } from 'react';
 import GrantContainer from '../components/grant/GrantContainer';
 import GrantData from '../interfaces/GrantData';
-import axios from 'axios';
-import { grantListEndpoint } from '../constants/endpoints';
 import { Spinner, Typography } from '@material-tailwind/react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import useGrantListData from '../hooks/grants/useGrantListData';
+import { currentGrantDataState, grantDataListState } from '../state/grants/atom';
 
 
 const Grants = () => {
-  //const { user } = useAuth();
-  const [grantData, setGrantData] = useState<GrantData | null>(null);
-  const [allGrantsData, setAllGrantsData] = useState<GrantData[]>([]);
-
-  const [isLoading, setIsLoading] = useState(true);
-
-
+  const { isLoading } = useGrantListData();
+  const grantListData: GrantData[] = useRecoilValue(grantDataListState);
+  const [grantData, setGrantData] = useRecoilState(currentGrantDataState);
+  
   useEffect(() => {
-    axios
-      .get(grantListEndpoint)
-      .then((response) => {
-        console.log('Response', response.data.grants);
-        setAllGrantsData(response.data.grants);
-        setIsLoading(false);
-      })
-  }, []);
+    console.log('Grant List Data', grantListData);
+  }, [grantListData]);
 
-  const openSubpage = (grantData: GrantData) => {
+  const openSubpage = (grantData: ((currVal: null) => null) | null) => {
     setGrantData(grantData);
+    console.log('Current Grant Data', grantData);
   }
 
   const closeSubpage = () => {
@@ -38,33 +29,30 @@ const Grants = () => {
   }
 
   return ( 
-    <>
-      <div className="flex flex-row">
-        <NavSpeedDial />
-        {!isLoading && (
-          grantData !== null && (
-            <Subpage>
-              <GrantContainer grantData={grantData} closeSubpage={closeSubpage} />
-            </Subpage>
-          ) || 
+    <div className="flex flex-row">
+      <NavSpeedDial />
+      {!isLoading && (
+        grantData !== null && (
+          <Subpage>
+            <GrantContainer grantData={grantData} closeSubpage={closeSubpage} />
+          </Subpage>
+        ) || 
           (
             <Subpage>
               <Typography variant="h3" color="blue" style={{ padding: '10px' }}>University of Memphis Grants</Typography>
               <Typography variant="paragraph" style={{ padding: '10px' }}>Welcome, Corinne!</Typography>
               <div className="flex flex-row justify-between items-center p-4">
-                <GrantGrid openSubpage={openSubpage} allGrantsData={allGrantsData}/>
+                <GrantGrid openSubpage={openSubpage} allGrantsData={grantListData} />
               </div>
             </Subpage>
           )
-        ) ||
+      ) ||
         (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vh'}}>
             <Spinner color="blue" className="flex-grow" />
           </div>
         )}
-      </div>
-    </>
-
+    </div>
   );
 }
  

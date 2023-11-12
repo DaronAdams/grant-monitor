@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-//import { useAuth } from '../../hooks/context/authContext';
 import {
   IconButton,
   Tabs,
@@ -8,9 +7,7 @@ import {
   Tab,
   TabPanel,
 } from '@material-tailwind/react';
-
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
 import Main from './tabs/Main';
 import Visuals from './tabs/Visuals';
 import BudgetReport from './tabs/BudgetReport';
@@ -25,7 +22,6 @@ interface GrantShowPageProps {
 }
 
 const Grant:React.FC<GrantShowPageProps> = ({grantData, closeSubpage}) => {
-  //const { user } = useAuth();
   
   const [activeTab, setActiveTab] = useState('Main');
 
@@ -63,18 +59,6 @@ const Grant:React.FC<GrantShowPageProps> = ({grantData, closeSubpage}) => {
     },
   ];
 
-  //   const renderTabContent = () => {
-  //     switch (activeTab) {
-  //       case 'Main':
-  //         return <MainTabContent />;
-  //       case 'Second':
-  //         return <SecondTabContent />;
-  //       case 'Budget Report':
-  //         return <BudgetReportTabContent />;
-  //       default:
-  //         return null;
-  //     }
-  //   };
 
   return ( 
     <>
@@ -111,7 +95,7 @@ const Grant:React.FC<GrantShowPageProps> = ({grantData, closeSubpage}) => {
                 <TabPanel key={value} value={value}>
                   <>
                     {value === 'Main' && <Main grantData={grantData} />}
-                    {value === 'Visuals' && <Visuals />}
+                    {value === 'Visuals' && <Visuals grantData={grantData} />}
                     {value === 'Budget Report' && <BudgetReport />}
                     {value === 'Effort Report' && <EffortReport />}
                     {value === 'Employee Report' && <EmployeeReport />}
