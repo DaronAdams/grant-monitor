@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Employees from './pages/Employees';
 import Settings from './pages/Settings';
+import CreateGrantPage from './pages/CreateGrant';
 
 
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <Register />,
+  },
+  {
+    path: '/grant/create',
+    element: <CreateGrantPage />,
   },
 ]);
 
