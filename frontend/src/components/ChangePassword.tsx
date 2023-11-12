@@ -110,5 +110,5 @@ export function ChangePassword() {
       </Card>
       <ToastContainer position="top-center" autoClose={5000} />
     </div>
-  )
+  );
 }
