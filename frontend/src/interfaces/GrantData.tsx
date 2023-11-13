@@ -1,5 +1,10 @@
-type StatusType = 'Approved' | 'Received' | 'Completed';
+export type StatusType = 'Approved' | 'Received' | 'Completed';
 
+export interface StatusInterface {
+  Approved: StatusType,
+  Received: StatusType,
+  Completed: StatusType
+}
 export default interface GrantData {
     id: number;
     createdAt: Date;
