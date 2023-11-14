@@ -1,6 +1,15 @@
 import { BarChart } from '@mui/x-charts/BarChart';
 import { Typography } from '@mui/material';
 import React from 'react';
+//import axios from 'axios'
+
+/*interface Transaction {
+  id: number;
+  amount: number;
+  date: Date;
+  
+}
+*/
 
 interface BarChartProps {
   startDate: Date;
@@ -13,6 +22,40 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
 
   // Calculate the burn rate for each month without accumulation
   const burnRate = TotalAmount / durationInMonths;
+
+
+  /*
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.get<Transaction[]>('/api/transactions');
+        setTransactions(response.data);
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      }
+    };
+
+    fetchTransactions();
+  }, [] 
+  */
+
+  /*const generateBarChartData = () => {
+    let remainingAmount = TotalAmount;
+
+    return transactions.map(transaction => {
+      const { amount, date } = transaction;
+      remainingAmount -= amount;
+
+      return {
+        grant1: amount,
+        grant2: burnRate,
+        month: new Date(date).toLocaleString('default', { month: 'short' }),
+      };
+    });
+  };
+  */
 
   const generateBarChartData = () => {
     let remainingAmount = TotalAmount;
@@ -35,7 +78,7 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
   const valueFormatterWithoutDecimals = (value: number) => `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 
   const labelProp = {
-    yAxis: [ // Change from xAxis to yAxis
+    yAxis: [ 
       {
         label: 'Monthly Burn Rate',
         interval: 0,
@@ -86,7 +129,7 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
           '--ChartsLegend-rootSpacing': '50px',
          
 
-          // Use :hover selector to adjust z-index on hover
+          
         }}
 
 
