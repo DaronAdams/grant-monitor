@@ -8,10 +8,10 @@ const prisma = new PrismaClient();
 async function getTransactions(req: Request, res: Response) {
   try {
     const transactions = await prisma.transaction.findMany();
-    res.json(transactions);
+    return res.json(transactions);
   } catch (error) {
     console.error('Error fetching transactions:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
