@@ -1,9 +1,10 @@
 import { PrismaClient} from '@prisma/client';
 import { Request, Response } from 'express';
-import Transactions from '../libs/types/transactions';
-import CreateTransactionInput from '../libs/types/transactions';
+import Transaction from '../libs/types/transaction';
 
 const prisma = new PrismaClient();
+
+// get transactions belonging to a grant budget item
 
 async function getTransactions(req: Request, res: Response) {
   try {
@@ -16,20 +17,25 @@ async function getTransactions(req: Request, res: Response) {
 }
 
 async function createTransaction(req: Request, res: Response) {
-    const { amount, date } = req.body as CreateTransactionInput;
+    const { amount, date, grantBudgetItemId } = req.body as Transaction;
   
     try {
       const newTransaction = await prisma.transaction.create({
         data: {
           amount,
           date,
+          grantBudgetItem: {
+            connect: {
+              id: grantBudgetItemId, // You may need to associate the grantPiBridge with the authenticated user
+            },
+          },
         },
       });
   
-      res.json(newTransaction);
+      return res.json(newTransaction);
     } catch (error) {
       console.error('Error creating transaction:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 

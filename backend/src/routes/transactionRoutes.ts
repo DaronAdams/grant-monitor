@@ -6,7 +6,7 @@ import { getTransactions, createTransaction } from '../controllers/transactionsC
 const router = express.Router();
 
 // GET all transactions
-router.get('/transactions', getTransactions);
-router.get('/create/transactions', createTransaction);
+router.get('/list/transactions', getTransactions);
+router.post('/create', createTransaction);
 
 export default router;
