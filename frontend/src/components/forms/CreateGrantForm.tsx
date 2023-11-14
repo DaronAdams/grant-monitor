@@ -8,8 +8,13 @@ import {
   Option,
 } from '@material-tailwind/react';
 import { ToastContainer } from 'react-toastify';
+import axios from 'axios';
+import { createGrantEndpoint } from '../../constants/endpoints';
+import { useNavigate } from 'react-router-dom';
+import { handleErrors } from '../../utils/parseJson';
 
 const CreateGrantForm = () => {  
+  const navigate = useNavigate();
   const [grantData, setGrantData] = useState({
     fund: '',
     organization: '',
@@ -27,12 +32,7 @@ const CreateGrantForm = () => {
     notes: '',
   });
 
-  const handleChange = (e: any) => {
-    if (!e || !e.target) {
-      console.error('Event or event target is undefined');
-      return;
-    }
-
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setGrantData({
       ...grantData,
@@ -40,9 +40,42 @@ const CreateGrantForm = () => {
     });
   };
 
+  const handleSelectChange = (selectedValue: any) => {
+    setGrantData({
+      ...grantData,
+      status: selectedValue,
+    });
+  };
+
   const handleSubmit = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     console.log('Data to be submitted: ', grantData);
+    axios
+      .post(createGrantEndpoint, grantData)
+      .then((response) => {
+        console.log('Successfully created grant: ', response);
+        setGrantData({
+          fund: '',
+          organization: '',
+          account: '',
+          program: '',
+          costShareIndex: 0,
+          cayuse: '',
+          sponsor: '',
+          status: '',
+          yearlyAmount: 0,
+          totalAmount: 0,
+          startDate: new Date(),
+          endDate: new Date(),
+          nceAppDate: new Date(),
+          notes: '',
+        });
+        navigate('/grants')
+      })
+      .catch((error) => {
+        console.error('Error:', error.request.response);
+        handleErrors(error);
+      })
   };
 
   return (
@@ -64,7 +97,7 @@ const CreateGrantForm = () => {
                 name="fund"
                 type="text"
                 value={grantData.fund}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
               <Input
@@ -74,7 +107,7 @@ const CreateGrantForm = () => {
                 name="organization"
                 type="text"
                 value={grantData.organization}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
               <Input
@@ -84,15 +117,29 @@ const CreateGrantForm = () => {
                 name="cayuse"
                 type="text"
                 value={grantData.cayuse}
-                onChange={handleChange}
+                onChange={handleInputChange}
+                required
+              />
+              <Input
+                size="lg"
+                label="Program"
+                crossOrigin={''}
+                name="program"
+                type="text"
+                value={grantData.program}
+                onChange={handleInputChange}
                 required
               />
               <Select
                 size="lg"
                 label="Status"
+                animate={{
+                  mount: { y: 0 },
+                  unmount: { y: 25 },
+                }}
                 name="status"
                 value={grantData.status}
-                onChange={handleChange}
+                onChange={handleSelectChange}
               >
                 <Option value="Received">Received</Option>
                 <Option value="Approved">Approved</Option>
@@ -104,7 +151,7 @@ const CreateGrantForm = () => {
                 crossOrigin={''}
                 name="endDate"
                 type="date"
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
               <Input
@@ -113,7 +160,7 @@ const CreateGrantForm = () => {
                 crossOrigin={''}
                 name="endDate"
                 type="date"
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -125,7 +172,7 @@ const CreateGrantForm = () => {
                 name="account"
                 type="text"
                 value={grantData.account}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
               <Input
@@ -135,7 +182,7 @@ const CreateGrantForm = () => {
                 name="costShareIndex"
                 type="number"
                 value={grantData.costShareIndex}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
               <Input
@@ -145,7 +192,7 @@ const CreateGrantForm = () => {
                 name="sponsor"
                 type="text"
                 value={grantData.sponsor}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
               <Input
@@ -155,7 +202,7 @@ const CreateGrantForm = () => {
                 name="yearlyAmount"
                 type="number"
                 value={grantData.yearlyAmount}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
               <Input
@@ -164,7 +211,7 @@ const CreateGrantForm = () => {
                 crossOrigin={''}
                 name="startDate"
                 type="date"
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
               <Input
@@ -174,7 +221,7 @@ const CreateGrantForm = () => {
                 name="totalAmount"
                 type="number"
                 value={grantData.totalAmount}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 required
               />
             </div>
