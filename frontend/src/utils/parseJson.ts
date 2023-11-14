@@ -11,3 +11,10 @@ export const parseErrorsJson = (error: any) => {
     console.log('Error parsing JSON')
   }
 }
+
+/*
+  * Uses the helper function to parse the message into a user friendly format 
+  */
+export const handleErrors = (error: any) => {
+  parseErrorsJson(error);
+}
