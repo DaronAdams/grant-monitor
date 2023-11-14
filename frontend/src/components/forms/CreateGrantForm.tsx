@@ -7,7 +7,7 @@ import {
   Select,
   Option,
 } from '@material-tailwind/react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { createGrantEndpoint } from '../../constants/endpoints';
 import { useNavigate } from 'react-router-dom';
@@ -47,6 +47,22 @@ const CreateGrantForm = () => {
     });
   };
 
+  // function convertDate(inputDate, time = '14:30:00') {
+  // // Create a new Date object using the input date
+  //   const date = new Date(inputDate);
+
+  //   // Ensure that the date is not invalid
+  //   if (isNaN(date.getTime())) {
+  //     return 'Invalid date';
+  //   }
+
+  //   // Convert to UTC and format
+  //   // If you want to use the current system's timezone, remove the 'Z' and use date.toISOString() directly
+  //   const isoString = date.toISOString();
+  //   const datePart = isoString.split('T')[0]; // Extract the date part
+  //   return `${datePart}T${time}Z`;
+  // }
+
   const handleSubmit = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     console.log('Data to be submitted: ', grantData);
@@ -75,6 +91,7 @@ const CreateGrantForm = () => {
       .catch((error) => {
         console.error('Error:', error.request.response);
         handleErrors(error);
+        toast.error(error);
       })
   };
 
