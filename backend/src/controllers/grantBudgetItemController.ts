@@ -7,6 +7,20 @@ const prisma = new PrismaClient();
 
 // get grant budget items belonging to a grant
 
+async function getGrantBudgetItemsByGrantId(grantId: number): Promise<GrantBudgetItem[]> {
+  try {
+    const grantBudgetItems = await prisma.grantBudgetItem.findMany({
+      where: {
+        grantId: grantId,
+      },
+    });
+    return grantBudgetItems;
+  } catch (error) {
+    console.error('Error fetching grant budget items:', error);
+    throw new Error('Internal Server Error');
+  }
+}
+
 async function getGrantBudgetItems(req: Request, res: Response) {
     try {
       const grantBudgetItems = await prisma.grantBudgetItem.findMany();
@@ -52,4 +66,4 @@ async function createGrantBudgetItem(req: Request, res: Response) {
     }
   }
 
-export { getGrantBudgetItems, createGrantBudgetItem };
+export { getGrantBudgetItems, createGrantBudgetItem , getGrantBudgetItemsByGrantId};

@@ -6,6 +6,20 @@ const prisma = new PrismaClient();
 
 // get transactions belonging to a grant budget item
 
+async function getTransactionsByGrantBudgetItemId(grantBudgetItemId: number): Promise<Transaction[]> {
+  try {
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        id: grantBudgetItemId,
+      },
+    });
+    return transactions;
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    throw new Error('Internal Server Error');
+  }
+}
+
 async function getTransactions(req: Request, res: Response) {
   try {
     const transactions = await prisma.transaction.findMany();
@@ -39,4 +53,4 @@ async function createTransaction(req: Request, res: Response) {
     }
   }
 
-export { getTransactions, createTransaction };
+export { getTransactions, createTransaction ,getTransactionsByGrantBudgetItemId};

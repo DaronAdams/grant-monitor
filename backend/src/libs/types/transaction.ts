@@ -1,4 +1,4 @@
-import { GrantBudgetItem, } from "@prisma/client";
+import { GrantBudgetItem } from "@prisma/client";
 
 export default interface Transaction {
     id: number;
