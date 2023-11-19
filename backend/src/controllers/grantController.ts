@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from "@prisma/client";
 import Grant from '../libs/types/grant';
-
+// The prisma client is responsible for communicating with the database
 const prisma = new PrismaClient();
 
+// Controller action used to create a new grant, has layered logic for creating all the required items
 export async function createGrant(req: Request, res: Response) {
 try {
     const {
+      // Grant fields
       fund,
       organization,
       account,
@@ -20,7 +22,11 @@ try {
       endDate,
       index,
       yearlyAmount,
-    } = req.body as Grant;
+      // Employee Fields
+      // TODO
+      // Transaction Fields
+      // TODO
+    } = req.body;
 
     // Validate that required fields are provided in the request
     if (!fund || !organization || !account || !program) {
@@ -44,7 +50,7 @@ try {
         yearlyAmount,
         User: {
           connect: {
-            id: 6, // You may need to associate the grant with the authenticated user
+            id: 6, // This value is hardcoded in to the admin account
           },
         },
       },
