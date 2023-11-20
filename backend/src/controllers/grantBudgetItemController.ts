@@ -7,17 +7,22 @@ const prisma = new PrismaClient();
 
 // get grant budget items belonging to a grant
 
-async function getGrantBudgetItemsByGrantId(grantId: number): Promise<GrantBudgetItem[]> {
+async function getGrantBudgetItemsByGrantId(req: Request, res: Response) {
   try {
+    const grantId = parseInt(req.params.id, 10); // Assuming the grantId is in the route parameters
+
     const grantBudgetItems = await prisma.grantBudgetItem.findMany({
       where: {
-        grantId: grantId,
+        grant: {
+          id: grantId,
+        },
       },
     });
-    return grantBudgetItems;
+
+    return res.json(grantBudgetItems);
   } catch (error) {
     console.error('Error fetching grant budget items:', error);
-    throw new Error('Internal Server Error');
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 

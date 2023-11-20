@@ -8,6 +8,6 @@ const router = express.Router();
 // GET all transactions
 router.get('/list/transactions', getTransactions);
 router.post('/create', createTransaction);
-router.get('/:id/budgettransactions',getTransactionsByGrantBudgetItemId);
+router.get('/by-grant-budget-item/:id', getTransactionsByGrantBudgetItemId);
 
 export default router;
