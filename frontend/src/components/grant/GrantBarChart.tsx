@@ -1,4 +1,6 @@
 import { BarChart } from '@mui/x-charts/BarChart';
+import { HighlightScope } from '@mui/x-charts';
+
 import { Typography } from '@mui/material';
 import React from 'react';
 //import axios from 'axios'
@@ -17,7 +19,12 @@ interface BarChartProps {
   TotalAmount: number;
 }
 
+
 const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmount }) => {
+
+  const [highlighted, setHighlighted] = React.useState('item');
+  const [faded, setFaded] = React.useState('global');
+
   const durationInMonths = (endDate.getUTCMonth() - startDate.getUTCMonth()) + 12 * (endDate.getUTCFullYear() - startDate.getUTCFullYear());
 
   // Calculate the burn rate for each month without accumulation
@@ -57,6 +64,36 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
   };
   */
 
+  /*
+
+  const generateBarChartData = () => {
+    const currentDate = new Date();
+    const monthsArray = Array.from({ length: 12 }, () => 0);
+
+    transactions.forEach(transaction => {
+      const transactionDate = new Date(transaction.date);
+      const monthIndex = transactionDate.getMonth();
+      monthsArray[monthIndex] += transaction.amount;
+    });
+
+    
+    // Calculate the number of months to show based on the difference between the current date and the start date
+    const monthsToShow = Math.min(currentDate.getMonth() - startDate.getMonth() + 12 * (currentDate.getFullYear() - startDate.getFullYear()) + 1, durationInMonths);
+
+    return Array.from({ length: monthsToShow }, (_, index) => {
+      const grant1 = monthsArray[index];
+      
+
+      return {
+        grant1,
+        grant2: const burnRate = TotalAmount / durationInMonths;
+        month: new Date(Date.UTC(startDate.getUTCFullYear(), (startDate.getUTCMonth() + index) % 12)).toLocaleString('default', { month: 'short' }),
+      };
+    });
+  };
+
+  */
+
   const generateBarChartData = () => {
     let remainingAmount = TotalAmount;
     return Array.from({ length: durationInMonths }, (_, index) => {
@@ -78,9 +115,9 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
   const valueFormatterWithoutDecimals = (value: number) => `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 
   const labelProp = {
-    yAxis: [ 
+    yAxis: [
       {
-        label: 'Monthly Burn Rate',
+        label: 'Amount of Money',
         interval: 0,
         valueFormatter: valueFormatterWithoutDecimals,
       },
@@ -90,10 +127,13 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
   const xLabels = dataProp.map(item => item.month);
 
 
+
+
   return (
     <div>
-      <Typography variant="h5" align="center" gutterBottom style={{ textAlign: 'right', paddingRight: '125px', paddingTop: '30px'}}>
+      <Typography variant="h5" align="center" gutterBottom style={{ textAlign: 'right', paddingRight: '125px', paddingTop: '30px' }}>
         Monthly Burn Rate
+
       </Typography>
 
       <BarChart
@@ -102,8 +142,8 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
         dataset={dataProp}
         xAxis={[{ scaleType: 'band', data: xLabels }]}
         series={[
-          { dataKey: 'grant1', label: 'Expenses', valueFormatter, color: '#B491C9' },
-          { dataKey: 'grant2', label: 'Burn Rate Avg', valueFormatter, color: '#9592CB' },
+          { dataKey: 'grant1', label: 'Expenses', valueFormatter, color: '#B491C9', highlightScope: { highlighted, faded } as HighlightScope },
+          { dataKey: 'grant2', label: 'Burn Rate Avg', valueFormatter, color: '#9592CB', highlightScope: { highlighted, faded } as HighlightScope },
         ]}
 
         layout="vertical"
@@ -124,17 +164,35 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
           '& .MuiChartsAxis-label': {
             transform: 'rotate(-90deg) translateY(-55px)',
           },
+
           '--ChartsLegend-rootOffsetX': '0px',
           '--ChartsLegend-rootOffsetY': '445px',
           '--ChartsLegend-rootSpacing': '50px',
-         
 
-          
+          backgroundColor: '#F0F0F0',
+
+
         }}
 
+        tooltip={{
+          trigger: 'axis',
+
+        }}
 
       />
+
+
+
+      <style>{`
+      .MuiPopper-root {
+        z-index: 9999 !important; 
+      }
+      
+    `}</style>
+
     </div>
+
+
   );
 };
 

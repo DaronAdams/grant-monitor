@@ -72,7 +72,10 @@ const Visuals:React.FC<GrantMainTabProps> = ({grantData}) => {
 
         <div className="flex flex-row justify-between items-center p-4">
           <GrantBarChart startDate={new Date(grantData.startDate)} endDate={new Date(grantData.endDate)} TotalAmount={grantData.totalAmount} />
+          
         </div>
+
+        <div className="mx-4"></div>
 
         <div className="flex flex-row justify-between items-center p-4">
           <GrantLineChart startDate={new Date(grantData.startDate)} endDate={new Date(grantData.endDate)} TotalAmount={grantData.totalAmount} />

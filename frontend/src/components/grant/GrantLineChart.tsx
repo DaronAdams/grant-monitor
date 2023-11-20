@@ -87,9 +87,13 @@ const GrantLineChart: React.FC<LineChartProps> = ({ startDate, endDate, TotalAmo
           '--ChartsLegend-rootOffsetX': '10px',
           '--ChartsLegend-rootOffsetY': '-20px',
           '--ChartsLegend-rootSpacing': '50px',
+
+          backgroundColor: '#F0F0F0',
           
         }}
       />
+
+      
     </div>
   );
 }
