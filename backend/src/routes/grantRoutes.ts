@@ -4,6 +4,7 @@ import { createGrant, editGrant, deleteGrant, getGrantById, getGrantList, getGra
 const router = express.Router();
 
 // TODO: Define all the routes here
+router.post('/grant/create', createGrant);
 router.post('/create', createGrant);
 router.put('/edit/:id', editGrant);
 router.delete('/delete/:id', deleteGrant);

@@ -4,11 +4,14 @@ import Grant from '../libs/types/grant';
 import GrantPIGridRow from '../libs/types/grantPIGridRow';
 import GrantEmployeeGridRow from '../libs/types/grantEmployeeGridRow';
 
+// The prisma client is responsible for communicating with the database
 const prisma = new PrismaClient();
 
+// Controller action used to create a new grant, has layered logic for creating all the required items
 export async function createGrant(req: Request, res: Response) {
-try {
+  try {
     const {
+      // Grant fields
       fund,
       organization,
       account,
@@ -21,16 +24,21 @@ try {
       startDate,
       endDate,
       index,
-      yearlyAmount,
-    } = req.body as Grant;
+      yearlyAmount,    
+    } = req.body;
 
-    // Validate that required fields are provided in the request
+    // Validate grant fields
     if (!fund || !organization || !account || !program) {
-      return res.status(400).json({ error: 'Required fields are missing in the request' });
+      return res.status(400).json({ error: 'Required grant fields are missing in the request' });
     }
 
+    // Optionally validate employee data
+    // TODO: Add validation for employee data if necessary
+
+    // Create Grant
     const newGrant = await prisma.grant.create({
       data: {
+        // Grant fields
         fund,
         organization,
         account,
@@ -46,7 +54,7 @@ try {
         yearlyAmount,
         User: {
           connect: {
-            id: 6, // You may need to associate the grant with the authenticated user
+            id: 6, // Assuming this is the user ID
           },
         },
       },
@@ -64,6 +72,7 @@ try {
     await prisma.$disconnect();
   }
 }
+
 
 
 export async function getGrantById(req: Request, res: Response) {
