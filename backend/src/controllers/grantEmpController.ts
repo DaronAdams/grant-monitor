@@ -52,7 +52,6 @@ try {
   }
 }
 
-
 export async function getGrantEmployeeBridgeById(req: Request, res: Response) {
   try {
     // Extract the grantEmployeeBridge ID from the request parameters
@@ -81,11 +80,70 @@ export async function getGrantEmployeeBridgeById(req: Request, res: Response) {
   }
 }
 
+export async function getGrantEmployeeBridgeByEmployeeAndGrantId(req: Request, res: Response) {
+    try {
+      const { employeeId, grantId } = req.body;
+
+      console.log(req.body)
+  
+      // Validate that required fields are provided in the request body
+      if (isNaN(employeeId) || isNaN(grantId)) {
+        return res.status(400).json({ error: 'Invalid employee ID or grant ID' });
+      }
+  
+      const grantEmployeeBridge = await prisma.grantEmployeeBridge.findFirst({
+        where: {
+          employeeId: employeeId,
+          grantId: grantId,
+        },
+      });
+  
+      if (!grantEmployeeBridge) {
+        return res.status(404).json({ error: 'GrantEmployeeBridge not found' });
+      }
+  
+      return res.status(200).json({ message: 'GrantEmployeeBridge found', grantEmployeeBridge });
+    } catch (error) {
+      console.error('Error getting grantEmployeeBridge by Employee and Grant ID:', error);
+      return res.status(500).json({ error: 'An error occurred while getting the grantEmployeeBridge by Employee and Grant ID' });
+    } finally {
+      await prisma.$disconnect();
+    }
+}
+
+export async function getGrantEmployeeBridgeListByGrantId(req: Request, res: Response) {
+    try {
+      const { grantId } = req.body;
+
+      console.log(req.body)
+  
+      // Validate that required fields are provided in the request body
+      if (isNaN(grantId)) {
+        return res.status(400).json({ error: 'Invalid grant ID' });
+      }
+  
+      const grantEmployeeBridge = await prisma.grantEmployeeBridge.findMany({
+        where: {
+          grantId: grantId,
+        },
+      });
+  
+      if (!grantEmployeeBridge) {
+        return res.status(404).json({ error: 'GrantEmployeeBridge not found' });
+      }
+  
+      return res.status(200).json({ message: 'GrantEmployeeBridge found', grantEmployeeBridge });
+    } catch (error) {
+      console.error('Error getting grantEmployeeBridge by Grant ID:', error);
+      return res.status(500).json({ error: 'An error occurred while getting the grantEmployeeBridge by Grant ID' });
+    } finally {
+      await prisma.$disconnect();
+    }
+}
+
 export async function getGrantEmployeeBridgeList(req: Request, res: Response) {
   try {
-    const grantEmployeeBridges = await prisma.grantEmployeeBridge.findMany({
-      
-    });
+    const grantEmployeeBridges = await prisma.grantEmployeeBridge.findMany({});
 
     if (!grantEmployeeBridges || grantEmployeeBridges.length === 0) {
       return res.status(404).json({ error: 'No grantEmployeeBridges found' });
