@@ -115,7 +115,26 @@ export async function getGrantList(req: Request, res: Response) {
       return res.status(404).json({ error: 'No grants found' });
     }
 
-    return res.status(200).json({ message: 'Grants found', grants });
+    /*total amount of money spent for a grant
+    the sum of all transactions on a grant with negative values (money is leaving the grant)
+
+
+    */
+
+    const newGrantListData = []
+
+    for(const grant of grants) {
+
+      const formattedGrantData = {
+        ...grant,
+        moneySpent: calcMoney(grant.id)
+      }
+
+      newGrantListData.push(formattedGrantData);
+    };
+  
+
+    return res.status(200).json({ message: 'Grants found', newGrantListData });
   } catch (error) {
     console.error('Error getting grants:', error);
     return res.status(500).json({ error: 'An error occurred while getting the grants' });
@@ -396,4 +415,40 @@ export async function getGrantPIGridRows(req: Request, res: Response) {
   } finally {
     await prisma.$disconnect();
   }
+}
+
+async function calcMoney(id: number) {
+
+  const grantBudgetItems = await prisma.grantBudgetItem.findMany({
+    where: {
+      grant: {
+        id: id,
+      },
+    },
+    include: {
+      transactions: true,
+    },
+  });
+
+  let sumOfNegativeTransactions = 0;
+  
+
+  // Loop over grant budget items
+  for (const budgetItem of grantBudgetItems) {
+    // Loop over transactions for each budget item
+    for (const transaction of budgetItem.transactions) {
+      const transactionAmount = transaction.amount;
+
+      // Check if the transaction date is within the specified range
+      if (transactionAmount < 0) {
+        sumOfNegativeTransactions += transactionAmount;
+        
+        //the sum of all transactions on a grant with negative values (money is leaving the grant)
+
+        
+      }
+    }
+  }
+
+  return sumOfNegativeTransactions;
 }

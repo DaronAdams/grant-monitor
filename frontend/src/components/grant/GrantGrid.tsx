@@ -53,11 +53,13 @@ const UpdatedGrid: React.FC<UpdatedGridProps> = ({ openSubpage, allGrantsData}) 
       startDate: formatDateMMDDYYYY(grantDataObject.startDate),
       endDate: formatDateMMDDYYYY(grantDataObject.endDate),
       moneyAllocated: grantDataObject.totalAmount,
-      moneySpent: 50000, // You can set this to the initial value you want
+      moneySpent: grantDataObject.moneySpent, // You can set this to the initial value you want
       grantStatus: grantDataObject.status,
       id: grantDataObject.id,
     };
   })
+
+  //
 
   const parseDate = (dateStr: string) => {
     const [mm, dd, yyyy] = dateStr.split('/').map(Number);
