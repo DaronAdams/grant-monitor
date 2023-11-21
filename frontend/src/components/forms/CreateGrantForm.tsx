@@ -9,13 +9,11 @@ import {
 } from '@material-tailwind/react';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
-import { createGrantEndpoint } from '../../constants/endpoints';
 import { useNavigate } from 'react-router-dom';
 import { handleErrors } from '../../utils/parseJson';
 
 const CreateGrantForm = () => {  
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(1);
   const [grantData, setGrantData] = useState({
     fund: '',
     organization: '',
@@ -23,44 +21,16 @@ const CreateGrantForm = () => {
     program: '',
     costShareIndex: 0,
     cayuse: '',
-    index: 200,
+    index: 0,
     sponsor: '',
     status: '',
     yearlyAmount: 0,
     totalAmount: 0,
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: '',
+    endDate: '',
     notes: '',
   });
 
-  // // ----------------------- Form Step Functions --------------------------------
-  // const nextStep = () => {
-  //   setCurrentStep(currentStep + 1);
-  // };
-
-  // const prevStep = () => {
-  //   setCurrentStep(currentStep - 1);
-  // };
-
-  // // ---------------------- Employee Functions ----------------------
-
-  // const addEmployee = () => {
-  //   setGrantData({
-  //     ...grantData,
-  //     employees: [...grantData.employees, { uID: '', firstName: '', middleInitial: '', lastName: ''}],
-  //   });
-  // };
-
-  // const handleEmployeeChange = (index: number, event: any) => {
-  //   const newEmployees = grantData.employees.map((employee, i) => {
-  //     if (i === index) {
-  //       return { ...employee, [event.target.name]: event.target.value };
-  //     }
-  //     return employee;
-  //   });
-
-  //   setGrantData({ ...grantData, employees: newEmployees });
-  // };
 
   // ------------------ Grant Functions ----------------------------
   const handleInputChange = (e: any) => {
@@ -69,6 +39,7 @@ const CreateGrantForm = () => {
       ...grantData,
       [name]: value,
     });
+    console.log(grantData);
   };
 
   const handleSelectChange = (selectedValue: any) => {
@@ -78,16 +49,33 @@ const CreateGrantForm = () => {
     });
   };
 
-  const convertDateToCustomFormat = (date: Date) => {
-    if (!(date instanceof Date) || isNaN(date.getTime())) {
-      return 'Invalid date'; // or handle the error as you prefer
+  function convertStringToNumber(str: any, isFloat = false): number | null {
+    const number = isFloat ? parseFloat(str) : parseInt(str, 10);
+
+    if (isNaN(number)) {
+      return null;
     }
 
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // +1 because months are 0-indexed
-    const day = date.getDate().toString().padStart(2, '0');
+    return number;
+  }
 
-    return `${year}-${month}-${day}T14:30:00Z`;
+  const convertDateToISO = (inputDate: string, time = '14:30:00') => {
+  // Parse the input date string and create a new Date object
+    const date = new Date(inputDate);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      return 'Invalid date'; // or handle the error as you see fit
+    }
+
+    // Convert the date to ISO string
+    const isoString = date.toISOString();
+
+    // Extract the date part from the ISO string
+    const datePart = isoString.split('T')[0];
+
+    // Combine the date part with the desired time and 'Z' to indicate UTC
+    return `${datePart}T${time}Z`;
   };
 
   const handleSubmit = (event: { preventDefault: () => void; }) => {
@@ -95,13 +83,17 @@ const CreateGrantForm = () => {
 
     const formattedGrantData = {
       ...grantData,
-      startDate: convertDateToCustomFormat(grantData.startDate),
-      endDate: convertDateToCustomFormat(grantData.endDate),
+      startDate: convertDateToISO(grantData.startDate),
+      endDate: convertDateToISO(grantData.endDate),
+      costShareIndex: convertStringToNumber(grantData.costShareIndex),
+      totalAmount: convertStringToNumber(grantData.totalAmount),
+      yearlyAmount: convertStringToNumber(grantData.yearlyAmount),
+      index: convertStringToNumber(grantData.index),
     };
 
     console.log('Data to be submitted: ', formattedGrantData);
     axios
-      .post(createGrantEndpoint, formattedGrantData)
+      .post('grant/create', formattedGrantData)
       .then((response) => {
         console.log('Successfully created grant: ', response);
         setGrantData({
@@ -112,12 +104,12 @@ const CreateGrantForm = () => {
           costShareIndex: 0,
           cayuse: '',
           sponsor: '',
-          index: 200,
+          index: 0,
           status: '',
           yearlyAmount: 0,
           totalAmount: 0,
-          startDate: new Date(),
-          endDate: new Date(),
+          startDate: '',
+          endDate: '',
           notes: '',
         });
         navigate('/grants')
@@ -194,73 +186,82 @@ const CreateGrantForm = () => {
               </Select>
               <Input
                 size="lg"
-                label="End Date"
+                label="Start Date"
                 crossOrigin={''}
-                name="endDate"
+                name="startDate"
+                value={grantData.startDate}
                 type="date"
                 onChange={handleInputChange}
                 required />
-              <div className="mb-4 flex flex-col gap-6 w-1/2">
-                <Input
-                  size="lg"
-                  label="Account"
-                  crossOrigin={''}
-                  name="account"
-                  type="text"
-                  value={grantData.account}
-                  onChange={handleInputChange}
-                  required />
-                <Input
-                  size="lg"
-                  label="Cost Share Index"
-                  crossOrigin={''}
-                  name="costShareIndex"
-                  type="number"
-                  value={grantData.costShareIndex}
-                  onChange={handleInputChange}
-                  required />
-                <Input
-                  size="lg"
-                  label="Sponsor"
-                  crossOrigin={''}
-                  name="sponsor"
-                  type="text"
-                  value={grantData.sponsor}
-                  onChange={handleInputChange}
-                  required />
-                <Input
-                  size="lg"
-                  label="Yearly Amount"
-                  crossOrigin={''}
-                  name="yearlyAmount"
-                  type="number"
-                  value={grantData.yearlyAmount}
-                  onChange={handleInputChange}
-                  required />
-                <Input
-                  size="lg"
-                  label="Start Date"
-                  crossOrigin={''}
-                  name="startDate"
-                  type="date"
-                  onChange={handleInputChange}
-                  required />
-                <Input
-                  size="lg"
-                  label="Total Amount"
-                  crossOrigin={''}
-                  name="totalAmount"
-                  type="number"
-                  value={grantData.totalAmount}
-                  onChange={handleInputChange}
-                  required />
-                <div>
-                  <Button
-                    onClick={handleSubmit}
-                  >
+              <Input
+                size="lg"
+                label="End Date"
+                crossOrigin={''}
+                name="endDate"
+                value={grantData.endDate}
+                type="date"
+                onChange={handleInputChange}
+                required />
+              <Input
+                size="lg"
+                label="Account"
+                crossOrigin={''}
+                name="account"
+                type="text"
+                value={grantData.account}
+                onChange={handleInputChange}
+                required />
+              <Input
+                size="lg"
+                label="Sponsor"
+                crossOrigin={''}
+                name="sponsor"
+                type="text"
+                value={grantData.sponsor}
+                onChange={handleInputChange}
+                required />
+              <Input
+                size="lg"
+                label="Index"
+                crossOrigin={''}
+                name="index"
+                type="number"
+                value={grantData.index}
+                onChange={handleInputChange}
+                required />
+              <Input
+                size="lg"
+                label="Cost Share Index"
+                crossOrigin={''}
+                name="costShareIndex"
+                type="number"
+                value={grantData.costShareIndex}
+                onChange={handleInputChange}
+                required />
+              <Input
+                size="lg"
+                label="Yearly Amount"
+                crossOrigin={''}
+                name="yearlyAmount"
+                type="number"
+                value={grantData.yearlyAmount}
+                onChange={handleInputChange}
+                required />
+              <Input
+                size="lg"
+                label="Total Amount"
+                crossOrigin={''}
+                name="totalAmount"
+                type="number"
+                value={grantData.totalAmount}
+                onChange={handleInputChange}
+                required />
+              <div>
+                <Button
+                  onClick={handleSubmit}
+                >
                   Submit
-                  </Button>
-                </div>
+                </Button>
               </div>
             </div>
           </form>
