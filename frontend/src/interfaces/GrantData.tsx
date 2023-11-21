@@ -20,9 +20,12 @@ export default interface GrantData {
     status: StatusType;
     yearlyAmount: number;
     totalAmount: number;
+    moneySpent: number;
     startDate: Date;
     endDate: Date;
     nceAppDate?: Date | null;
     notes?: string | null;
   }
+
+
 
