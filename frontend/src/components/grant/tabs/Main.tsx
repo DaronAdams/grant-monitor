@@ -177,39 +177,21 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
       border:'1px solid gray',
       borderRadius:'10px',
       margin:'10px',
-    }}>
-      <h1 className="font-semibold">Grant Name</h1>
-  
-      <div>
-        <p>{`Account: ${grantData.account}`}</p>
-        <p>{`Cayuse: ${grantData.cayuse}`}</p>
-        <p>{`Fund: ${grantData.fund}`}</p>
-        <p>{`Organization: ${grantData.organization}`}</p>
-        <p>{`Program: ${grantData.program}`}</p>
-        <p>{`Sponsor: ${grantData.sponsor}`}</p>
-        <p>{`Index: ${grantData.index}`}</p>
-        <p>{`Cost-Share Index: ${grantData.costShareIndex}`}</p>
-        <p>{`NCE App Date: ${grantData.nceAppDate}`}</p>
-        <p>{`Start Date: ${grantData.startDate}`}</p>
-        <p>{`End Date: ${grantData.endDate}`}</p>
-        <p>{`Status: ${grantData.status}`}</p>
-        <p>{`Total Amount: $${grantData.totalAmount}`}</p>
-        <p>{`Yearly Amount: ${grantData.yearlyAmount}`}</p>
-        <p>{`Notes: ${grantData.notes || 'N/A'}`}</p>
-        <p>{`Created At: ${grantData.createdAt}`}</p>
-        <p>{`Updated At: ${grantData.updatedAt}`}</p>
-      </div>
-      <div className='py-3'>
-        <Button
-          onClick={handleDeleteClicked}
-        >
-          Delete
-        </Button>
-      </div>
+    }}>  
+      
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Typography variant="h4" component="div" sx={{ paddingBottom: 1, paddingTop: 1, paddingLeft: 1, color: 'black', borderRadius:'10px' }}>
+          Grant Index: {grantData.index}
+        </Typography>
 
-      <Typography variant="h4" component="div" sx={{ paddingBottom: 1, paddingTop: 1, paddingLeft: 1, border:'1px solid lightgray', borderRadius:'10px' }}>
-        Grant Index: {grantData.index}
-      </Typography>
+        <div className='py-3'>
+          <Button
+            onClick={handleDeleteClicked}
+          >
+            Delete
+          </Button>
+        </div>
+      </div>
 
       <CenteredContainer>
         <CardContainer title="Complete Info">
@@ -228,6 +210,7 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
           <GrantInfo description='Yearly Amount' value={`$${grantData.yearlyAmount}`} />
           <GrantInfo description='Created At' value={formatDate(grantData.createdAt)} />
           <GrantInfo description='Updated At' value={formatDate(grantData.updatedAt)} />
+          
         </CardContainer>
 
         <CardContainer title="Lifetime">
