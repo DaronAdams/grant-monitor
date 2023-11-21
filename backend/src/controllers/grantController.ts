@@ -203,3 +203,72 @@ export async function deleteGrant(req: Request, res: Response) {
     await prisma.$disconnect();
   }
 }
+
+export async function getGrantExpensesForEachMonth(req: Request, res: Response) {
+  try {
+    // Extract data from the request
+    const grantId = parseInt(req.body.grantID);
+    const startDate = new Date(req.body.startDate);
+    const endDate = new Date(req.body.endDate);
+
+    if (isNaN(grantId) || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return res.status(400).json({ error: 'Invalid input data' });
+    }
+
+    // Fetch grant budget items for the given grantID
+    const grantBudgetItems = await prisma.grantBudgetItem.findMany({
+      where: {
+        grantId: grantId,
+      },
+      include: {
+        transactions: true,
+      },
+    });
+
+    // Create an array for each month and initialize values to 0
+    const monthsArray = Array.from({ length: 12 }, () => 0);
+
+    // Loop over grant budget items
+    for (const budgetItem of grantBudgetItems) {
+      // Loop over transactions for each budget item
+      for (const transaction of budgetItem.transactions) {
+        const transactionDate = new Date(transaction.date);
+
+        // Check if the transaction date is within the specified range
+        if (transactionDate >= startDate && transactionDate <= endDate) {
+          // Increment the corresponding month's value in the array
+          const monthIndex = transactionDate.getMonth();
+          monthsArray[monthIndex] += transaction.amount;
+        }
+      }
+    }
+
+    return res.status(200).json({ message: 'Expense data retrieved successfully', expenses: monthsArray });
+  } catch (error) {
+    console.error('Error getting grant expenses:', error);
+    return res.status(500).json({ error: 'An error occurred while getting grant expenses' });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+/*getGrantExpensesForEachMonth (Request,response) 
+
+request would have the following data: grantID, startDate, endDate
+fill out function like so
+
+1. create an array corresponding to each month (array[0] could be Januray, array[1] could be February)
+2. loop over all grant budget items that have the grantID from the request
+  2a. in an inner loop, loop over all transaction objects that have the grant budget item id from the outer loop
+  2b. if the transaction's date is between the start date and end date in the request, then add its value to the appropriate value of the array
+3. after the double loop has ran, return the array
+
+
+
+
+
+
+
+
+
+*/
