@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from "@prisma/client";
 import Grant from '../libs/types/grant';
+import GrantPIGridRow from '../libs/types/grantPIGridRow';
+import GrantEmployeeGridRow from '../libs/types/grantEmployeeGridRow';
 
 const prisma = new PrismaClient();
 
@@ -257,18 +259,132 @@ export async function getGrantExpensesForEachMonth(req: Request, res: Response) 
 request would have the following data: grantID, startDate, endDate
 fill out function like so
 
-1. create an array corresponding to each month (array[0] could be Januray, array[1] could be February)
+1. create an array corresponding to each month (array[0] could be January, array[1] could be February)
 2. loop over all grant budget items that have the grantID from the request
   2a. in an inner loop, loop over all transaction objects that have the grant budget item id from the outer loop
   2b. if the transaction's date is between the start date and end date in the request, then add its value to the appropriate value of the array
 3. after the double loop has ran, return the array
-
-
-
-
-
-
-
-
-
 */
+
+export async function getGrantEmployeeGridRows(req: Request, res: Response) {
+  try {
+    // Extract data from the request
+    const grantIdParam = req.query.grantID;
+
+    if (typeof grantIdParam !== 'string') {
+      return res.status(400).json({ error: 'Invalid grant ID type' });
+    }
+
+    const grantId = parseInt(grantIdParam, 10);
+    
+    console.log("Trying to get employees for: " + grantId);
+
+
+    if (isNaN(grantId)) {
+      return res.status(400).json({ error: 'Grant ID not a number' });
+    }
+
+    // Fetch grant employee data for the given grantID
+    const grantEmployees = await prisma.grantEmployeeBridge.findMany({
+      where: {
+        grantId: grantId,
+      },
+      include: {
+        employee: true,
+      },
+    });
+
+    console.log(grantEmployees);
+
+    // Map the fetched data to the desired format
+    const grantEmployeeGridRows: GrantEmployeeGridRow[] = grantEmployees.map((grantEmployee) => {
+      const { employee, rate, effort, startDate, endDate } = grantEmployee;
+      const { id: employeeId, uID, firstName, middleInitial, lastName } = employee;
+
+      return {
+        employeeId,
+        uID,
+        firstName,
+        middleInitial,
+        lastName,
+        rate,
+        effort,
+        startDate,
+        endDate,
+      };
+    });
+
+    console.log(grantEmployeeGridRows);
+
+    
+    return res.status(200).json({ message: 'Grant employee data retrieved successfully', grantEmployeeGridRows: grantEmployeeGridRows });
+  } catch (error) {
+    console.error('Error getting grant expenses:', error);
+    return res.status(500).json({ error: 'An error occurred while getting grant employees' });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+
+export async function getGrantPIGridRows(req: Request, res: Response) {
+  try {
+    // Extract data from the request
+    const grantIdParam = req.query.grantID;
+
+    if (typeof grantIdParam !== 'string') {
+      return res.status(400).json({ error: 'Invalid grant ID type' });
+    }
+
+    const grantId = parseInt(grantIdParam, 10);   
+
+    console.log("Trying to get PI/CoPIs for: " + grantId) ;
+
+    if (isNaN(grantId)) {
+      return res.status(400).json({ error: 'Grant ID not a number' });
+    }
+
+    // Fetch grant PI data for the given grantID
+    const grantPIs = await prisma.grantPIBridge.findMany({
+      where: {
+        grantId: grantId,
+      },
+      include: {
+        employee: true,
+      },
+    });
+
+    console.log(grantPIs);
+
+
+    // Map the fetched data to the desired format
+    const grantPIGridRows: GrantPIGridRow[] = grantPIs.map((grantPI) => {
+      const { employee, academicYearEffort, costShareEffort, summerEffort, credit, startDate, endDate, isCoPI } = grantPI;
+      const { id: employeeId, uID, firstName, middleInitial, lastName } = employee;
+
+      return {
+        employeeId,
+        uID,
+        firstName,
+        middleInitial,
+        lastName,
+        academicYearEffort,
+        costShareEffort,
+        summerEffort,
+        credit,
+        startDate,
+        endDate,
+        isCoPI,
+      };
+    });
+
+    console.log(grantPIGridRows);
+    
+    return res.status(200).json({ message: 'Grant PI data retrieved successfully', grantPiGridRows: grantPIGridRows });
+  } catch (error) {
+    console.error('Error getting grant expenses:', error);
+    return res.status(500).json({ error: 'An error occurred while getting grant employees' });
+  } finally {
+    await prisma.$disconnect();
+  }
+}

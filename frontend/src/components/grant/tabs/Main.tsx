@@ -4,7 +4,22 @@ import GrantData from '../../../interfaces/GrantData';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import Divider from '@mui/material/Divider';
+import { Spinner } from '@material-tailwind/react';
+
 import getDaysPassedAndRemaining from '../../../utils/getDaysPassedAndRemaining';
+
+import GrantPIGrid from '../GrantPIGrid';
+import GrantEmployeeGrid from '../GrantEmployeesGrid';
+
+import { useRecoilValue } from 'recoil';
+
+import useGrantEmployeeGridRowListData from '../../../hooks/grants/useGrantEmployeeGridListData';
+import { grantEmployeeGridRowDataListState } from '../../../state/grantEmployeeGridRow/atom';
+import GrantEmployeeGridRow from '../../../interfaces/GrantEmployeeGridRow';
+
+import useGrantPIGridRowListData from '../../../hooks/grants/useGrantPIGridListData';
+import { grantPIGridRowDataListState } from '../../../state/grantPIGridRow/atom';
+import GrantPIGridRow from '../../../interfaces/GrantPIGridRow';
 
 interface GrantMainTabProps {
   grantData: GrantData;
@@ -31,7 +46,6 @@ const CenteredContainer: React.FC<CenteredContainerProps> = ({ children }) => (
   </div>
 );
 
-
 const CardContainer: React.FC<{ title: string, children: any }> = ({ title, children }) => (
   <Card style={{ flex: '1', minWidth: 0, margin: '10px', overflow: 'hidden' }}>
     <CardContent style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -43,7 +57,6 @@ const CardContainer: React.FC<{ title: string, children: any }> = ({ title, chil
     </CardContent>
   </Card>
 );
-
 
 function formatDate(date: Date | null | undefined): string {
 
@@ -94,6 +107,20 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
 
+  const { employeeRowsLoading } = useGrantEmployeeGridRowListData(grantData.id);
+  const { piRowsLoading } = useGrantPIGridRowListData(grantData.id);
+  const grantEmployeeGridRowListData: GrantEmployeeGridRow[] = useRecoilValue(grantEmployeeGridRowDataListState);
+  //const [grantEmployeeRowData, setGrantEmployeeRowData] = useRecoilState(currentGrantEmployeeGridRowDataState);
+  const grantPIGridRowListData: GrantPIGridRow[] = useRecoilValue(grantPIGridRowDataListState);
+
+  useEffect(() => {
+    console.log('Grant employee Data', grantEmployeeGridRowListData);
+  }, [grantEmployeeGridRowListData]);
+
+  useEffect(() => {
+    console.log('Grant PI Data', grantPIGridRowListData);
+  }, [grantPIGridRowListData]);
+  
   const dateDataHolder: DateDataProps = getDaysPassedAndRemaining(grantData.startDate, grantData.endDate)
 
   const lifetimeData = {
@@ -124,7 +151,7 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
     ],
   };
 
-  return(
+  return !(piRowsLoading || employeeRowsLoading) && (
     <div style={{
       width:'100%',
       height:'100%',
@@ -166,18 +193,22 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
       </CenteredContainer>
 
       <CenteredContainer>
-        <CardContainer title="PI's and Co-PI's">
-          <Typography variant="body2" component="div">
-            {'N/A'}
-          </Typography>
+        <CardContainer title="PI and Co-PI's">
+          {grantEmployeeGridRowListData.length > 0 ? (
+            <GrantPIGrid grantPIData={grantPIGridRowListData}></GrantPIGrid>
+          ) : (
+            <p>No data available</p>
+          )}
         </CardContainer>
       </CenteredContainer>
 
       <CenteredContainer>
         <CardContainer title="Employees">
-          <Typography variant="body2" component="div">
-            {'N/A'}
-          </Typography>
+          {grantEmployeeGridRowListData.length > 0 ? (
+            <GrantEmployeeGrid grantEmployeeData={grantEmployeeGridRowListData} />
+          ) : (
+            <p>No data available</p>
+          )}
         </CardContainer>
       </CenteredContainer>
 
@@ -189,7 +220,12 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
         </CardContainer>
       </CenteredContainer>
     </div>
-  ) 
+    
+  ) || (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vh'}}>
+      <Spinner color="blue" className="flex-grow" />
+    </div>
+  )
 }
 
 export default Main;
