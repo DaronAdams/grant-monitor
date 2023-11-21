@@ -1,11 +1,29 @@
 import React, {useRef, useState} from 'react';
 import GrantData from '../../../interfaces/GrantData';
+import { Button } from '@material-tailwind/react';
+import axios from 'axios';
+import { useNavigate} from 'react-router-dom';
 
 interface GrantMainTabProps {
   grantData: GrantData;
 }
 
 const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
+
+  const navigate = useNavigate();
+  const handleDeleteClicked = () => {
+    const confirmed = window.confirm('Are you sure you want to delete this grant?');
+    if (confirmed) {
+      // Stuff
+      axios
+        .delete('/grant/delete/' + grantData.id)
+        .then((response) => {
+          console.log('Response', response)
+          navigate(0);
+        });
+      
+    }
+  }
 
   return(
     <div style={{
@@ -36,6 +54,13 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
         <p>{`Notes: ${grantData.notes || 'N/A'}`}</p>
         <p>{`Created At: ${grantData.createdAt}`}</p>
         <p>{`Updated At: ${grantData.updatedAt}`}</p>
+      </div>
+      <div className='py-3'>
+        <Button
+          onClick={handleDeleteClicked}
+        >
+          Delete
+        </Button>
       </div>
 
     </div>

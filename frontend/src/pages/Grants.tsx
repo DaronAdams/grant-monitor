@@ -31,7 +31,6 @@ const Grants = () => {
   }
 
   const handleCreateClick = () => {
-    console.log('Button clicked.. Start form procedure')
     navigate('/grant/create')
   }
 
