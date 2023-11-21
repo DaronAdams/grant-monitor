@@ -15,7 +15,7 @@ const useGrantListData = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(grantListEndpoint);
-        setGrantListData(response.data.grants);
+        setGrantListData(response.data.newGrantListData);
       } catch (error) {
         console.error('Error fetching grant list data:', error);
       } finally {

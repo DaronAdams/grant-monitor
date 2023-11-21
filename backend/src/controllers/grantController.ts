@@ -121,17 +121,22 @@ export async function getGrantList(req: Request, res: Response) {
 
     */
 
-    const newGrantListData = []
+    const newGrantListData = [];
 
-    for(const grant of grants) {
-
-      const formattedGrantData = {
+    // Create an array of Promises for calcMoney
+    const calcMoneyPromises = grants.map(async (grant) => {
+      const moneySpent = await calcMoney(grant.id);
+      return {
         ...grant,
-        moneySpent: calcMoney(grant.id)
-      }
+        moneySpent,
+      };
+    });
 
-      newGrantListData.push(formattedGrantData);
-    };
+    // Wait for all promises to resolve
+    const formattedGrantDataArray = await Promise.all(calcMoneyPromises);
+
+    // Add the formatted data to newGrantListData
+    newGrantListData.push(...formattedGrantDataArray);
   
 
     return res.status(200).json({ message: 'Grants found', newGrantListData });
@@ -417,7 +422,7 @@ export async function getGrantPIGridRows(req: Request, res: Response) {
   }
 }
 
-async function calcMoney(id: number) {
+async function calcMoney(id: number): Promise<number> {
 
   const grantBudgetItems = await prisma.grantBudgetItem.findMany({
     where: {
@@ -430,9 +435,8 @@ async function calcMoney(id: number) {
     },
   });
 
-  let sumOfNegativeTransactions = 0;
+  let sumOfNegativeTransactions: number = 0;
   
-
   // Loop over grant budget items
   for (const budgetItem of grantBudgetItems) {
     // Loop over transactions for each budget item
