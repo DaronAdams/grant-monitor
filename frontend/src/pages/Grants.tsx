@@ -8,10 +8,12 @@ import { Spinner, Typography } from '@material-tailwind/react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import useGrantListData from '../hooks/grants/useGrantListData';
 import { currentGrantDataState, grantDataListState } from '../state/grants/atom';
-
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Grants = () => {
   const { isLoading } = useGrantListData();
+  const navigate = useNavigate();
   const grantListData: GrantData[] = useRecoilValue(grantDataListState);
   const [grantData, setGrantData] = useRecoilState(currentGrantDataState);
   
@@ -28,6 +30,13 @@ const Grants = () => {
     setGrantData(null);
   }
 
+  const handleCreateClick = () => {
+    console.log('Button clicked.. Start form procedure')
+    navigate('/grant/create')
+  }
+
+  
+
   return ( 
     <div className="flex flex-row">
       <NavSpeedDial />
@@ -41,6 +50,14 @@ const Grants = () => {
             <Subpage>
               <Typography variant="h3" color="blue" style={{ padding: '10px' }}>University of Memphis Grants</Typography>
               <Typography variant="paragraph" style={{ padding: '10px' }}>Welcome, Corinne!</Typography>
+              <div className='px-4'>
+                <Button
+                  onClick={handleCreateClick}
+                  variant='contained'
+                >
+                  Create Grant
+                </Button>
+              </div>
               <div className="flex flex-row justify-between items-center p-4">
                 <GrantGrid openSubpage={openSubpage} allGrantsData={grantListData} />
               </div>
