@@ -15,9 +15,7 @@ import { handleErrors } from '../../utils/parseJson';
 
 const CreateGrantForm = () => {  
   const navigate = useNavigate();
-  const [employeesData, setEmplyeesData] = useState([
-    { uID: '' , firstName: '', middleInitial: '', lastName: ''},
-  ]);
+  const [currentStep, setCurrentStep] = useState(1);
   const [grantData, setGrantData] = useState({
     fund: '',
     organization: '',
@@ -25,34 +23,44 @@ const CreateGrantForm = () => {
     program: '',
     costShareIndex: 0,
     cayuse: '',
+    index: 200,
     sponsor: '',
     status: '',
     yearlyAmount: 0,
     totalAmount: 0,
     startDate: new Date(),
     endDate: new Date(),
-    nceAppDate: new Date(),
     notes: '',
   });
 
-  // ---------------------- Employee Functions ----------------------
+  // // ----------------------- Form Step Functions --------------------------------
+  // const nextStep = () => {
+  //   setCurrentStep(currentStep + 1);
+  // };
 
-  const addEmployee = () => {
-    setEmplyeesData([...employeesData, { uID: '', firstName: '', middleInitial: '', lastName: ''}])
-  }
+  // const prevStep = () => {
+  //   setCurrentStep(currentStep - 1);
+  // };
 
-  const handleEmployeeChange = (index: number, event: any) => {
-    const updatedEmployee = employeesData.map((employee, i) => {
-      if (i == index) {
-        return { ...employee, [event.target.name]: event.target.value };
-      }
-      return employee;
-    });
+  // // ---------------------- Employee Functions ----------------------
 
-    setEmplyeesData(updatedEmployee);
-    console.log('Employee Data: ', updatedEmployee);
-  }
-  
+  // const addEmployee = () => {
+  //   setGrantData({
+  //     ...grantData,
+  //     employees: [...grantData.employees, { uID: '', firstName: '', middleInitial: '', lastName: ''}],
+  //   });
+  // };
+
+  // const handleEmployeeChange = (index: number, event: any) => {
+  //   const newEmployees = grantData.employees.map((employee, i) => {
+  //     if (i === index) {
+  //       return { ...employee, [event.target.name]: event.target.value };
+  //     }
+  //     return employee;
+  //   });
+
+  //   setGrantData({ ...grantData, employees: newEmployees });
+  // };
 
   // ------------------ Grant Functions ----------------------------
   const handleInputChange = (e: any) => {
@@ -70,27 +78,30 @@ const CreateGrantForm = () => {
     });
   };
 
-  // function convertDate(inputDate, time = '14:30:00') {
-  // // Create a new Date object using the input date
-  //   const date = new Date(inputDate);
+  const convertDateToCustomFormat = (date: Date) => {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return 'Invalid date'; // or handle the error as you prefer
+    }
 
-  //   // Ensure that the date is not invalid
-  //   if (isNaN(date.getTime())) {
-  //     return 'Invalid date';
-  //   }
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // +1 because months are 0-indexed
+    const day = date.getDate().toString().padStart(2, '0');
 
-  //   // Convert to UTC and format
-  //   // If you want to use the current system's timezone, remove the 'Z' and use date.toISOString() directly
-  //   const isoString = date.toISOString();
-  //   const datePart = isoString.split('T')[0]; // Extract the date part
-  //   return `${datePart}T${time}Z`;
-  // }
+    return `${year}-${month}-${day}T14:30:00Z`;
+  };
 
   const handleSubmit = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
-    console.log('Data to be submitted: ', grantData);
+
+    const formattedGrantData = {
+      ...grantData,
+      startDate: convertDateToCustomFormat(grantData.startDate),
+      endDate: convertDateToCustomFormat(grantData.endDate),
+    };
+
+    console.log('Data to be submitted: ', formattedGrantData);
     axios
-      .post(createGrantEndpoint, grantData)
+      .post(createGrantEndpoint, formattedGrantData)
       .then((response) => {
         console.log('Successfully created grant: ', response);
         setGrantData({
@@ -101,12 +112,12 @@ const CreateGrantForm = () => {
           costShareIndex: 0,
           cayuse: '',
           sponsor: '',
+          index: 200,
           status: '',
           yearlyAmount: 0,
           totalAmount: 0,
           startDate: new Date(),
           endDate: new Date(),
-          nceAppDate: new Date(),
           notes: '',
         });
         navigate('/grants')
@@ -119,16 +130,16 @@ const CreateGrantForm = () => {
   };
 
   return (
-    <div className="bg-gray-100 flex w-screen items-center justify-center" style={{ height: '150vh' }}>
-      <Card color="transparent" shadow={false}>
-        <Typography variant="h4" color="blue-gray">
-          Enter the grant information below
-        </Typography>
-        <form
-          className="mt-8 mb-2 w-100 max-w-screen-lg sm:w-96"
-          onSubmit={handleSubmit}
-        >
-          <div className='flex flex-col md:flex-row border-3'>
+    <>
+      <div className="bg-gray-100 flex w-screen items-center justify-center" style={{ height: '150vh' }}>
+        <Card color="transparent" shadow={false}>
+          <Typography variant="h4" color="blue-gray">
+          Grant Information
+          </Typography>
+          <form
+            className="mt-8 mb-2 w-100 max-w-screen-lg sm:w-96"
+            onSubmit={handleSubmit}
+          >
             <div className="mb-4 flex flex-col gap-4 w-full px-2">
               <Input
                 size="lg"
@@ -138,8 +149,7 @@ const CreateGrantForm = () => {
                 type="text"
                 value={grantData.fund}
                 onChange={handleInputChange}
-                required
-              />
+                required />
               <Input
                 size="lg"
                 label="Organization"
@@ -148,8 +158,7 @@ const CreateGrantForm = () => {
                 type="text"
                 value={grantData.organization}
                 onChange={handleInputChange}
-                required
-              />
+                required />
               <Input
                 size="lg"
                 label="Cayuse"
@@ -158,8 +167,7 @@ const CreateGrantForm = () => {
                 type="text"
                 value={grantData.cayuse}
                 onChange={handleInputChange}
-                required
-              />
+                required />
               <Input
                 size="lg"
                 label="Program"
@@ -168,8 +176,7 @@ const CreateGrantForm = () => {
                 type="text"
                 value={grantData.program}
                 onChange={handleInputChange}
-                required
-              />
+                required />
               <Select
                 size="lg"
                 label="Status"
@@ -192,145 +199,76 @@ const CreateGrantForm = () => {
                 name="endDate"
                 type="date"
                 onChange={handleInputChange}
-                required
-              />
-              <Input
-                size="lg"
-                label="NCE Data"
-                crossOrigin={''}
-                name="endDate"
-                type="date"
-                onChange={handleInputChange}
-                required
-              />
-              <div>
-                <Typography variant="h5" color="blue-gray">
-          Employees
-                </Typography>
-              </div>
-              <div>
-                {employeesData.map((employee, index) => (
-                  <div className='mb-4 flex flex-col gap-2 w-full px-2' key={index}>
-                    <Input
-                      type="text"
-                      label="uID"
-                      crossOrigin={''}
-                      name="uID"
-                      value={employee.uID}
-                      onChange={(e) => handleEmployeeChange(index, e)}
-                    />
-                    <Input
-                      type="text"
-                      label="First Name"
-                      crossOrigin={''}
-                      name="firstName"
-                      value={employee.firstName}
-                      onChange={(e) => handleEmployeeChange(index, e)}
-                    />
-                    <Input
-                      type="text"
-                      label="Middle Initial"
-                      crossOrigin={''}
-                      name="middleInitial"
-                      value={employee.middleInitial}
-                      onChange={(e) => handleEmployeeChange(index, e)}
-                    />
-                    <Input
-                      type="text"
-                      label="Last Name"
-                      crossOrigin={''}
-                      name="lastName"
-                      value={employee.lastName}
-                      onChange={(e) => handleEmployeeChange(index, e)}
-                    />
-                  </div>
-                ))}
-              </div>
-              <div>
-                <Button
-                  className="mt-6"
-                  type="button" 
-                  onClick={addEmployee}
-                >
-                      Add Employee
-                </Button>
+                required />
+              <div className="mb-4 flex flex-col gap-6 w-1/2">
+                <Input
+                  size="lg"
+                  label="Account"
+                  crossOrigin={''}
+                  name="account"
+                  type="text"
+                  value={grantData.account}
+                  onChange={handleInputChange}
+                  required />
+                <Input
+                  size="lg"
+                  label="Cost Share Index"
+                  crossOrigin={''}
+                  name="costShareIndex"
+                  type="number"
+                  value={grantData.costShareIndex}
+                  onChange={handleInputChange}
+                  required />
+                <Input
+                  size="lg"
+                  label="Sponsor"
+                  crossOrigin={''}
+                  name="sponsor"
+                  type="text"
+                  value={grantData.sponsor}
+                  onChange={handleInputChange}
+                  required />
+                <Input
+                  size="lg"
+                  label="Yearly Amount"
+                  crossOrigin={''}
+                  name="yearlyAmount"
+                  type="number"
+                  value={grantData.yearlyAmount}
+                  onChange={handleInputChange}
+                  required />
+                <Input
+                  size="lg"
+                  label="Start Date"
+                  crossOrigin={''}
+                  name="startDate"
+                  type="date"
+                  onChange={handleInputChange}
+                  required />
+                <Input
+                  size="lg"
+                  label="Total Amount"
+                  crossOrigin={''}
+                  name="totalAmount"
+                  type="number"
+                  value={grantData.totalAmount}
+                  onChange={handleInputChange}
+                  required />
+                <div>
+                  <Button
+                    onClick={handleSubmit}
+                  >
+                  Submit
+                  </Button>
+                </div>
               </div>
             </div>
-            <div className="mb-4 flex flex-col gap-6 w-1/2">
-              <Input
-                size="lg"
-                label="Account"
-                crossOrigin={''}
-                name="account"
-                type="text"
-                value={grantData.account}
-                onChange={handleInputChange}
-                required
-              />
-              <Input
-                size="lg"
-                label="Cost Share Index"
-                crossOrigin={''}
-                name="costShareIndex"
-                type="number"
-                value={grantData.costShareIndex}
-                onChange={handleInputChange}
-                required
-              />
-              <Input
-                size="lg"
-                label="Sponsor"
-                crossOrigin={''}
-                name="sponsor"
-                type="text"
-                value={grantData.sponsor}
-                onChange={handleInputChange}
-                required
-              />
-              <Input
-                size="lg"
-                label="Yearly Amount"
-                crossOrigin={''}
-                name="yearlyAmount"
-                type="number"
-                value={grantData.yearlyAmount}
-                onChange={handleInputChange}
-                required
-              />
-              <Input
-                size="lg"
-                label="Start Date"
-                crossOrigin={''}
-                name="startDate"
-                type="date"
-                onChange={handleInputChange}
-                required
-              />
-              <Input
-                size="lg"
-                label="Total Amount"
-                crossOrigin={''}
-                name="totalAmount"
-                type="number"
-                value={grantData.totalAmount}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-          </div>
-          <Button
-            className="mt-6"
-            type="submit"
-          >
-          Submit
-          </Button>
-        </form>
-      </Card>
-      <ToastContainer position="top-center" autoClose={5000} />
-    </div>
+          </form>
+        </Card>
+        <ToastContainer position="top-center" autoClose={5000} />
+      </div>
+    </>
   );
 }
-
-  
 
 export default CreateGrantForm;
