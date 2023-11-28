@@ -18,10 +18,10 @@ interface GrantMainTabProps {
 
 const Visuals:React.FC<GrantMainTabProps> = ({grantData}) => {
 
-  const { GrantTransactionsLoading } = useGrantTransactionData(grantData.id);
+  const { grantTransactionsLoading } = useGrantTransactionData(grantData.id);
   
   //const [grantEmployeeRowData, setGrantEmployeeRowData] = useRecoilState(currentGrantEmployeeGridRowDataState);
-  const grantTransactionsData: [] = useRecoilValue(grantTransactionsState);
+  const grantTransactionsData = useRecoilValue(grantTransactionsState);
 
 
   const pdfRef = useRef(null);
