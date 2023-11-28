@@ -7,12 +7,22 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import {useRef, useState} from 'react';
 
+import useGrantTransactionData from '../../../hooks/grants/useGrantTransactionsData';
+import { grantTransactionsState } from '../../../state/grantTransactions/atom';
+import { useRecoilValue } from 'recoil';
+
 
 interface GrantMainTabProps {
   grantData: GrantData;
 }
 
 const Visuals:React.FC<GrantMainTabProps> = ({grantData}) => {
+
+  const { GrantTransactionsLoading } = useGrantTransactionData(grantData.id);
+  
+  //const [grantEmployeeRowData, setGrantEmployeeRowData] = useRecoilState(currentGrantEmployeeGridRowDataState);
+  const grantTransactionsData: [] = useRecoilValue(grantTransactionsState);
+
 
   const pdfRef = useRef(null);
 
