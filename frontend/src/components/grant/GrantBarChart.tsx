@@ -1,9 +1,8 @@
 import { BarChart } from '@mui/x-charts/BarChart';
 import { HighlightScope } from '@mui/x-charts';
-
 import { Typography } from '@mui/material';
 import React from 'react';
-//import GrantData from '../../interfaces/GrantData';
+
 
 
 interface BarChartProps {
@@ -16,94 +15,47 @@ interface BarChartProps {
 
 const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmount, transactions }) => {
 
+
+
   const [highlighted, setHighlighted] = React.useState('item');
   const [faded, setFaded] = React.useState('global');
 
-  const durationInMonths = (endDate.getUTCMonth() - startDate.getUTCMonth()) + 12 * (endDate.getUTCFullYear() - startDate.getUTCFullYear());
+  const durationInMonths = (endDate.getFullYear() - startDate.getFullYear()) * 12 + endDate.getMonth() - startDate.getMonth() + 1;
+  const durationInMonths2 = (endDate.getUTCMonth() - startDate.getUTCMonth()) + 12 * (endDate.getUTCFullYear() - startDate.getUTCFullYear());
 
   // Calculate the burn rate for each month without accumulation
   const burnRate = TotalAmount / durationInMonths;
 
-  //create a hook
-  //create an atom in the state folder
-  //add a route for that function
-  //consider the current date when it comes to months displayed (in terms of the data)
-  //sometimes you do - interface (not required to do since the function is just a list of numbers)
-  //create a copy ( do not reference the data, make a deep copy)
-  //
+  const generateBarChartData = () => {
+    if (!Array.isArray(transactions)) {
+      return [];
+    }
 
+    const monthsArray = Array.from({ length: durationInMonths }, () => 0);
 
+    transactions.forEach((amount, index) => {
+      monthsArray[index] = amount;
+    });
 
-  /*
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const monthLabels = Array.from({ length: durationInMonths }, (_, index) => {
+      const monthIndex = (startDate.getUTCMonth() + index + 1) % 12;
+      const year = startDate.getUTCFullYear() + Math.floor((startDate.getUTCMonth() + index) / 12); // Calculate the year
+      return `${new Date(Date.UTC(year, monthIndex)).toLocaleString('default', { month: 'short' })} ${year}`;
+    });
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const response = await axios.get<Transaction[]>('/api/transactions');
-        setTransactions(response.data);
-      } catch (error) {
-        console.error('Error fetching transactions:', error);
-      }
-    };
-
-    fetchTransactions();
-  }, [] 
-  */
-
-  /*const generateBarChartData = () => {
-    let remainingAmount = TotalAmount;
-
-    return transactions.map(transaction => {
-      const { amount, date } = transaction;
-      remainingAmount -= amount;
-
+    const resultData = monthLabels.map((label, index) => {
       return {
-        grant1: amount,
+        grant1: monthsArray[index],
         grant2: burnRate,
-        month: new Date(date).toLocaleString('default', { month: 'short' }),
+        month: label,
       };
     });
-  };
-  */
 
-  /*
+    console.log('resultData:', resultData);
 
-  const generateBarChartData = () => {
-    const currentDate = new Date();
-    const monthsArray = Array.from({ length: 12 }, () => 0);
-
-    transactions.forEach(transaction => {
-      const transactionDate = new Date(transaction.date);
-      const monthIndex = transactionDate.getMonth();
-      monthsArray[monthIndex] += transaction.amount;
-    });
-
-    
-    // Calculate the number of months to show based on the difference between the current date and the start date
-    const monthsToShow = Math.min(currentDate.getMonth() - startDate.getMonth() + 12 * (currentDate.getFullYear() - startDate.getFullYear()) + 1, durationInMonths);
-
-    return Array.from({ length: monthsToShow }, (_, index) => {
-      const grant1 = monthsArray[index];
-      
-
-      return {
-        grant1,
-        grant2: const burnRate = TotalAmount / durationInMonths;
-        month: new Date(Date.UTC(startDate.getUTCFullYear(), (startDate.getUTCMonth() + index) % 12)).toLocaleString('default', { month: 'short' }),
-      };
-    });
+    return resultData;
   };
 
-  */
-
-  const generateBarChartData = () => {
-    return transactions.map((amount, index) => ({
-      grant1: amount,
-      grant2: burnRate,
-      month: new Date(Date.UTC(startDate.getUTCFullYear(), (startDate.getUTCMonth() + index + 1) % 12)).toLocaleString('default', { month: 'short' }),
-    }));
-  };
 
   const dataProp = generateBarChartData();
 
@@ -128,13 +80,15 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
 
   return (
     <div>
-      <Typography variant="h5" align="center" gutterBottom style={{ textAlign: 'right', paddingRight: '125px', paddingTop: '30px' }}>
+      <Typography variant="h5" align="center" gutterBottom style={{ textAlign: 'right', paddingRight: '400px', paddingTop: '30px' }}>
         Monthly Burn Rate
 
       </Typography>
 
+
+
       <BarChart
-        width={500}
+        width={1000}
         height={500}
         dataset={dataProp}
         xAxis={[{ scaleType: 'band', data: xLabels }]}
@@ -142,6 +96,8 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
           { dataKey: 'grant1', label: 'Expenses', valueFormatter, color: '#B491C9', highlightScope: { highlighted, faded } as HighlightScope },
           { dataKey: 'grant2', label: 'Burn Rate Avg', valueFormatter, color: '#9592CB', highlightScope: { highlighted, faded } as HighlightScope },
         ]}
+
+
 
         layout="vertical"
         {...labelProp}
@@ -177,6 +133,7 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
         }}
 
       />
+
 
 
 

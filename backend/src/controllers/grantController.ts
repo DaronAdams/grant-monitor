@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import Grant from '../libs/types/grant';
 import GrantPIGridRow from '../libs/types/grantPIGridRow';
 import GrantEmployeeGridRow from '../libs/types/grantEmployeeGridRow';
@@ -290,7 +290,6 @@ export async function getGrantExpensesForEachMonth(req: Request, res: Response) 
       }
     }
 
- 
 
 
     return res.status(200).json({ message: 'Expense data retrieved successfully', expenses: monthsArray });

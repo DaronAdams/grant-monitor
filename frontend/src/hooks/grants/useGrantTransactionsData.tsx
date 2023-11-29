@@ -13,10 +13,10 @@ const useGrantTransactionData = (id: number) => {
     const fetchData = async () => {
       try {
         // Fetch grant transaction per month data
-        const response = await axios.get(grantTransactions, { params: { grantID: id } });
-        setGrantTransactionsData(response.data.newGrantTransactionsData);
+        const response = await axios.get(grantTransactions.replace(':id', id.toString()));
+        setGrantTransactionsData(response.data.expenses);
+        console.log('Backend Response:', response.data);
   
-          
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -25,7 +25,7 @@ const useGrantTransactionData = (id: number) => {
     };
   
     fetchData();
-  }, [setGrantTransactionsData]); 
+  }, [id, setGrantTransactionsData]); 
   
   return { grantTransactionsLoading };
 };
