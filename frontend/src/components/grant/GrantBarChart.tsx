@@ -3,24 +3,18 @@ import { HighlightScope } from '@mui/x-charts';
 
 import { Typography } from '@mui/material';
 import React from 'react';
-//import axios from 'axios'
+//import GrantData from '../../interfaces/GrantData';
 
-/*interface Transaction {
-  id: number;
-  amount: number;
-  date: Date;
-  
-}
-*/
 
 interface BarChartProps {
   startDate: Date;
   endDate: Date;
   TotalAmount: number;
+  transactions: number[];
 }
 
 
-const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmount }) => {
+const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmount, transactions }) => {
 
   const [highlighted, setHighlighted] = React.useState('item');
   const [faded, setFaded] = React.useState('global');
@@ -29,6 +23,15 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
 
   // Calculate the burn rate for each month without accumulation
   const burnRate = TotalAmount / durationInMonths;
+
+  //create a hook
+  //create an atom in the state folder
+  //add a route for that function
+  //consider the current date when it comes to months displayed (in terms of the data)
+  //sometimes you do - interface (not required to do since the function is just a list of numbers)
+  //create a copy ( do not reference the data, make a deep copy)
+  //
+
 
 
   /*
@@ -95,17 +98,11 @@ const GrantBarChart: React.FC<BarChartProps> = ({ startDate, endDate, TotalAmoun
   */
 
   const generateBarChartData = () => {
-    let remainingAmount = TotalAmount;
-    return Array.from({ length: durationInMonths }, (_, index) => {
-      const grant1 = Math.floor(Math.random() * (remainingAmount + 1));
-      remainingAmount -= grant1;
-
-      return {
-        grant1,
-        grant2: burnRate,
-        month: new Date(Date.UTC(startDate.getUTCFullYear(), (startDate.getUTCMonth() + index + 1) % 12)).toLocaleString('default', { month: 'short' }),
-      };
-    });
+    return transactions.map((amount, index) => ({
+      grant1: amount,
+      grant2: burnRate,
+      month: new Date(Date.UTC(startDate.getUTCFullYear(), (startDate.getUTCMonth() + index + 1) % 12)).toLocaleString('default', { month: 'short' }),
+    }));
   };
 
   const dataProp = generateBarChartData();

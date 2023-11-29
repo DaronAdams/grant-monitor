@@ -19,8 +19,6 @@ interface GrantMainTabProps {
 const Visuals:React.FC<GrantMainTabProps> = ({grantData}) => {
 
   const { grantTransactionsLoading } = useGrantTransactionData(grantData.id);
-  
-  //const [grantEmployeeRowData, setGrantEmployeeRowData] = useRecoilState(currentGrantEmployeeGridRowDataState);
   const grantTransactionsData = useRecoilValue(grantTransactionsState);
 
 
