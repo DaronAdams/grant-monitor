@@ -12,6 +12,6 @@ router.get('/:id', getGrantById);
 router.get('/list/grants', getGrantList);
 router.get('/list/grantEmployeeGridRows', getGrantEmployeeGridRows);
 router.get('/list/grantPIGridRows', getGrantPIGridRows);
-router.get('/:id/grantexpenses',getGrantExpensesForEachMonth);
+router.get('/grantexpenses/:id',getGrantExpensesForEachMonth);
 
 export default router;

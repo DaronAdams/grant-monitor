@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import Grant from '../libs/types/grant';
 import GrantPIGridRow from '../libs/types/grantPIGridRow';
 import GrantEmployeeGridRow from '../libs/types/grantEmployeeGridRow';
@@ -115,7 +115,31 @@ export async function getGrantList(req: Request, res: Response) {
       return res.status(404).json({ error: 'No grants found' });
     }
 
-    return res.status(200).json({ message: 'Grants found', grants });
+    /*total amount of money spent for a grant
+    the sum of all transactions on a grant with negative values (money is leaving the grant)
+
+
+    */
+
+    const newGrantListData = [];
+
+    // Create an array of Promises for calcMoney
+    const calcMoneyPromises = grants.map(async (grant) => {
+      const moneySpent = await calcMoney(grant.id, grant.startDate, grant.endDate);;
+      return {
+        ...grant,
+        moneySpent,
+      };
+    });
+
+    // Wait for all promises to resolve
+    const formattedGrantDataArray = await Promise.all(calcMoneyPromises);
+
+    // Add the formatted data to newGrantListData
+    newGrantListData.push(...formattedGrantDataArray);
+  
+
+    return res.status(200).json({ message: 'Grants found', newGrantListData });
   } catch (error) {
     console.error('Error getting grants:', error);
     return res.status(500).json({ error: 'An error occurred while getting the grants' });
@@ -218,13 +242,21 @@ export async function deleteGrant(req: Request, res: Response) {
 export async function getGrantExpensesForEachMonth(req: Request, res: Response) {
   try {
     // Extract data from the request
-    const grantId = parseInt(req.body.grantID);
-    const startDate = new Date(req.body.startDate);
-    const endDate = new Date(req.body.endDate);
+    const grantId = parseInt(req.params.id, 10);
+    const grantDetails = await prisma.grant.findUnique({
+      where: {
+        id: grantId,
+      },
+    });
 
-    if (isNaN(grantId) || isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-      return res.status(400).json({ error: 'Invalid input data' });
+    if (!grantDetails) {
+      return res.status(404).json({ error: 'Grant not found' });
     }
+
+    const startDate = grantDetails.startDate; // Assuming your grant model has a startDate property
+    const endDate = grantDetails.endDate;     // Assuming your grant model has an endDate property
+
+    const monthDiff = (endDate.getFullYear() - startDate.getFullYear()) * 12 + endDate.getMonth() - startDate.getMonth() + 1;
 
     // Fetch grant budget items for the given grantID
     const grantBudgetItems = await prisma.grantBudgetItem.findMany({
@@ -237,31 +269,38 @@ export async function getGrantExpensesForEachMonth(req: Request, res: Response) 
     });
 
     // Create an array for each month and initialize values to 0
-    const monthsArray = Array.from({ length: 12 }, () => 0);
+    const monthsArray = Array.from({ length: monthDiff }, () => 0);
 
     // Loop over grant budget items
     for (const budgetItem of grantBudgetItems) {
       // Loop over transactions for each budget item
       for (const transaction of budgetItem.transactions) {
         const transactionDate = new Date(transaction.date);
+        const transactionAmount = transaction.amount;
 
         // Check if the transaction date is within the specified range
         if (transactionDate >= startDate && transactionDate <= endDate) {
-          // Increment the corresponding month's value in the array
-          const monthIndex = transactionDate.getMonth();
-          monthsArray[monthIndex] += transaction.amount;
+          const monthIndex = (transactionDate.getFullYear() - startDate.getFullYear()) * 12 + transactionDate.getMonth() - startDate.getMonth();
+          
+          // Sum up the absolute values of negative amounts
+          if (transactionAmount < 0) {
+            monthsArray[monthIndex] += transactionAmount * -1;
+          }
         }
       }
     }
 
+
+
     return res.status(200).json({ message: 'Expense data retrieved successfully', expenses: monthsArray });
-  } catch (error) {
+  } catch (error:any) {
     console.error('Error getting grant expenses:', error);
-    return res.status(500).json({ error: 'An error occurred while getting grant expenses' });
+    return res.status(500).json({ error: 'An error occurred while getting grant expenses', details: error.message });
   } finally {
     await prisma.$disconnect();
   }
 }
+
 
 /*getGrantExpensesForEachMonth (Request,response) 
 
@@ -397,3 +436,36 @@ export async function getGrantPIGridRows(req: Request, res: Response) {
     await prisma.$disconnect();
   }
 }
+
+async function calcMoney(id: number, startDate: Date, endDate: Date): Promise<number> {
+  const grantBudgetItems = await prisma.grantBudgetItem.findMany({
+    where: {
+      grant: {
+        id: id,
+      },
+    },
+    include: {
+      transactions: true,
+    },
+  });
+
+  let sumOfNegativeTransactions: number = 0;
+  
+  // Loop over grant budget items
+  for (const budgetItem of grantBudgetItems) {
+    // Loop over transactions for each budget item
+    for (const transaction of budgetItem.transactions) {
+      const transactionDate = new Date(transaction.date);
+      const transactionAmount = transaction.amount;
+
+      // Check if the transaction date is within the specified range
+      if (transactionAmount < 0 && transactionDate >= startDate && transactionDate <= endDate) {
+        // Sum up the absolute values of negative amounts
+        sumOfNegativeTransactions += transactionAmount * -1;
+      }
+    }
+  }
+
+  return sumOfNegativeTransactions;
+}
+

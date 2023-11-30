@@ -160,7 +160,7 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
     datasets: [
       {
         label: '$USD',
-        data: [15000, 36000],
+        data: [grantData.moneySpent, grantData.totalAmount - grantData.moneySpent],
         backgroundColor: [
           'rgb(18, 170, 18, 0.7)',
           'lightgray',
