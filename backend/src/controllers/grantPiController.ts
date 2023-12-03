@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from "@prisma/client";
 import GrantPiBridge from '../libs/types/grantPiBridge';
+import EffortReportRow from '../libs/types/effortReportRow';
 
 const prisma = new PrismaClient();
 
@@ -145,6 +146,77 @@ export async function getGrantPiBridgeListByGrantId(req: Request, res: Response)
   } catch (error) {
     console.error('Error getting grantPiBridge by Grant ID:', error);
     return res.status(500).json({ error: 'An error occurred while getting the grantPiBridge and Grant ID' });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function getEffortReport(req: Request, res: Response) {
+  try {
+    const grantPiBridges = await prisma.grantPIBridge.findMany({
+      include: {
+        employee: {
+            select: {
+                firstName: true,
+                lastName: true,
+            },
+        },
+        grant: {
+          select: {
+            index: true,
+            account: true,
+            sponsor: true,
+            cayuse: true,
+            nceAppDate: true,
+            grantPIBridge: {  // need the grant's pi
+              select: {},
+              include: {
+                employee: {
+                  select: {
+                    lastName: true
+                  }
+                }
+              },
+              where: {
+                isCoPI: false
+              }
+            }
+          }
+        }
+    }
+    });
+
+    // if (!grantPiBridges || grantPiBridges.length === 0) {
+    //   return res.status(404).json({ error: 'No grantPiBridges found' });
+    // }
+
+    const effortReportRows: EffortReportRow[] = [];
+    
+    for (const grantPiBridge of grantPiBridges) {
+      const effortReportRow: EffortReportRow = {
+        id: grantPiBridge.id,
+        academicYearEffort: grantPiBridge.academicYearEffort,
+        costShareEffort: grantPiBridge.costShareEffort,
+        summerEffort: grantPiBridge.summerEffort,
+        credit: grantPiBridge.credit,
+        startDate: grantPiBridge.startDate,
+        isCoPI: grantPiBridge.isCoPI,
+        firstName: grantPiBridge.employee.firstName,
+        lastName: grantPiBridge.employee.lastName,
+        index: grantPiBridge.grant.index,
+        account: grantPiBridge.grant.account,
+        sponsor: grantPiBridge.grant.sponsor,
+        cayuse: grantPiBridge.grant.cayuse,
+        nceAppDate: grantPiBridge.grant.nceAppDate,
+        piLastName: grantPiBridge.grant.grantPIBridge.at(0)?.employee.lastName
+      };
+      effortReportRows.push(effortReportRow);
+    }
+
+    return res.status(200).json({ message: 'Effort report rows found', effortReportRows });
+  } catch (error) {
+    console.error('Error getting effort report:', error);
+    return res.status(500).json({ error: 'An error occurred while getting the effort report' });
   } finally {
     await prisma.$disconnect();
   }

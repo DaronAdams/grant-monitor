@@ -8,3 +8,4 @@ export const changePasswordEndpoint = 'auth/change-password';
 export const createGrantEndpoint = 'grant/create';
 export const grantTransactions = 'grant/grantexpenses/:id';
 export const laborReport = 'payment/list/laborReport';
+export const effortReport = 'grantPiBridge/list/effortReport';

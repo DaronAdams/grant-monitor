@@ -47,7 +47,7 @@ const Grants = () => {
         ) || 
           (
             <Subpage>
-              <Typography variant="h3" color="blue" style={{ padding: '10px' }}>University of Memphis Grants</Typography>
+              <Typography variant="h3" color="blue" style={{ padding: '10px', paddingTop: '20px' }}>University of Memphis Grants</Typography>
               <Typography variant="paragraph" style={{ padding: '10px' }}>Welcome, Corinne!</Typography>
               <div className='px-4'>
                 <Button
