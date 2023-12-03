@@ -1,5 +1,3 @@
-import { GrantBudgetItem, Employee } from "@prisma/client";
-
 export default interface PaymentAAAAHHH {
     id: number;
     uID: string | null;

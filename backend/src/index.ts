@@ -7,6 +7,7 @@ import transactionRoutes from './routes/transactionRoutes';
 import grantPiBridgeRoutes from './routes/grantPiRoutes';
 import grantEmployeeBridgeRoutes from './routes/grantEmpRoutes';
 import grantBudgetItemRoutes from './routes/grantBudgetItemRoutes';
+import paymentRoutes from './routes/paymentRoutes'
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 
@@ -28,6 +29,7 @@ app.use('/transactions', transactionRoutes)
 app.use('/grantPiBridge', grantPiBridgeRoutes)
 app.use('/grantEmployeeBridge', grantEmployeeBridgeRoutes)
 app.use('/grantBudgetItem', grantBudgetItemRoutes)
+app.use('/payment', paymentRoutes)
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
