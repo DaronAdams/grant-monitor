@@ -23,17 +23,19 @@ const LaborReport:React.FC<GrantMainTabProps> = ({grantData}) => {
 
   // design notes
   /*
+
   Column Headers:
   Earnings Code - 3 digit integer
-  Benefit Code - ??
-  Hours - float.2f 
+  * Benefit Code - ?? [blank column]
+  Hours - float.2f [our example is all 1's]
   Amount - dollar amount .2f 
-  Debit or Credit - Single Character (D / C)
+  Debit or Credit - Single Character (D / C) [our example is all D]
   ID - UID begins with U followed by 8 digits
   Last Name
   First Name 
-  Middle Name - really just their initial, if they have one
-  Payroll Event - looks to be year of the labor report
+  Middle Name/Initial
+  * Payroll Event - looks to be year of the labor report
+
   */
 
   const rows: GridRowsProp = [
@@ -55,7 +57,7 @@ const LaborReport:React.FC<GrantMainTabProps> = ({grantData}) => {
     { field: 'col10', headerName: 'Payroll Event', width: 150 },
   ];
   
-  
+
   return(
     <div>
       <DataGrid rows={rows} columns={columns} />
