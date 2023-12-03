@@ -192,15 +192,15 @@ const LaborTabGrid: React.FC<GrantLaborTabProps> = ({ paymentAHData }) => {
   }
 
   const columns: GridColDef[] = [
-    { field: 'earnings_code', headerName: 'Earnings Code', width: 150 },
+    { field: 'earnings_code', headerName: 'Earnings Code', flex: 0.75 },
     // { field: 'col2', headerName: 'Benefit Code', width: 150 },
-    { field: 'hours', headerName: 'Hours', width: 150 },
-    { field: 'amount', headerName: 'Amount', width: 150 },
+    { field: 'hours', headerName: 'Hours', flex: 0.75 },
+    { field: 'amount', headerName: 'Amount', flex: 0.75 },
     // { field: 'col5', headerName: 'Debit or Credit', width: 150 },
     { field: 'uID', headerName: 'uID', width: 150 },
-    { field: 'lastName', headerName: 'Last Name', width: 150 },
-    { field: 'firstName', headerName: 'First Name', width: 150 },
-    { field: 'middleInitial', headerName: 'Middle Initial', width: 150 },
+    { field: 'lastName', headerName: 'Last Name', flex: 0.75 },
+    { field: 'firstName', headerName: 'First Name', flex: 0.75 },
+    { field: 'middleInitial', headerName: 'Middle Initial', flex: 0.75 },
     // { field: 'col10', headerName: 'Payroll Event', width: 150 },
   ];
 
