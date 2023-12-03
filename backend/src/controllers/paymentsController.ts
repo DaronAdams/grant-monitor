@@ -41,20 +41,20 @@ export async function createPayment(req: Request, res: Response) {
                 },
                 employee: {
                     connect: {
-                        id: employeeId, // You may need to associate the grantPiBridge with the authenticated user
+                        id: employeeId, // You may need to associate the Payment with the authenticated user
                     },
                 },
           },
         });
     
         if (!newPayment) {
-          return res.status(500).json({ error: 'An error occurred while creating the grantPiBridge' });
+          return res.status(500).json({ error: 'An error occurred while creating the payment' });
         }
     
-        return res.status(201).json({ message: 'GrantPiBridge created successfully', payment: newPayment });
+        return res.status(201).json({ message: 'Payment created successfully', payment: newPayment });
       } catch (error) {
-        console.error('Error creating grantPiBridge:', error);
-        return res.status(500).json({ error: 'An error occurred while creating the grantPiBridge' });
+        console.error('Error creating payment:', error);
+        return res.status(500).json({ error: 'An error occurred while creating the payment' });
       } finally {
         await prisma.$disconnect();
       }
@@ -62,10 +62,12 @@ export async function createPayment(req: Request, res: Response) {
 
 export async function getPaymentsForGrant(req: Request, res: Response) {
 try {
-    // gotta get the grant ID
     const grantID = req.query.grantID;
 
+    
+
     if (typeof grantID !== 'string') {
+        console.log(grantID);
         return res.status(400).json({ error: 'Invalid grant ID type' });
     }
 
