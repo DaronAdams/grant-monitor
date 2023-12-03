@@ -3,6 +3,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import Grant from '../libs/types/grant';
 import GrantPIGridRow from '../libs/types/grantPIGridRow';
 import GrantEmployeeGridRow from '../libs/types/grantEmployeeGridRow';
+import Payment from '../libs/types/grant';
 
 // The prisma client is responsible for communicating with the database
 const prisma = new PrismaClient();
