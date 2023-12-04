@@ -9,7 +9,17 @@ const prisma = new PrismaClient();
 
 async function getGrantBudgetItemsByGrantId(req: Request, res: Response) {
   try {
-    const grantId = parseInt(req.params.id, 10); // Assuming the grantId is in the route parameters
+    const grantID = req.query.grantID;
+
+    
+
+    if (typeof grantID !== 'string') {
+        console.log(grantID);
+        return res.status(400).json({ error: 'Invalid grant ID type' });
+    }
+
+    // reassign grantID to grandId
+    const grantId = parseInt(grantID, 10);
 
     const grantBudgetItems = await prisma.grantBudgetItem.findMany({
       where: {
