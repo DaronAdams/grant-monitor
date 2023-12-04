@@ -6,6 +6,6 @@ const router = express.Router();
 // GET all transactions
 router.post('/create', createGrantBudgetItem);
 router.get('/list/grantBudgetItems', getGrantBudgetItems);
-router.get('/by-grant/:id', getGrantBudgetItemsByGrantId);
+router.get('/by-grant', getGrantBudgetItemsByGrantId);
 
 export default router;
