@@ -16,7 +16,7 @@ const useGrantBudgetGridRowListData = (grantId: number) => {
       try {
         const response = await axios.get(budgetReport, { params: { grantID: grantId } });
         console.log('Response from backend:', response.data);
-        setGrantBudgetGridRowListData(response.data.grantBudgetGridRows);
+        setGrantBudgetGridRowListData(response.data);
       } catch (error) {
         console.error('Error fetching grant employee list data:', error);
       } finally {
