@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 import GrantData from '../../../interfaces/GrantData';
 import { Button } from '@material-tailwind/react';
 import axios from 'axios';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import Divider from '@mui/material/Divider';
@@ -55,7 +55,7 @@ const CardContainer: React.FC<{ title: string, children: any }> = ({ title, chil
       <Typography variant="h5" component="div">
         {title}
       </Typography>
-      <Divider sx={{marginBottom: 1}}/>
+      <Divider sx={{ marginBottom: 1 }} />
       <div style={{ flex: '1', overflow: 'auto' }}>{children}</div>
     </CardContent>
   </Card>
@@ -69,7 +69,7 @@ function formatDate(date: Date | null | undefined): string {
 
   const thisDate = new Date(date); // the fact that I have to do this is idiotic
 
-  console.log(typeof(thisDate));
+  console.log(typeof (thisDate));
 
   return thisDate.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -108,7 +108,7 @@ const GrantInfo: React.FC<GrantInfoProps> = (grantInfo) => {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
-const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
+const Main: React.FC<GrantMainTabProps> = ({ grantData }) => {
 
   const navigate = useNavigate();
   const handleDeleteClicked = () => {
@@ -121,7 +121,7 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
           console.log('Response', response)
           navigate(0);
         });
-      
+
     }
   }
 
@@ -138,7 +138,7 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
   useEffect(() => {
     console.log('Grant PI Data', grantPIGridRowListData);
   }, [grantPIGridRowListData]);
-  
+
   const dateDataHolder: DateDataProps = getDaysPassedAndRemaining(grantData.startDate, grantData.endDate)
 
   const lifetimeData = {
@@ -171,16 +171,16 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
 
   return !(piRowsLoading || employeeRowsLoading) && (
     <div style={{
-      width:'100%',
-      height:'100%',
-      padding:'10px',
-      border:'1px solid gray',
-      borderRadius:'10px',
-      margin:'10px',
-    }}>  
-      
+      width: '100%',
+      height: '100%',
+      padding: '10px',
+      border: '1px solid gray',
+      borderRadius: '10px',
+      margin: '10px',
+    }}>
+
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" component="div" sx={{ paddingBottom: 1, paddingTop: 1, paddingLeft: 1, color: 'black', borderRadius:'10px' }}>
+        <Typography variant="h4" component="div" sx={{ paddingBottom: 1, paddingTop: 1, paddingLeft: 1, color: 'black', borderRadius: '10px' }}>
           Grant Index: {grantData.index}
         </Typography>
 
@@ -195,7 +195,7 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
 
       <CenteredContainer>
         <CardContainer title="Complete Info">
-          <GrantInfo description={'Account'} value={grantData.account } />
+          <GrantInfo description={'Account'} value={grantData.account} />
           <GrantInfo description='Cayuse' value={grantData.cayuse} />
           <GrantInfo description='Fund' value={grantData.fund} />
           <GrantInfo description='Organization' value={grantData.organization} />
@@ -210,7 +210,7 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
           <GrantInfo description='Yearly Amount' value={`$${grantData.yearlyAmount}`} />
           <GrantInfo description='Created At' value={formatDate(grantData.createdAt)} />
           <GrantInfo description='Updated At' value={formatDate(grantData.updatedAt)} />
-          
+
         </CardContainer>
 
         <CardContainer title="Lifetime">
@@ -250,12 +250,12 @@ const Main:React.FC<GrantMainTabProps> = ({grantData}) => {
         </CardContainer>
       </CenteredContainer>
     </div>
-    
+
   ) || (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vh'}}>
-      <Spinner color="blue" className="flex-grow" />
-    </div>
-  )
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vh' }}>
+        <Spinner color="blue" className="flex-grow" />
+      </div>
+    )
 }
 
 export default Main;

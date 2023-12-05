@@ -1,4 +1,4 @@
-import { 
+import {
   DataGrid,
   GridToolbarContainer,
   GridFilterModel,
@@ -6,7 +6,8 @@ import {
   GridRowsProp,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
-  GridRowParams } from '@mui/x-data-grid';
+  GridRowParams
+} from '@mui/x-data-grid';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
@@ -16,7 +17,7 @@ import { Typography, Progress } from '@material-tailwind/react'
 
 
 interface GrantPIGridProps {
-//openSubpage: (grantData: any) => void;
+  //openSubpage: (grantData: any) => void;
   grantPIData: GrantPIGridRow[];
 }
 
@@ -93,17 +94,17 @@ const GrantPIGrid: React.FC<GrantPIGridProps> = ({ grantPIData }) => {
     row.coPI = row.isCoPI && 'Y' || 'N';
   });
 
-  function applyFilters(data: GridRowsProp,filterModel: GridFilterModel): GridRowsProp {
+  function applyFilters(data: GridRowsProp, filterModel: GridFilterModel): GridRowsProp {
     let filteredData: GridRowsProp = [...data];
     filterModel.items.forEach((filterItem) => {
-      const { field, value, operator} = filterItem;
-      if (value === undefined || value === null || value === ' '){
+      const { field, value, operator } = filterItem;
+      if (value === undefined || value === null || value === ' ') {
         return;
       }
 
       if (filterItem.operator === 'equals') {
         filteredData = filteredData.filter((row) => row[field] == filterItem.value || row[field][0] == filterItem.value);
-      } 
+      }
 
       if (filterItem.operator === 'contains') {
         const searchValue = filterItem.value.toString().toLowerCase();
@@ -115,7 +116,7 @@ const GrantPIGrid: React.FC<GrantPIGridProps> = ({ grantPIData }) => {
     return filteredData;
   }
 
-  const [filterModel, setFilterModel] = useState<GridFilterModel>({items: []});
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
   const [filteredRows, setFilteredRows] = useState(rows);
   const [filterApplied, setFilterApplied] = useState(false);
 
@@ -142,7 +143,7 @@ const GrantPIGrid: React.FC<GrantPIGridProps> = ({ grantPIData }) => {
       setAnchorEl(null);
     };
 
-    const exportDataAsCSV = (data: Array<{[key:string]:any}>) => {
+    const exportDataAsCSV = (data: Array<{ [key: string]: any }>) => {
       const formattedData = data.map((row) => ({
         id: row.employeeId,
         uID: row.uID,
@@ -159,10 +160,10 @@ const GrantPIGrid: React.FC<GrantPIGridProps> = ({ grantPIData }) => {
       }));
 
       const csvContent =
-    'data:text/csv;charset=utf-8,' +
-    [Object.keys(formattedData[0]), ...formattedData.map(Object.values)]
-      .map((row) => row.join(','))
-      .join('\n');
+        'data:text/csv;charset=utf-8,' +
+        [Object.keys(formattedData[0]), ...formattedData.map(Object.values)]
+          .map((row) => row.join(','))
+          .join('\n');
 
       const encodedUri = encodeURI(csvContent);
 
@@ -181,12 +182,12 @@ const GrantPIGrid: React.FC<GrantPIGridProps> = ({ grantPIData }) => {
 
       if (filterApplied == true) {
         dataToExport = filteredRows;
-      } 
+      }
       else {
         dataToExport = rows;
       }
 
-      exportDataAsCSV(dataToExport as Array<{[key:string]: any}>);
+      exportDataAsCSV(dataToExport as Array<{ [key: string]: any }>);
 
       handleMenuClose();
     };
@@ -197,7 +198,7 @@ const GrantPIGrid: React.FC<GrantPIGridProps> = ({ grantPIData }) => {
 
       if (filterApplied == true) {
         dataToExport = filteredRows;
-      } 
+      }
       else {
         dataToExport = rows;
       }
@@ -250,14 +251,15 @@ const GrantPIGrid: React.FC<GrantPIGridProps> = ({ grantPIData }) => {
   */
 
   const columns: GridColDef[] = [
-    {field: 'uID', headerName: 'UID', flex: .75},
-    {field: 'firstName', headerName: 'First Name', flex: .75},
-    {field: 'lastName', headerName: 'Last Name', flex: .75},
-    {field: 'academicYearEffort', headerName: 'AY Effort', flex: .4},
-    {field: 'summerEffort', headerName: 'S Effort', flex: .4},
-    {field: 'costShareEffort', headerName: 'CS Effort', flex: .4},
-    {field: 'coPI', headerName: 'Is Co-PI', flex: .3},
-    {field: 'timeProgress', headerName: 'Contract %', flex: 1.75,
+    { field: 'uID', headerName: 'UID', flex: .5 },
+    { field: 'firstName', headerName: 'First Name', flex: .5 },
+    { field: 'lastName', headerName: 'Last Name', flex: .5 },
+    { field: 'academicYearEffort', headerName: 'AY Effort', flex: .4 },
+    { field: 'summerEffort', headerName: 'S Effort', flex: .4 },
+    { field: 'costShareEffort', headerName: 'CS Effort', flex: .4 },
+    { field: 'coPI', headerName: 'Is Co-PI', flex: .3 },
+    {
+      field: 'timeProgress', headerName: 'Contract %', flex: 1,
       renderCell: (params) => (
         <div className="w-full">
           <div className="mb-2 flex items-center justify-between gap-4">

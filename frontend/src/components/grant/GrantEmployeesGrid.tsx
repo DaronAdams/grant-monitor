@@ -1,11 +1,12 @@
-import { 
+import {
   DataGrid,
   GridToolbarContainer,
   GridFilterModel,
   GridColDef,
   GridRowsProp,
   GridToolbarColumnsButton,
-  GridToolbarFilterButton } from '@mui/x-data-grid';
+  GridToolbarFilterButton
+} from '@mui/x-data-grid';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { SaveAlt as SaveAltIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
@@ -79,17 +80,17 @@ const GrantEmployeeGrid: React.FC<GrantEmployeeGridProps> = ({ grantEmployeeData
     row.timeProgress = [progress, row.startDate, row.endDate]
   });
 
-  function applyFilters(data: GridRowsProp,filterModel: GridFilterModel): GridRowsProp {
+  function applyFilters(data: GridRowsProp, filterModel: GridFilterModel): GridRowsProp {
     let filteredData: GridRowsProp = [...data];
     filterModel.items.forEach((filterItem) => {
-      const { field, value, operator} = filterItem;
-      if (value === undefined || value === null || value === ' '){
+      const { field, value, operator } = filterItem;
+      if (value === undefined || value === null || value === ' ') {
         return;
       }
 
       if (operator === 'equals') {
         filteredData = filteredData.filter((row) => row[field] == value || row[field][0] == value);
-      } 
+      }
 
       if (operator === 'contains') {
         const searchValue = value.toString().toLowerCase();
@@ -101,7 +102,7 @@ const GrantEmployeeGrid: React.FC<GrantEmployeeGridProps> = ({ grantEmployeeData
     return filteredData;
   }
 
-  const [filterModel, setFilterModel] = useState<GridFilterModel>({items: []});
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
   const [filteredRows, setFilteredRows] = useState(rows);
   const [filterApplied, setFilterApplied] = useState(false);
 
@@ -128,7 +129,7 @@ const GrantEmployeeGrid: React.FC<GrantEmployeeGridProps> = ({ grantEmployeeData
       setAnchorEl(null);
     };
 
-    const exportDataAsCSV = (data: Array<{[key:string]:any}>) => {
+    const exportDataAsCSV = (data: Array<{ [key: string]: any }>) => {
       const formattedData = data.map((row) => ({
         id: row.employeeId,
         uID: row.uID,
@@ -142,10 +143,10 @@ const GrantEmployeeGrid: React.FC<GrantEmployeeGridProps> = ({ grantEmployeeData
       }));
 
       const csvContent =
-      'data:text/csv;charset=utf-8,' +
-      [Object.keys(formattedData[0]), ...formattedData.map(Object.values)]
-        .map((row) => row.join(','))
-        .join('\n');
+        'data:text/csv;charset=utf-8,' +
+        [Object.keys(formattedData[0]), ...formattedData.map(Object.values)]
+          .map((row) => row.join(','))
+          .join('\n');
 
       const encodedUri = encodeURI(csvContent);
 
@@ -164,12 +165,12 @@ const GrantEmployeeGrid: React.FC<GrantEmployeeGridProps> = ({ grantEmployeeData
 
       if (filterApplied == true) {
         dataToExport = filteredRows;
-      } 
+      }
       else {
         dataToExport = rows;
       }
 
-      exportDataAsCSV(dataToExport as Array<{[key:string]: any}>);
+      exportDataAsCSV(dataToExport as Array<{ [key: string]: any }>);
 
       handleMenuClose();
     };
@@ -180,11 +181,11 @@ const GrantEmployeeGrid: React.FC<GrantEmployeeGridProps> = ({ grantEmployeeData
 
       if (filterApplied == true) {
         dataToExport = filteredRows;
-      } 
+      }
       else {
         dataToExport = rows;
       }
-  
+
       const rowsForExcelExport = dataToExport.map((row) => ({
         id: row.employeeId,
         uID: row.uID,
@@ -220,12 +221,13 @@ const GrantEmployeeGrid: React.FC<GrantEmployeeGridProps> = ({ grantEmployeeData
   }
 
   const columns: GridColDef[] = [
-    {field: 'uID', headerName: 'UID', flex: .75},
-    {field: 'firstName', headerName: 'First Name', flex: .75},
-    {field: 'lastName', headerName: 'Last Name', flex: .75},
-    {field: 'rate', headerName: 'Rate', flex: .75},
-    {field: 'effort', headerName: 'Effort', flex: .75},
-    {field: 'timeProgress', headerName: 'Contract %', flex: 1.75,
+    { field: 'uID', headerName: 'UID', flex: .5 },
+    { field: 'firstName', headerName: 'First Name', flex: .5 },
+    { field: 'lastName', headerName: 'Last Name', flex: .5 },
+    { field: 'rate', headerName: 'Rate', flex: .75 },
+    { field: 'effort', headerName: 'Effort', flex: .75 },
+    {
+      field: 'timeProgress', headerName: 'Contract %', flex: 1,
       renderCell: (params) => (
         <div className="w-full">
           <div className="mb-2 flex items-center justify-between gap-4">
@@ -252,7 +254,7 @@ const GrantEmployeeGrid: React.FC<GrantEmployeeGridProps> = ({ grantEmployeeData
       filterModel={filterModel}
       onFilterModelChange={handleFilterModelChange}
       slots={{ toolbar: CustomToolBar }}
-      //onRowClick={handleRowClick}
+    //onRowClick={handleRowClick}
     />
   );
 
