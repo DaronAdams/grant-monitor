@@ -1,0 +1,59 @@
+Meeting with Corrine Notes (11/9/2023)
+
+General Comments
+
+	- Due to the fact that Corrine got a new job we may have to make it more generalized for the person that will replace Corrine and for other Capstone Teams should the person replacing Corrine want to continue work on this project.
+
+		- She did mention that she would like to take the app with her but is unsure how often she will be use it at her new job.
+
+	- However, Corrine mentioned that everything looks really great overall in terms of our redesign of our entire UI and was a big fan of the speed dial navigation menu. 
+
+	- When it comes to something that Corrine did not understand, the only thing Corrine was confused about was the charts as they did not make sense to her in terms of the data that was displayed. We assured her that those charts on the visual tab as placeholders at the moment and do not reflect how they would look in the final product. We told her that we plan on making these charts similar to the charts that she provided us and she thinks that this idea is perfect in terms of how she would use these charts. 
+
+Clarification on the different reports
+
+	- Budget report
+
+		- transactions she adds manually (category, item, and amount spent will need to be included)
+
+		- total available for a specific category (should be in the form of a progress bar)
+
+		- Reports are obtained from the school or from Banner 
+
+
+	- Labor report
+
+		- should include all employees on a grant
+
+		- should be different per grant (only 1 labor report per grant)
+
+
+	Employee report
+
+		- U number would need to be included (identifying number to keep track across mutliple reports)
+
+		- when the employee is actively working (only for that particular grant) (this is in terms of the start and end date)
+
+		- effort is imputted manually 
+
+		- GA can get monthly stipend (in the budget employee has effort%)
+
+
+
+	Effort report
+
+		- system used for proposals is the cayus identifying number
+
+		- index is the banner identifying number
+
+		- all of this would be manually entered
+
+		- months is calculated using some sort of formula (will need to get it at a later date)
+
+		- effort - total academic year (PI is on a regular contract) (fall and spring semester)
+
+		- summer effort - effort for the summer months (PI is not on contract) (summer semester)
+
+		- cost share (what the school puts in)
+
+		- credit (how much money an employee is going to get back)
